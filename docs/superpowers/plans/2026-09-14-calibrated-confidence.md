@@ -631,7 +631,6 @@ git commit -m "feat: normalize Evidence Map confidence onto the computed format 
 - [ ] **Step 1: Confirm every confidence value in the app is now computed**
 
 ```js
-document.querySelectorAll ? null : null; // just a reminder this is a console-driven check
 [...PL.decisions, PL.evidenceMap.detail].every(o => o.confidenceInputs != null)
 ```
 Expected: `true`.
