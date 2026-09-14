@@ -8,7 +8,7 @@ window.PL = {
 
   // The person opening this on their phone in the morning: the accountable exec.
   user: { id: "maya-okonkwo", name: "Maya Okonkwo", role: "Chief Delivery Officer", initials: "MO" },
-  today: { label: "Monday, September 7", greetingName: "Maya" },
+  today: { label: "Monday, September 7", greetingName: "Maya", nowIso: "2026-09-07T09:50:00" },
 
   // Impact Score weights. score = 0.35·value + 0.30·unblock + 0.20·reach + 0.15·urgency
   weights: { value: 0.35, unblock: 0.30, reach: 0.20, urgency: 0.15 },
@@ -17,6 +17,18 @@ window.PL = {
     unblock: { label: "Unblocks today",   hint: "How much of today's build this clears" },
     reach:   { label: "Reach",            hint: "Users or volume affected" },
     urgency: { label: "Urgency",          hint: "Time until a gate or window closes" }
+  },
+
+  // Calibrated-confidence weights (PRD §4.7). PROVISIONAL / UNVALIDATED — §8 Q1 flags these
+  // as an open question pending a held-out set of expert-assigned confidence to fit against,
+  // which doesn't exist in this capstone. Ship inspectable, not asserted as final.
+  // confidence = round(w1·evalPassRate + w2·sourceAgreement + w3·coverage + w4·recency)
+  confidenceWeights: { evalPassRate: 0.35, sourceAgreement: 0.30, coverage: 0.20, recency: 0.15 },
+  confidenceWeightMeta: {
+    evalPassRate:    { label: "Eval pass rate",   hint: "Share of relevant eval cases passed" },
+    sourceAgreement: { label: "Source agreement", hint: "Evidence that confirms vs. contradicts" },
+    coverage:        { label: "Coverage",         hint: "Claims backed by a linked source" },
+    recency:         { label: "Recency",          hint: "Freshness of the latest supporting run" }
   },
 
   // Time-available gate: asked once per open (never persisted). Drives how much of

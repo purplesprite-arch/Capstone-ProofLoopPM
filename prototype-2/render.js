@@ -139,6 +139,99 @@
       </div>`;
   }
 
+  /* ---------- calibrated confidence (§4.7) ----------
+     Mirrors the Impact Score's honest-arithmetic pattern: a visible composite
+     (sub × weight = contribution) plus a band-based provenance chip per factor.
+     Unlike the Impact Score, no sub-score here is hand-authored — every factor
+     is computed straight from confidenceInputs + the evidence/sources array. */
+  function evidenceList(o) {
+    return o.evidence || o.sources || [];
+  }
+  function pct(n, total) {
+    return total ? Math.round((n / total) * 100) : 0;
+  }
+  function sourceAgreementPct(list) {
+    if (!list.length) return 0;
+    const agreeing = list.filter((s) => s.claim === "confirmed" || s.claim === "observed").length;
+    return Math.round((agreeing / list.length) * 100);
+  }
+  function daysBetween(fromIso, toIso) {
+    return Math.max(0, Math.round((new Date(toIso) - new Date(fromIso)) / 86400000));
+  }
+  function recencyBand(daysAgo) {
+    if (daysAgo <= 7) return { name: "fresh", score: 100 };
+    if (daysAgo <= 30) return { name: "recent", score: 70 };
+    return { name: "stale", score: 30 };
+  }
+
+  function confidenceFactors(o) {
+    const inputs = o.confidenceInputs;
+    const sources = evidenceList(o);
+    const daysAgo = daysBetween(inputs.mostRecentAt, PL.today.nowIso);
+    const band = recencyBand(daysAgo);
+    return {
+      evalPassRate: pct(inputs.eval.passed, inputs.eval.total),
+      sourceAgreement: sourceAgreementPct(sources),
+      coverage: pct(inputs.coverage.linked, inputs.coverage.total),
+      recency: band.score,
+      daysAgo,
+      band
+    };
+  }
+
+  function confidenceScore(o) {
+    const w = PL.confidenceWeights;
+    const f = confidenceFactors(o);
+    return Math.round(w.evalPassRate * f.evalPassRate + w.sourceAgreement * f.sourceAgreement + w.coverage * f.coverage + w.recency * f.recency);
+  }
+
+  function confidenceContributions(o) {
+    const w = PL.confidenceWeights;
+    const f = confidenceFactors(o);
+    return Object.keys(w)
+      .map((k) => ({ key: k, sub: f[k], contrib: +(w[k] * f[k]).toFixed(1), weight: w[k] }))
+      .sort((a, b) => b.contrib - a.contrib);
+  }
+
+  function confidenceProvenance(key, o, f) {
+    const inputs = o.confidenceInputs;
+    const sources = evidenceList(o);
+    if (key === "evalPassRate") return `${inputs.eval.passed} of ${inputs.eval.total} eval cases passed`;
+    if (key === "sourceAgreement") {
+      const agreeing = sources.filter((s) => s.claim === "confirmed" || s.claim === "observed").length;
+      return `${agreeing} of ${sources.length} sources confirm or observe this`;
+    }
+    if (key === "coverage") return `${inputs.coverage.linked} of ${inputs.coverage.total} claims are source-linked`;
+    if (key === "recency") return `latest supporting run was ${f.daysAgo} day${f.daysAgo === 1 ? "" : "s"} ago`;
+    return "";
+  }
+
+  function confidenceBreakdown(o) {
+    const total = confidenceScore(o);
+    const f = confidenceFactors(o);
+    const rows = confidenceContributions(o)
+      .map((c) => {
+        const meta = PL.confidenceWeightMeta[c.key];
+        const bandChip = c.key === "recency" ? `<b class="bd-band">${f.band.name} band</b>` : "";
+        return `<div class="bd-row">
+            <span class="bd-name">${meta.label}<em>${meta.hint}</em></span>
+            <span class="bd-bar"><i style="width:${c.sub}%"></i></span>
+            <span class="bd-math">${c.sub} × ${c.weight.toFixed(2)} = <b>${c.contrib}</b></span>
+            <span class="bd-prov">${bandChip}<span>${confidenceProvenance(c.key, o, f)}</span></span>
+          </div>`;
+      })
+      .join("");
+    const segs = confidenceContributions(o)
+      .map((c) => `<i class="seg-${c.key}" style="width:${c.contrib}%" title="${PL.confidenceWeightMeta[c.key].label}: ${c.contrib}"></i>`)
+      .join("");
+    return `<div class="breakdown">
+        <div class="bd-total"><span>Confidence</span><b>${total}<small>/100</small></b></div>
+        <div class="bd-stack">${segs}</div>
+        <div class="bd-rows">${rows}</div>
+        <p class="bd-note">Confidence is computed from this decision's own evidence — eval pass rate, source agreement, coverage, and recency — not asserted. Weights are provisional, pending validation against expert-assigned confidence on a held-out set (PRD §8).</p>
+      </div>`;
+  }
+
   /* ---------- RACI ---------- */
   function raci(d) {
     const r = d.raci || {};
@@ -557,5 +650,5 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker };
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown };
 })();
