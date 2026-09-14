@@ -182,7 +182,10 @@
   function confidenceScore(o) {
     const w = PL.confidenceWeights;
     const f = confidenceFactors(o);
-    return Math.round(w.evalPassRate * f.evalPassRate + w.sourceAgreement * f.sourceAgreement + w.coverage * f.coverage + w.recency * f.recency);
+    // Cap displayed confidence at 99 so perfect inputs never read as absolute certainty;
+    // per-factor breakdown rows remain untouched — only the total badge is clamped (§7).
+    const raw = Math.round(w.evalPassRate * f.evalPassRate + w.sourceAgreement * f.sourceAgreement + w.coverage * f.coverage + w.recency * f.recency);
+    return Math.min(99, raw);
   }
 
   function confidenceContributions(o) {
