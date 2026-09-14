@@ -458,9 +458,10 @@
           <p class="detail-body">${m.detail.body}</p>
           <div class="stat-row">
             <span><small>Owner</small><b>${m.detail.owner}</b></span>
-            <span><small>Confidence</small><b>${m.detail.confidence}</b></span>
+            <span><small>Confidence</small><b>${confidenceScore(m.detail)}%</b></span>
             <span><small>Verified</small><b>${m.detail.verified}</b></span>
           </div>
+          <button class="link-btn" data-conf="evidence-map">How confidence works</button>
           <h3 class="sources-head">Supporting evidence <span>${m.detail.sources.length}</span></h3>
           ${sources}
         </section>
