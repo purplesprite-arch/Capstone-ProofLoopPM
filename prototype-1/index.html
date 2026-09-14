@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ProofLoop decision intelligence prototype" />
+    <title>ProofLoop — Decision Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand"><span class="brand-mark">P</span><span>ProofLoop</span></div>
+        <div class="workspace-switcher">
+          <div class="workspace-icon">AV</div>
+          <div><strong>Atlas Voice AI</strong><span>Customer support agent</span></div>
+          <svg class="icon"><use href="#chevron-down" /></svg>
+        </div>
+        <nav>
+          <button class="nav-item active" data-view="overview"><svg class="icon"><use href="#grid" /></svg>Overview</button>
+          <button class="nav-item" data-view="briefs"><svg class="icon"><use href="#file" /></svg>Decision briefs <span class="nav-badge">1</span></button>
+          <button class="nav-item" data-view="evidence"><svg class="icon"><use href="#nodes" /></svg>Evidence map</button>
+          <button class="nav-item" data-view="activity"><svg class="icon"><use href="#activity" /></svg>Decision memory</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <button class="nav-item" data-action="open-sources"><svg class="icon"><use href="#database" /></svg>Sources</button>
+          <button class="nav-item"><svg class="icon"><use href="#settings" /></svg>Settings</button>
+          <div class="user-card">
+            <div class="avatar">AA</div>
+            <div><strong>Andrew Aasen</strong><span>Delivery lead</span></div>
+            <button class="icon-button" aria-label="More"><svg class="icon"><use href="#more" /></svg></button>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <button class="mobile-menu icon-button" aria-label="Toggle menu"><svg class="icon"><use href="#menu" /></svg></button>
+          <div class="environment"><span class="status-dot"></span>Shadow mode</div>
+          <div class="top-actions">
+            <span class="last-sync">Evidence synced 2 min ago</span>
+            <button class="button secondary small" data-action="open-sources"><svg class="icon"><use href="#plus" /></svg>Add evidence</button>
+            <button class="icon-button has-dot" aria-label="Notifications"><svg class="icon"><use href="#bell" /></svg></button>
+          </div>
+        </header>
+
+        <section id="overview" class="view active-view">
+          <div class="page-header">
+            <div><p class="eyebrow">Monday, September 7</p><h1>Good morning, Andrew.</h1><p>One delivery decision needs human judgment. Everything else is moving.</p></div>
+            <button class="button secondary" data-view-target="evidence"><svg class="icon"><use href="#nodes" /></svg>View evidence map</button>
+          </div>
+
+          <div class="attention-card">
+            <div class="attention-icon"><svg class="icon"><use href="#spark" /></svg></div>
+            <div class="attention-copy"><span class="label coral">DECISION NEEDED</span><h2>A release change may conflict with a confirmed customer promise.</h2><p>ProofLoop traced the issue to 3 requirements, ran 24 evaluations, and prepared a recommendation for the product owner.</p></div>
+            <button class="button primary" data-open-brief>Review brief <svg class="icon"><use href="#arrow-right" /></svg></button>
+          </div>
+
+          <div class="section-title"><div><h2>Delivery pulse</h2><p>Impact since ProofLoop entered shadow mode</p></div><button class="text-button">Last 30 days <svg class="icon"><use href="#chevron-down" /></svg></button></div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span>Stakeholder time saved</span><svg class="icon muted"><use href="#clock" /></svg></div><strong>4.8 hrs</strong><p><span class="positive">↑ 32%</span> vs. manual reviews</p><div class="sparkline"><i style="height:25%"></i><i style="height:38%"></i><i style="height:31%"></i><i style="height:53%"></i><i style="height:47%"></i><i style="height:68%"></i><i style="height:82%"></i></div></article>
+            <article class="metric-card"><div class="metric-top"><span>Advanced autonomously</span><svg class="icon muted"><use href="#bolt" /></svg></div><strong>73%</strong><p>16 of 22 changes</p><div class="progress"><span style="width:73%"></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span>Recommendation acceptance</span><svg class="icon muted"><use href="#check" /></svg></div><strong>88%</strong><p>7 of 8 accepted</p><div class="progress"><span style="width:88%"></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span>Claim traceability</span><svg class="icon muted"><use href="#link" /></svg></div><strong>100%</strong><p>47 of 47 claims sourced</p><div class="progress"><span class="mint" style="width:100%"></span></div></article>
+          </div>
+
+          <div class="two-column">
+            <section class="panel">
+              <div class="panel-head"><div><h2>Recent changes</h2><p>What ProofLoop evaluated</p></div><button class="text-button" data-view-target="activity">View all</button></div>
+              <div class="change-list">
+                <button class="change-row" data-open-brief><span class="change-icon alert"><svg class="icon"><use href="#git-branch" /></svg></span><span class="change-main"><strong>Escalation response v2.4</strong><small>Prompt + policy update · 18 min ago</small></span><span class="row-status review">Needs review</span><svg class="icon muted"><use href="#chevron-right" /></svg></button>
+                <div class="change-row"><span class="change-icon safe"><svg class="icon"><use href="#git-branch" /></svg></span><span class="change-main"><strong>Intent routing patch</strong><small>Classifier update · Yesterday</small></span><span class="row-status advanced">Advanced</span><svg class="icon muted"><use href="#chevron-right" /></svg></div>
+                <div class="change-row"><span class="change-icon safe"><svg class="icon"><use href="#git-branch" /></svg></span><span class="change-main"><strong>Billing refund examples</strong><small>Knowledge update · Sep 4</small></span><span class="row-status advanced">Advanced</span><svg class="icon muted"><use href="#chevron-right" /></svg></div>
+              </div>
+            </section>
+            <section class="panel evidence-health">
+              <div class="panel-head"><div><h2>Evidence health</h2><p>Coverage of confirmed goals</p></div><span class="score-ring">92</span></div>
+              <div class="health-row"><span>Acceptance criteria</span><span><b>14 / 15</b><i class="mini-progress"><em style="width:93%"></em></i></span></div>
+              <div class="health-row"><span>Business outcomes</span><span><b>6 / 6</b><i class="mini-progress"><em style="width:100%"></em></i></span></div>
+              <div class="health-row"><span>Risk controls</span><span><b>8 / 9</b><i class="mini-progress"><em style="width:89%"></em></i></span></div>
+              <div class="health-note"><svg class="icon"><use href="#info" /></svg><span><strong>One evidence gap:</strong> no approved threshold for repeat escalation attempts.</span></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="briefs" class="view">
+          <div class="page-header"><div><p class="eyebrow">RECOMMENDATION QUEUE</p><h1>Decision briefs</h1><p>Only decisions that cannot be safely inferred reach this queue.</p></div></div>
+          <div class="filter-row"><button class="filter active">Needs review <span>1</span></button><button class="filter">Resolved <span>8</span></button><button class="filter">All <span>9</span></button></div>
+          <article class="brief-list-card" data-open-brief tabindex="0">
+            <div class="brief-accent"></div><div><div class="brief-meta"><span class="label coral">HIGH CONSEQUENCE</span><span>18 min ago</span></div><h2>Escalation response v2.4</h2><p>Approve the new response behavior with a guardrail that preserves the confirmed 30-second human handoff promise.</p><div class="chips"><span>3 goals affected</span><span>24 tests run</span><span>92% evidence confidence</span></div></div><div class="brief-owner"><div class="avatar navy">NC</div><span>For Nadia Chen<br><small>Product owner</small></span><svg class="icon"><use href="#chevron-right" /></svg></div>
+          </article>
+          <div class="empty-resolved"><div class="empty-icon"><svg class="icon"><use href="#check" /></svg></div><h3>The rest is handled</h3><p>Sixteen low-risk changes advanced automatically under approved policies.</p></div>
+        </section>
+
+        <section id="evidence" class="view">
+          <div class="page-header"><div><p class="eyebrow">LIVING PROJECT CONTEXT</p><h1>Evidence map</h1><p>Every delivery decision connected to its goals, proof, and owner.</p></div><button class="button secondary" data-action="open-sources"><svg class="icon"><use href="#plus" /></svg>Add source</button></div>
+          <div class="evidence-layout">
+            <div class="panel evidence-tree">
+              <div class="panel-head"><div><h2>Goals & requirements</h2><p>30 mapped items</p></div><button class="icon-button"><svg class="icon"><use href="#search" /></svg></button></div>
+              <button class="tree-row open"><svg class="icon"><use href="#chevron-down" /></svg><span class="tree-dot business"></span><span><strong>Reduce service operating cost</strong><small>Business outcome · SOW §2.1</small></span><b>5</b></button>
+              <div class="tree-children"><button class="tree-row selected"><span class="tree-line"></span><span class="tree-dot requirement"></span><span><strong>Human escalation within 30 sec</strong><small>Confirmed requirement · PRD AC-14</small></span><b>4</b></button><button class="tree-row"><span class="tree-line"></span><span class="tree-dot requirement"></span><span><strong>Contain 65% of tier-1 requests</strong><small>Confirmed KPI · SOW §2.3</small></span><b>6</b></button></div>
+              <button class="tree-row"><svg class="icon"><use href="#chevron-right" /></svg><span class="tree-dot business"></span><span><strong>Maintain customer trust</strong><small>Business outcome · OKR 3</small></span><b>8</b></button>
+              <button class="tree-row"><svg class="icon"><use href="#chevron-right" /></svg><span class="tree-dot risk"></span><span><strong>Safety & compliance controls</strong><small>Risk controls · Policy v1.7</small></span><b>9</b></button>
+            </div>
+            <div class="panel evidence-detail">
+              <div class="detail-title"><div><span class="label blue">CONFIRMED REQUIREMENT</span><h2>Human escalation within 30 seconds</h2><p>When the agent detects a high-risk intent or fails twice, it must transfer the customer to a human queue within 30 seconds.</p></div><button class="icon-button"><svg class="icon"><use href="#more" /></svg></button></div>
+              <div class="evidence-stats"><span><small>Owner</small><b><i class="avatar tiny navy">NC</i>Nadia Chen</b></span><span><small>Confidence</small><b>High · 96%</b></span><span><small>Last verified</small><b>Sep 7, 2026</b></span></div>
+              <h3>Supporting evidence <span class="count">4</span></h3>
+              <div class="source-card"><span class="source-type doc"><svg class="icon"><use href="#file" /></svg></span><span><b>Atlas Voice AI — Product requirements</b><small>AC-14 · “Escalate within 30 seconds after second unsuccessful resolution attempt.”</small></span><span class="claim confirmed">Confirmed</span></div>
+              <div class="source-card"><span class="source-type eval"><svg class="icon"><use href="#pulse" /></svg></span><span><b>Escalation regression suite</b><small>23 of 24 cases passed · Run Sep 7 at 09:42</small></span><span class="claim observed">Observed</span></div>
+              <div class="source-card contradiction"><span class="source-type warn"><svg class="icon"><use href="#alert" /></svg></span><span><b>Release v2.4 test result</b><small>1 case transferred at 47 seconds after repeated identity uncertainty.</small></span><span class="claim conflict">Contradicts</span></div>
+              <div class="source-card"><span class="source-type decision"><svg class="icon"><use href="#history" /></svg></span><span><b>Decision DL-007</b><small>Nadia confirmed this promise is externally committed and cannot be changed silently.</small></span><span class="claim confirmed">Confirmed</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="activity" class="view">
+          <div class="page-header"><div><p class="eyebrow">AUDITABLE HISTORY</p><h1>Decision memory</h1><p>What changed, why it changed, and who authorized it.</p></div><button class="button secondary"><svg class="icon"><use href="#download" /></svg>Export log</button></div>
+          <div class="panel timeline-panel">
+            <div class="timeline-date">TODAY</div>
+            <div class="timeline-item pending"><span class="timeline-dot"><svg class="icon"><use href="#hourglass" /></svg></span><div><strong>Decision requested · Escalation response v2.4</strong><p>ProofLoop recommends approval with a guardrail. Awaiting Nadia Chen.</p><small>11:42 AM · 47 traceable claims</small></div><span class="row-status review">Pending</span></div>
+            <div class="timeline-item"><span class="timeline-dot robot"><svg class="icon"><use href="#bolt" /></svg></span><div><strong>Autonomous evaluation completed</strong><p>Ran 24 escalation scenarios and identified one requirement conflict.</p><small>11:38 AM · Escalation regression suite</small></div></div>
+            <div class="timeline-item"><span class="timeline-dot"><svg class="icon"><use href="#git-branch" /></svg></span><div><strong>Build change detected</strong><p>Prompt policy updated from v2.3 to v2.4.</p><small>11:24 AM · GitHub release log</small></div></div>
+            <div class="timeline-date">SEPTEMBER 6</div>
+            <div class="timeline-item"><span class="timeline-dot approved"><svg class="icon"><use href="#check" /></svg></span><div><strong>Decision DL-008 approved</strong><p>Intent routing patch advanced with no additional stakeholder conditions.</p><small>4:18 PM · Resolved in 2m 14s</small></div><span class="row-status advanced">Approved</span></div>
+          </div>
+        </section>
+
+        <section id="brief-detail" class="view brief-detail-view">
+          <button class="back-button" data-view-target="briefs"><svg class="icon"><use href="#arrow-left" /></svg>Back to decision briefs</button>
+          <div class="brief-detail-header">
+            <div><div class="brief-meta"><span class="label coral">DECISION NEEDED</span><span class="severity"><i></i> High consequence</span><span>DL-009</span></div><h1>Escalation response v2.4</h1><p>Prepared for <strong>Nadia Chen</strong> · Product owner</p></div>
+            <div class="countdown"><small>OPEN FOR</small><strong id="open-timer">18m 32s</strong></div>
+          </div>
+          <div class="brief-detail-layout">
+            <div class="brief-main">
+              <section class="recommendation-card">
+                <div class="recommendation-label"><svg class="icon"><use href="#spark" /></svg>PROOFLOOP RECOMMENDS</div>
+                <h2>Approve with a 30-second handoff guardrail.</h2>
+                <p>Release v2.4 improves escalation clarity in 23 of 24 scenarios. One edge case delays human transfer beyond the confirmed customer promise. Add a hard 30-second transfer timeout before release.</p>
+                <div class="confidence"><span><b>92%</b> evidence confidence</span><div class="progress"><span style="width:92%"></span></div><button class="text-button" id="confidence-info">How confidence works</button></div>
+              </section>
+              <section class="detail-section"><h2>What changed</h2><div class="diff-box"><div><span class="minus">−</span><code>“I’m connecting you with a specialist now.”</code></div><div><span class="plus">+</span><code>“I want to get this right. Let me try one more step before I connect you.”</code></div></div><p class="source-link"><svg class="icon"><use href="#link" /></svg>Source: Release notes v2.4 · Prompt policy line 148</p></section>
+              <section class="detail-section"><div class="section-heading"><h2>Why it matters</h2><span class="label coral-light">3 GOALS AFFECTED</span></div>
+                <div class="impact-row"><span class="impact-icon down"><svg class="icon"><use href="#clock" /></svg></span><div><strong>Human handoff within 30 seconds</strong><p>1 of 24 tests exceeded the confirmed limit by 17 seconds.</p></div><span class="impact-tag negative">At risk</span></div>
+                <div class="impact-row"><span class="impact-icon up"><svg class="icon"><use href="#trend-up" /></svg></span><div><strong>Contain 65% of tier-1 requests</strong><p>Projected containment improves by 3.2 percentage points.</p></div><span class="impact-tag positive-tag">Improves</span></div>
+                <div class="impact-row"><span class="impact-icon neutral"><svg class="icon"><use href="#shield" /></svg></span><div><strong>No unsupported policy claims</strong><p>All new wording remains grounded in the approved knowledge base.</p></div><span class="impact-tag neutral-tag">No change</span></div>
+              </section>
+              <section class="detail-section"><div class="section-heading"><h2>Evidence reviewed</h2><span>6 sources · 24 evaluations</span></div>
+                <div class="evidence-summary"><div><span class="check-circle"><svg class="icon"><use href="#check" /></svg></span><p><strong>23 scenarios passed</strong><br><small>Expected escalation timing and language</small></p></div><div><span class="warning-circle"><svg class="icon"><use href="#alert" /></svg></span><p><strong>1 contradiction found</strong><br><small>47-second handoff in identity uncertainty case</small></p></div></div>
+                <button class="evidence-expand" id="toggle-evidence"><span><svg class="icon"><use href="#nodes" /></svg>View requirement-to-evidence trace</span><svg class="icon toggle-chevron"><use href="#chevron-down" /></svg></button>
+                <div class="expanded-evidence" id="expanded-evidence"><div><b>Confirmed fact</b><span>PRD acceptance criterion AC-14 sets a 30-second maximum.</span></div><div><b>Observed result</b><span>Evaluation EV-024 recorded a 47-second handoff.</span></div><div><b>Inference</b><span>A hard timeout should preserve the commitment without losing the clarity gains.</span></div></div>
+              </section>
+              <section class="detail-section gate-section"><div class="gate-icon"><svg class="icon"><use href="#lock" /></svg></div><div><span class="label blue">WHY YOU'RE SEEING THIS</span><h2>Escalation gate triggered</h2><p>This change touches a confirmed external commitment. ProofLoop can test and recommend, but only the product owner can authorize a release condition.</p></div></section>
+            </div>
+            <aside class="decision-panel">
+              <div class="sticky-card"><span class="label blue">YOUR DECISION</span><h2>How should the team proceed?</h2>
+                <button class="decision-choice recommended" data-decision="approve"><span class="choice-icon"><svg class="icon"><use href="#check" /></svg></span><span><b>Approve with guardrail</b><small>Add the 30-second timeout, then release.</small></span><span class="recommended-pill">Recommended</span></button>
+                <button class="decision-choice" data-decision="revise"><span class="choice-icon revise"><svg class="icon"><use href="#edit" /></svg></span><span><b>Request revision</b><small>Send specific conditions to the team.</small></span></button>
+                <button class="decision-choice" data-decision="reject"><span class="choice-icon reject"><svg class="icon"><use href="#x" /></svg></span><span><b>Reject change</b><small>Keep the current v2.3 behavior.</small></span></button>
+                <p class="decision-note"><svg class="icon"><use href="#lock" /></svg>Your decision and its evidence will be added to decision memory.</p>
+              </div>
+              <div class="prepared-card"><small>PREPARED BY PROOFLOOP</small><p>47 claims · 100% source-linked<br>6 artifacts · 24 test scenarios</p><span>Last updated 2 min ago</span></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="source-modal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="source-title">
+        <button class="modal-close icon-button" data-close-modal><svg class="icon"><use href="#x" /></svg></button>
+        <span class="modal-icon"><svg class="icon"><use href="#upload" /></svg></span><h2 id="source-title">Add project evidence</h2><p>Upload sanitized artifacts to strengthen ProofLoop’s living context.</p>
+        <label class="dropzone"><input type="file" id="file-input" multiple accept=".pdf,.docx,.txt,.csv,.md" /><svg class="icon"><use href="#upload" /></svg><strong>Drop files here or choose files</strong><span>PDF, DOCX, TXT, CSV, or Markdown · synthetic data only</span></label>
+        <div class="source-options"><button><span class="source-type doc"><svg class="icon"><use href="#file" /></svg></span><span><b>Product requirements</b><small>PRD, acceptance criteria, roadmap</small></span><svg class="icon"><use href="#chevron-right" /></svg></button><button><span class="source-type eval"><svg class="icon"><use href="#pulse" /></svg></span><span><b>Evaluation results</b><small>Test runs, scorecards, regressions</small></span><svg class="icon"><use href="#chevron-right" /></svg></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="decision-modal" aria-hidden="true">
+      <div class="modal decision-confirm" role="dialog" aria-modal="true"><button class="modal-close icon-button" data-close-modal><svg class="icon"><use href="#x" /></svg></button><span class="modal-icon success"><svg class="icon"><use href="#check" /></svg></span><h2 id="decision-title">Approve with guardrail?</h2><p id="decision-description">This will record your authorization and tell the delivery team to add a hard 30-second timeout before release.</p><label class="note-label">Decision note <span>Optional</span><textarea id="decision-note" placeholder="Add context for the delivery team…"></textarea></label><div class="modal-actions"><button class="button secondary" data-close-modal>Cancel</button><button class="button primary" id="confirm-decision">Confirm decision</button></div></div>
+    </div>
+
+    <div class="toast" id="toast"><span><svg class="icon"><use href="#check" /></svg></span><div><strong>Decision recorded</strong><p>Delivery team notified. Decision memory updated.</p></div><button class="icon-button"><svg class="icon"><use href="#x" /></svg></button></div>
+
+    <svg aria-hidden="true" class="svg-sprite">
+      <symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+      <symbol id="file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+      <symbol id="nodes" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v4M5 16v-2h14v2"/></symbol>
+      <symbol id="activity" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+      <symbol id="database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v7c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12v7c0 1.7 4 3 9 3s9-1.3 9-3v-7"/></symbol>
+      <symbol id="settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1z"/></symbol>
+      <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+      <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></symbol>
+      <symbol id="spark" viewBox="0 0 24 24"><path d="m12 3 1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5zM19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/></symbol>
+      <symbol id="arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+      <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="bolt" viewBox="0 0 24 24"><path d="m13 2-8 12h7l-1 8 8-12h-7z"/></symbol>
+      <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></symbol>
+      <symbol id="chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol><symbol id="chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="git-branch" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="19" r="2"/><path d="M6 7v10M8 9c5 0 8-1 8-3"/></symbol><symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+      <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol><symbol id="pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></symbol><symbol id="alert" viewBox="0 0 24 24"><path d="M10.3 3.7 2.5 18a2 2 0 0 0 1.8 3h15.4a2 2 0 0 0 1.8-3L13.7 3.7a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol>
+      <symbol id="history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></symbol><symbol id="download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+      <symbol id="hourglass" viewBox="0 0 24 24"><path d="M6 2h12M6 22h12M7 2c0 6 3 6 5 10-2 4-5 4-5 10M17 2c0 6-3 6-5 10 2 4 5 4 5 10"/></symbol><symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+      <symbol id="trend-up" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+      <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol><symbol id="edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/></symbol><symbol id="x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol><symbol id="upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+    </svg>
+    <script src="app.js"></script>
+  </body>
+</html>
