@@ -33,6 +33,7 @@ Then visit `http://localhost:4173`. All data is synthetic; nothing is uploaded a
 - **RACI-lite** — inline R/A/C/I with the Accountable role emphasized, plus reversible decision-vs-informative routing.
 - **Agent watch floor** — a standing crew of 8; only agents that *escalate* surface in the briefing, keeping it calm.
 - **Rollout arc** — value showcase → pilot plan → go/no-go → decision memory.
+- **Show & tell** — an optional gallery (screenshots, graphics, short video) the delivery lead can attach to a decision or the rollout showcase; it only appears once populated (see the escalation brief and the value showcase for examples).
 
 ## How it's built
 

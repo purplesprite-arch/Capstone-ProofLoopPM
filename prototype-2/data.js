@@ -113,6 +113,11 @@ window.PL = {
         { label: "Observed result", body: "Evaluation EV-024 recorded a 47-second handoff." },
         { label: "Inference", body: "A hard timeout preserves the commitment without losing the clarity gains." }
       ],
+      // Delivery-lead-curated media, optional per decision — absent everywhere else on purpose,
+      // to show that the section only appears once someone has actually attached something.
+      showAndTell: [
+        { type: "graphic", title: "Handoff latency, before vs. after", caption: "Distribution of transfer times across the 24-case regression suite — one outlier past the 30s line.", addedBy: "andrew-aasen" }
+      ],
       gate: "This change touches a confirmed external commitment. ProofLoop can test and recommend, but only an accountable owner can authorize a release condition.",
       openedMinsAgo: 18
     },
@@ -232,6 +237,12 @@ window.PL = {
       { kind: "eval", title: "Pre-launch eval battery", note: "412 billing scenarios · 94% resolved correctly.", claim: "observed" },
       { kind: "doc",  title: "Refund policy grounding", note: "All refund logic linked to approved policy v2.1.", claim: "confirmed" },
       { kind: "eval", title: "Shadow-mode comparison", note: "Beat human baseline on 3 of 4 KPIs over 6 weeks.", claim: "observed" }
+    ],
+    // Delivery-lead-curated media for the go/no-go — optional, only shown once populated.
+    showAndTell: [
+      { type: "screenshot", title: "Before: human agent queue", caption: "Tier-1 billing chat routed to a human, average 6.4 min handle time.", addedBy: "andrew-aasen" },
+      { type: "screenshot", title: "After: Billing Resolution Agent", caption: "Same refund case resolved by the agent in shadow mode, 3.9 min.", addedBy: "andrew-aasen" },
+      { type: "video", title: "60-second pilot walkthrough", caption: "Screen recording of the agent resolving a live refund end to end in shadow mode.", addedBy: "andrew-aasen" }
     ],
     designedBy: "rollout-manager",
     cohorts: [

@@ -375,6 +375,36 @@
     `;
   }
 
+  /* ---------- show & tell ----------
+     Delivery-lead-curated media (screenshots, graphics, short videos) attached to a
+     decision or the rollout showcase. Renders nothing when unset — visible to the
+     exec only once the delivery lead has actually populated it. */
+  const ST_LABEL = { screenshot: "Screenshot", graphic: "Graphic", video: "Video" };
+  function showAndTell(items) {
+    if (!items || !items.length) return "";
+    const tiles = items
+      .map((it) => {
+        const person = P[it.addedBy];
+        const credit = person ? `${person.short || person.name}${person.role ? " · " + person.role : ""}` : "";
+        return `<article class="st-tile">
+            <div class="st-thumb st-${it.type}">
+              ${icon(it.type === "video" ? "play" : "image", "st-ic")}
+              <span class="st-kind">${ST_LABEL[it.type] || it.type}</span>
+            </div>
+            <div class="st-body">
+              <b>${it.title}</b>
+              <p>${it.caption}</p>
+              ${credit ? `<span class="st-credit">Added by ${credit}</span>` : ""}
+            </div>
+          </article>`;
+      })
+      .join("");
+    return `<section class="detail-block showtell">
+        <div class="block-head"><h2>Show & tell</h2><span class="muted">${items.length} attached</span></div>
+        <div class="st-grid">${tiles}</div>
+      </section>`;
+  }
+
   function sourceCard(s) {
     const label = { confirmed: "Confirmed", observed: "Observed", contradicts: "Contradicts" };
     return `<div class="source-card${s.kind === "conflict" ? " is-conflict" : ""}">
@@ -446,6 +476,8 @@
 
           ${diff}
 
+          ${showAndTell(d.showAndTell)}
+
           ${goals ? `<section class="detail-block"><div class="block-head"><h2>Why it matters</h2><span class="badge coral">${d.goals.length} goals affected</span></div>${goals}</section>` : ""}
 
           ${ev ? `<section class="detail-block"><div class="block-head"><h2>Evidence reviewed</h2><span class="muted">${d.evidence.length} sources</span></div>${ev}
@@ -496,6 +528,7 @@
             <div class="conf-side"><small>Evidence confidence</small><b>${r.confidence}%</b><i class="conf-bar"><em style="width:${r.confidence}%"></em></i></div>
           </div>
           <div class="kpi-grid">${kpis}</div>
+          ${showAndTell(r.showAndTell)}
           <section class="detail-block"><div class="block-head"><h2>Evidence for the decision</h2><span class="muted">${r.evidence.length} sources</span></div>${ev}</section>
         </div>
         <aside class="decide-panel">
