@@ -153,11 +153,9 @@
       return;
     }
 
-    // confidence explainer
-    if (t.closest("[data-conf]")) {
-      showToast("How confidence works", "A blend of source coverage, recency, agreement across sources, and eval repeatability.");
-      return;
-    }
+    // confidence explainer → real computed breakdown, same treatment as the Impact Score's "why"
+    const confBtn = t.closest("[data-conf]");
+    if (confBtn) { openConfidenceBreakdown(confBtn.dataset.conf); return; }
 
     // modal close (the time-gate has no dismiss — picking a tier is the only way out)
     if (t.closest("[data-close]") || t.classList.contains("modal-backdrop")) { if (!gateOpen) closeModal(); return; }
@@ -184,6 +182,18 @@
       <p class="modal-sub">${d.title}</p>
       ${R.breakdown(d)}
       <p class="modal-foot">Score = 0.35·value + 0.30·unblocks + 0.20·reach + 0.15·urgency. Weights are tuned to protect production value first.</p>`;
+    openModal();
+  }
+
+  /* ---------- confidence breakdown modal (§4.7) ---------- */
+  function openConfidenceBreakdown(ref) {
+    const o = ref === "evidence-map" ? PL.evidenceMap.detail : state.decisionFor(ref);
+    if (!o) return;
+    const body = document.getElementById("modal-body");
+    body.innerHTML = `<div class="modal-head"><h2>How confidence works</h2><button class="icon-btn" data-close>${R.icon("x")}</button></div>
+      <p class="modal-sub">${o.title || ""}</p>
+      ${R.confidenceBreakdown(o)}
+      <p class="modal-foot">Confidence = 0.35·eval pass rate + 0.30·source agreement + 0.20·coverage + 0.15·recency.</p>`;
     openModal();
   }
 

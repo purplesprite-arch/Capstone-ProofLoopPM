@@ -534,7 +534,7 @@
             <div class="rec-label">${icon("spark")}ProofLoop recommends</div>
             <h2>${rec.headline}</h2>
             <p>${rec.rationale}</p>
-            <div class="confidence"><span><b>${rec.confidence}%</b> evidence confidence</span><i class="conf-bar"><em style="width:${rec.confidence}%"></em></i><button class="link-btn" data-conf>How confidence works</button></div>
+            <div class="confidence"><span><b>${confidenceScore(d)}%</b> evidence confidence</span><i class="conf-bar"><em style="width:${confidenceScore(d)}%"></em></i><button class="link-btn" data-conf="${d.id}">How confidence works</button></div>
           </section>
 
           ${diff}
