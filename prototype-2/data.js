@@ -101,8 +101,12 @@ window.PL = {
       recommendation: {
         choice: "approve",
         headline: "Approve with a 30-second handoff guardrail.",
-        rationale: "v2.4 improves escalation clarity in 23 of 24 scenarios. One edge case delays human transfer past the promise. A hard 30-second timeout keeps the clarity gains without breaking the commitment.",
-        confidence: 92
+        rationale: "v2.4 improves escalation clarity in 23 of 24 scenarios. One edge case delays human transfer past the promise. A hard 30-second timeout keeps the clarity gains without breaking the commitment."
+      },
+      confidenceInputs: {
+        eval: { passed: 23, total: 24 },       // matches the "23 of 24 cases passed" evidence note below
+        coverage: { linked: 4, total: 4 },     // all 4 evidence entries backing this decision are source-linked
+        mostRecentAt: "2026-09-07T09:42:00"    // matches the "run Sep 7, 09:42" evidence note below
       },
       diff: {
         before: "I'm connecting you with a specialist now.",
@@ -145,8 +149,17 @@ window.PL = {
       recommendation: {
         choice: "approve",
         headline: "Approve a 5% pilot with staged expansion.",
-        rationale: "Across 6 weeks in shadow mode the agent beat the human baseline on deflection and handle time while holding CSAT. Guardrails and rollback triggers are in place for a limited pilot.",
-        confidence: 87
+        rationale: "Across 6 weeks in shadow mode the agent beat the human baseline on deflection and handle time while holding CSAT. Guardrails and rollback triggers are in place for a limited pilot."
+      },
+      evidence: [
+        { kind: "eval", title: "Pre-launch eval battery", note: "412 billing scenarios · 94% resolved correctly.", claim: "observed" },
+        { kind: "doc",  title: "Refund policy grounding", note: "All refund logic linked to approved policy v2.1.", claim: "confirmed" },
+        { kind: "eval", title: "Shadow-mode comparison", note: "Beat human baseline on 3 of 4 KPIs over 6 weeks.", claim: "observed" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 387, total: 412 },     // 94% of 412 pre-launch scenarios resolved correctly
+        coverage: { linked: 3, total: 3 },     // all 3 evidence sources behind the go/no-go are source-linked
+        mostRecentAt: "2026-09-06T00:00:00"    // shadow-mode comparison closed out the day before go/no-go
       },
       openedMinsAgo: 42
     },
@@ -166,8 +179,7 @@ window.PL = {
       recommendation: {
         choice: "approve",
         headline: "Set the limit at 2 repeat attempts, then force a human handoff.",
-        rationale: "Two attempts covers 96% of successful self-resolutions in the logs. Beyond that, resolution rate falls and frustration signals rise. A hard cap closes the open evidence gap and unblocks the routing work.",
-        confidence: 78
+        rationale: "Two attempts covers 96% of successful self-resolutions in the logs. Beyond that, resolution rate falls and frustration signals rise. A hard cap closes the open evidence gap and unblocks the routing work."
       },
       goals: [
         { title: "Human handoff within 30 seconds", note: "A cap keeps repeat loops from delaying escalation.", dir: "up" },
@@ -175,8 +187,14 @@ window.PL = {
       ],
       evidence: [
         { kind: "eval",     title: "Self-resolution log analysis", note: "96% of successful resolutions happen within 2 attempts.", claim: "observed" },
-        { kind: "conflict", title: "Coverage gap EG-03", note: "No approved threshold for repeat escalation attempts.", claim: "contradicts" }
+        { kind: "conflict", title: "Coverage gap EG-03", note: "No approved threshold for repeat escalation attempts.", claim: "contradicts" },
+        { kind: "eval",     title: "Repeat-cap simulation", note: "Simulated a 2-attempt cap against 90 days of logs — 187 of 194 sessions matched the target resolution behavior.", claim: "observed" }
       ],
+      confidenceInputs: {
+        eval: { passed: 187, total: 194 },     // repeat-cap simulation result
+        coverage: { linked: 1, total: 2 },     // the open coverage gap (EG-03) is exactly one of two claims still unlinked
+        mostRecentAt: "2026-08-28T00:00:00"    // the log analysis predates today by about 10 days
+      },
       trace: [
         { label: "Observed result", body: "Resolution rate drops sharply after the second attempt." },
         { label: "Inference", body: "A cap of 2 balances containment against customer frustration." }
@@ -196,7 +214,16 @@ window.PL = {
       metrics: { headline: "no goals at risk", kpi: "+1.1 pt routing accuracy", reach: "all inbound intents", blocksToday: 0 },
       raci: { r: ["sam-tan"], a: "andrew-aasen", c: [], i: ["maya-okonkwo"] },
       autoIn: "advances in 2h",
-      recommendation: { choice: "approve", headline: "Advancing under approved routing policy.", rationale: "", confidence: 96 }
+      recommendation: { choice: "approve", headline: "Advancing under approved routing policy.", rationale: "" },
+      evidence: [
+        { kind: "eval", title: "Intent routing regression suite", note: "142 of 142 cases passed · run Sep 7, 07:10.", claim: "observed" },
+        { kind: "doc",  title: "Routing policy v1.3", note: "Matches approved routing policy — no scope change.", claim: "confirmed" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 142, total: 142 },
+        coverage: { linked: 2, total: 2 },
+        mostRecentAt: "2026-09-07T07:10:00"
+      }
     },
     {
       id: "d-refund-knowledge",
@@ -209,7 +236,15 @@ window.PL = {
       metrics: { headline: "100% sourced", kpi: "12 examples added", reach: "billing responses", blocksToday: 0 },
       raci: { r: ["priya-rao"], a: "nadia-chen", c: [], i: ["maya-okonkwo"] },
       autoIn: "advances in 4h",
-      recommendation: { choice: "approve", headline: "Advancing — grounded in approved sources.", rationale: "", confidence: 94 }
+      recommendation: { choice: "approve", headline: "Advancing — grounded in approved sources.", rationale: "" },
+      evidence: [
+        { kind: "doc", title: "Refund policy v2.1", note: "12 new refund examples added, all linked to approved policy.", claim: "confirmed" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 12, total: 12 },       // all 12 new examples verified against policy
+        coverage: { linked: 12, total: 12 },   // matches the "100% sourced" headline metric
+        mostRecentAt: "2026-09-07T06:30:00"
+      }
     },
     {
       id: "d-tone-tweak",
@@ -222,7 +257,15 @@ window.PL = {
       metrics: { headline: "cosmetic", kpi: "neutral", reach: "all responses", blocksToday: 0 },
       raci: { r: ["andrew-aasen"], a: "andrew-aasen", c: [], i: ["maya-okonkwo"] },
       autoIn: "advances in 6h",
-      recommendation: { choice: "approve", headline: "Advancing — no behavioral change.", rationale: "", confidence: 91 }
+      recommendation: { choice: "approve", headline: "Advancing — no behavioral change.", rationale: "" },
+      evidence: [
+        { kind: "doc", title: "Tone style guide v1.2", note: "8 of 8 sample responses reviewed — warmer phrasing, no policy or claim changes.", claim: "confirmed" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 8, total: 8 },
+        coverage: { linked: 1, total: 1 },
+        mostRecentAt: "2026-08-29T00:00:00"    // slightly older review pass — lands in the "recent" band, not "fresh"
+      }
     }
   ],
 
@@ -278,7 +321,12 @@ window.PL = {
       badge: "Confirmed requirement",
       title: "Human escalation within 30 seconds",
       body: "When the agent detects a high-risk intent or fails twice, it must transfer the customer to a human queue within 30 seconds.",
-      owner: "Nadia Chen", confidence: "High · 96%", verified: "Sep 7, 2026",
+      owner: "Nadia Chen", verified: "Sep 7, 2026",
+      confidenceInputs: {
+        eval: { passed: 23, total: 24 },
+        coverage: { linked: 47, total: 47 },   // the Evidence Steward's "47 of 47 claims source-linked" finding
+        mostRecentAt: "2026-09-07T09:42:00"
+      },
       sources: [
         { kind: "doc",      title: "Atlas Voice AI — product requirements", note: "AC-14 · escalate within 30 seconds after a second failed attempt.", claim: "confirmed" },
         { kind: "eval",     title: "Escalation regression suite", note: "23 of 24 cases passed · run Sep 7, 09:42.", claim: "observed" },
