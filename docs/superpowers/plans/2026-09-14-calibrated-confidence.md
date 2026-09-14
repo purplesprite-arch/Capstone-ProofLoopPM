@@ -631,7 +631,6 @@ git commit -m "feat: normalize Evidence Map confidence onto the computed format 
 - [ ] **Step 1: Confirm every confidence value in the app is now computed**
 
 ```js
-document.querySelectorAll ? null : null; // just a reminder this is a console-driven check
 [...PL.decisions, PL.evidenceMap.detail].every(o => o.confidenceInputs != null)
 ```
 Expected: `true`.
@@ -667,3 +666,44 @@ grep -rn "\.confidence\b" prototype-2/render.js prototype-2/app.js
 Expected matches: only `confidenceScore(...)`/`confidenceBreakdown(...)` calls, `PL.confidenceWeights`/`PL.confidenceWeightMeta` reads inside the engine, and the two remaining `r.confidence` reads inside `showcase()` (Rollout arc, explicitly out of scope). No `.recommendation.confidence` or `m.detail.confidence` reads should remain anywhere.
 
 - [ ] **Step 5: No commit for this task** — it's verification-only. If Step 4's grep turns up a stray reference, fix it in the relevant file from Tasks 1–4 and fold the fix into that task's commit (or make a small `fix:` commit if those are already pushed).
+
+---
+
+### Task 6: Cap displayed confidence below 100% (post-review addendum)
+
+The final whole-branch review (after Task 5) found that `d-intent-routing` and `d-refund-knowledge` compute to a literal 100 — perfect inputs (full eval pass, full coverage, all-agreeing sources, fresh recency) hit the formula's ceiling exactly, and both decisions are reachable via the live Brief detail page. A bare "100%" badge reads as absolute certainty even with the breakdown one click away. Decision (recorded in PRD §7): cap the *displayed* composite below 100, leaving the underlying per-factor math, weights, and breakdown rows completely unchanged — only the single rounded number every caller reads gets clamped.
+
+**Files:**
+- Modify: `prototype-2/render.js` — `confidenceScore(o)`
+
+**Interfaces:**
+- Consumes: nothing new.
+- Produces: `confidenceScore(o)` now returns `Math.min(99, <previous return value>)`. Every existing caller (`brief()`, `evidence()`, `confidenceBreakdown()`'s total line) already goes through this one function, so no other file changes.
+
+- [ ] **Step 1: Apply the cap**
+
+Find `confidenceScore(o)` in `prototype-2/render.js` (added in Task 1). It currently ends with a line shaped like:
+
+```js
+return Math.round(f.evalPassRate*w.evalPassRate + f.sourceAgreement*w.sourceAgreement + f.coverage*w.coverage + f.recency*w.recency);
+```
+
+Change the `return` so the rounded value is clamped to 99 as a display ceiling, without touching how `f` (factors) or `w` (weights) are computed:
+
+```js
+const raw = Math.round(f.evalPassRate*w.evalPassRate + f.sourceAgreement*w.sourceAgreement + f.coverage*w.coverage + f.recency*w.recency);
+return Math.min(99, raw);
+```
+
+Add a one-line comment directly above explaining why: displayed confidence never reads as absolute certainty, even when every input is perfect — the per-factor breakdown rows (`confidenceContributions`/`confidenceProvenance`) are untouched and still show the true, uncapped per-factor math.
+
+- [ ] **Step 2: Verify**
+
+No test framework exists — verify manually. Re-run the same hand-computation used in Task 1/Task 2's verification for all 7 confidence-bearing objects (`PL.decisions` + `PL.evidenceMap.detail`) via a Node script loading the real `data.js`/`render.js`. Expected: every object that previously computed to 100 now returns exactly `99`; every object that previously computed to anything below 100 (e.g. `d-escalation` → 91, `evidenceMap.detail` → 91) is completely unaffected, since `Math.min(99, x)` only changes values that were already ≥ 99. Also confirm `confidenceBreakdown(o)`'s per-row math (e.g. `d-intent-routing`'s individual factor contributions) still shows the true uncapped per-factor values — only the total/badge is capped, not the row-level arithmetic.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add prototype-2/render.js
+git commit -m "feat: cap displayed confidence at 99% so perfect inputs never read as absolute certainty (§7)"
+```
