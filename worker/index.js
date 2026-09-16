@@ -3,6 +3,7 @@ export default {
     const url = new URL(request.url);
     if (url.pathname.startsWith("/api/")) {
       // Placeholder for the future backend (AI calls, saved responses, forms).
+      // Future landing spot for the read-only Jira sync: /api/jira.
       return new Response(JSON.stringify({ error: "API not implemented yet" }), {
         status: 501,
         headers: { "content-type": "application/json" },
