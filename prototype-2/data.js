@@ -86,10 +86,10 @@ window.PL = {
   decisions: [
     {
       id: "d-escalation",
-      title: "Escalation response v2.4",
+      title: "Friendlier escalation replies (v2.4)",
       agentId: "risk-sentinel",
       type: "decision",
-      one_liner: "A friendlier retry can push human handoff past the promised 30 seconds.",
+      one_liner: "Warmer wording is clearer in 23 of 24 cases -- but one path risks breaking our 30-second handoff promise.",
       impact: { value: 84, unblock: 88, reach: 76, urgency: 90 },
       // Observable signals behind the sub-scores. The rubric (render.js) maps these to a band;
       // each authored sub-score sits inside the band its signals imply — provenance, not recomputation.
@@ -140,10 +140,10 @@ window.PL = {
 
     {
       id: "d-billing-golive",
-      title: "Billing Resolution Agent — pilot go/no-go",
+      title: "Billing Agent -- launch the pilot?",
       agentId: "rollout-manager",
       type: "decision",
-      one_liner: "Evidence supports a limited launch. Approve the pilot plan or hold.",
+      one_liner: "Six weeks of shadow data beat the human baseline. Approve a limited 5% pilot, or hold.",
       impact: { value: 90, unblock: 60, reach: 82, urgency: 64 },
       signals: { valueKind: "revenue-opportunity", dollarsDisplay: "$18k/mo", weeklyDollars: 4150, dollarsKind: "opportunity", commitmentAtStake: false, blocksToday: 2, reachPerWeek: 9000, urgencyKind: "gate-window" },
       metrics: { headline: "$18k/mo projected", kpi: "+17 pt deflection", reach: "billing queue · ~9k chats / week", blocksToday: 2 },
@@ -171,10 +171,10 @@ window.PL = {
 
     {
       id: "d-repeat-threshold",
-      title: "Repeat-escalation threshold",
+      title: "How many retries before a human takes over?",
       agentId: "dependency-tracker",
       type: "decision",
-      one_liner: "No agreed limit on repeat escalations. Three build tasks are waiting on it.",
+      one_liner: "There's no agreed limit yet -- and 3 build tasks are blocked until we set one.",
       impact: { value: 58, unblock: 74, reach: 55, urgency: 58 },
       signals: { valueKind: "unblocks-work", dollarsDisplay: null, weeklyDollars: null, dollarsKind: null, commitmentAtStake: false, blocksToday: 3, reachPerWeek: null, urgencyKind: "gate-window" },
       metrics: { headline: "unblocks 3 tasks", kpi: "closes 1 evidence gap", reach: "all escalation paths", blocksToday: 3 },
@@ -210,10 +210,10 @@ window.PL = {
 
     {
       id: "d-intent-routing",
-      title: "Intent routing patch v1.3",
+      title: "Intent-routing tune-up (v1.3)",
       agentId: "eval-runner",
       type: "informative",
-      one_liner: "Classifier update passed every check and stayed within policy.",
+      one_liner: "Classifier update passed every check and stayed within policy -- advancing on its own.",
       impact: { value: 42, unblock: 36, reach: 60, urgency: 40 },
       signals: { valueKind: "accuracy-gain", dollarsDisplay: null, weeklyDollars: null, dollarsKind: null, commitmentAtStake: false, blocksToday: 0, reachPerWeek: null, urgencyKind: "scheduled" },
       metrics: { headline: "no goals at risk", kpi: "+1.1 pt routing accuracy", reach: "all inbound intents", blocksToday: 0 },
@@ -232,10 +232,10 @@ window.PL = {
     },
     {
       id: "d-refund-knowledge",
-      title: "Billing refund knowledge update",
+      title: "New refund examples added",
       agentId: "evidence-steward",
       type: "informative",
-      one_liner: "New refund examples added and fully source-linked.",
+      one_liner: "Fresh refund cases, every one source-linked -- advancing on its own.",
       impact: { value: 35, unblock: 30, reach: 52, urgency: 34 },
       signals: { valueKind: "content", dollarsDisplay: null, weeklyDollars: null, dollarsKind: null, commitmentAtStake: false, blocksToday: 0, reachPerWeek: null, urgencyKind: "scheduled" },
       metrics: { headline: "100% sourced", kpi: "12 examples added", reach: "billing responses", blocksToday: 0 },
@@ -253,10 +253,10 @@ window.PL = {
     },
     {
       id: "d-tone-tweak",
-      title: "Tone & style refinement",
+      title: "Warmer tone, same rules",
       agentId: "requirements-analyst",
       type: "informative",
-      one_liner: "Warmer phrasing, no change to policy or claims.",
+      one_liner: "Phrasing softened; no change to policy or claims -- advancing on its own.",
       impact: { value: 28, unblock: 22, reach: 48, urgency: 26 },
       signals: { valueKind: "cosmetic", dollarsDisplay: null, weeklyDollars: null, dollarsKind: null, commitmentAtStake: false, blocksToday: 0, reachPerWeek: null, urgencyKind: "low" },
       metrics: { headline: "cosmetic", kpi: "neutral", reach: "all responses", blocksToday: 0 },
