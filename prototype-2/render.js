@@ -330,7 +330,12 @@
       .join("");
     return `<div class="modal-head"><h2>How much time do you have today?</h2></div>
       <p class="modal-sub">Pick one — Today will adjust to match.</p>
-      ${rows}`;
+      ${rows}
+      <p class="group-label">Or switch modes</p>
+      <button class="choice choice-secondary" data-presenter-entry>
+        <span class="choice-ic presenter">${icon("gauge", "filled")}</span>
+        <span><b>Presenter Mode</b><small>A screen-share view for walkthroughs — not a time choice.</small></span>
+      </button>`;
   }
 
   /* ---------- views ---------- */
@@ -688,5 +693,16 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown };
+  /* ---------- presenter mode entry point (placeholder — presenter-cockpit feature fills this in) ---------- */
+  function presenter(state) {
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to Today</button>
+      <header class="page-head">
+        <h1>Presenter Mode</h1>
+        <p>The full presenter cockpit is coming soon — this screen is just the entry point for now.</p>
+      </header>
+    `;
+  }
+
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, presenter };
 })();
