@@ -274,6 +274,31 @@ window.PL = {
     }
   ],
 
+  // Delivery-crew build items (feature.agentId is a SEPARATE namespace from decision.agentId —
+  // watch-floor ProofLoop agents above vs. the agents actually building/shipping each feature).
+  // decisionIds link a feature to the watch-floor decisions gating or informing its progress.
+  // 'd-order-history-access', 'd-refund-autonomy', and 'd-password-reset' are reserved decision
+  // ids that don't exist yet in this seed — a later feature adds them; referencing them here now
+  // is intentional.
+  features: [
+    { id: "feat-billing-resolver", name: "Billing Resolution Agent", agentId: "billing-resolver",
+      status: "build-complete", summary: "Waiting on pilot go/no-go", progress: 90,
+      decisionIds: ["d-billing-golive", "d-order-history-access", "d-refund-autonomy"],
+      jiraKey: null, blockers: [] },
+    { id: "feat-escalation-service", name: "Service Agent — Escalation", agentId: "escalation-service",
+      status: "in-progress", summary: "Needs decision inputs to raise value and clear partial blockers", progress: 55,
+      decisionIds: ["d-escalation", "d-repeat-threshold", "d-password-reset"],
+      jiraKey: null, blockers: [] },
+    { id: "feat-intent-router", name: "Intent Router", agentId: "intent-router",
+      status: "live", summary: "Classifier update passed every check", progress: 100,
+      decisionIds: ["d-intent-routing"],
+      jiraKey: null, blockers: [] },
+    { id: "feat-refund-knowledge", name: "Knowledge / Refunds", agentId: "refund-knowledge",
+      status: "in-progress", summary: "Fresh refund examples added, source-linked", progress: 70,
+      decisionIds: ["d-refund-knowledge"],
+      jiraKey: null, blockers: [] }
+  ],
+
   // Second agent's rollout package: the go/no-go value showcase + the pilot plan the Rollout Manager drafted.
   rollout: {
     agentId: "billing-resolver",
