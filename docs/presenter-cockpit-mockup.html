@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProofLoop — Presenter Mode cockpit (mockup v3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Tokens copied verbatim from prototype-2/styles.css — throwaway visual exploration,
+   not the real app. v3: the Impact Score in each row is now a real, working link that
+   opens a modal with that decision's full breakdown — same honest-arithmetic pattern as
+   the existing "see the math" modal in render.js's breakdown(). */
+:root{--navy:#172338;--navy-2:#223149;--ink:#182131;--muted:#3d4759;--line:#e3e7eb;--bg:#f5f6f7;--white:#fff;--blue:#315aef;--blue-soft:#edf1ff;--coral:#e66045;--coral-soft:#fff0eb;--mint:#24a981;--mint-soft:#e8f8f3;--amber:#c98812;--amber-soft:#fff6df;--shadow:0 10px 30px rgba(23,35,56,.08);--radius:14px;--mono:"DM Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+
+.note{max-width:1320px;margin:0 auto;padding:22px 22px 0}
+.note .eyebrow{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--coral)}
+.note h1{font-size:22px;letter-spacing:-.6px;margin:6px 0 8px}
+.note p{font-size:13px;color:var(--muted);max-width:80ch;line-height:1.6}
+.note ul{margin:10px 0 0;padding-left:19px}
+.note li{font-size:12.5px;color:#454f60;line-height:1.6;margin-bottom:3px}
+
+.stage{background:var(--navy);padding:26px 0 50px;margin-top:20px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px;display:grid;gap:18px}
+
+.cockpit-head{display:flex;align-items:center;justify-content:space-between;color:#cdd8ff}
+.cockpit-head .who{display:flex;align-items:center;gap:12px}
+.cockpit-head .badge{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.4px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:6px 14px}
+.cockpit-head .ws{font-size:13px;color:#9aabce}
+.cockpit-head .status-line{font-size:13px;color:#9aabce}
+
+.panel{background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.panel-pad{padding:22px 26px 10px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.panel-title h3{font-size:13px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+.panel-title .cnt{font-family:var(--mono);font-size:11.5px;color:#8a94a6}
+
+/* ============ DECISION DASHBOARD ============ */
+.dgrid{display:grid;grid-template-columns:1.7fr 1.1fr 100px 1.5fr 1.1fr 90px 56px 128px;column-gap:14px;align-items:center}
+.dgrid.head{padding:0 4px 10px;border-bottom:2px solid var(--ink)}
+.dgrid.head span{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+.drow{padding:12px 4px;border-bottom:1px solid #eef0f3}
+.drow:last-child{border-bottom:0}
+.d-title{font-size:14px;font-weight:700;letter-spacing:-.1px;line-height:1.3}
+.d-sub{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.agent-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#4a5566;background:#eef1f5;border:1px solid #e2e7ec;border-radius:99px;padding:4px 10px 4px 8px;white-space:nowrap}
+.who-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.who-chip i{display:grid;place-items:center;width:20px;height:20px;border-radius:6px;font-size:9.5px;font-weight:800;font-style:normal;flex:0 0 auto}
+.who-chip.is-you i{background:var(--blue);color:#fff}
+.who-chip.is-you{color:#28407f}
+.who-chip.is-other i{background:#e2e6ec;color:#67717f}
+.who-chip.is-other{color:#3d4759}
+.who-chip .tag{font-size:9.5px;font-weight:700;color:#8a94a6;margin-left:2px}
+.d-rec{font-size:12.5px;color:#2c3746;line-height:1.4}
+.feat-pill{display:inline-block;font-size:11px;font-weight:700;color:#5a6675;background:#f0f2f5;border-radius:6px;padding:4px 9px}
+.feat-pill.none{color:#b7bfc9;background:transparent;padding-left:0}
+.unblk{font-family:var(--mono);font-size:12.5px;font-weight:500;color:#3d4759}
+.unblk.zero{color:#b7bfc9}
+.d-score{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--blue);text-align:center;background:none;border:0;padding:2px 0;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:#9fb0e8;width:100%}
+.d-score:hover{color:#1c3fc9;text-decoration-color:var(--blue)}
+.d-score:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.d-actions{display:flex;gap:6px;justify-content:flex-end}
+.abtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
+.abtn.approve{border-color:#9fe0c8;color:#17805e;background:var(--mint-soft)}
+.abtn.revise{color:#9a6a12;border-color:#f0d9a6;background:var(--amber-soft)}
+.abtn.reject{color:#b5482f;border-color:#f1c9bd;background:var(--coral-soft)}
+
+/* ============ VALUE FROM TODAY'S DECISIONS ============ */
+.vpanel{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);padding:26px 30px}
+.vhead{display:flex;align-items:center;justify-content:space-between}
+.vhead h3{font-size:14px;font-weight:800;letter-spacing:.3px;color:#fff}
+.vhead .pill{font-family:var(--mono);font-size:11.5px;font-weight:700;color:#0f1a2c;background:#fff;border-radius:99px;padding:5px 13px}
+.vstats{display:flex;gap:40px;margin-top:20px}
+.vstat{flex:1}
+.vstat .lbl{font-size:13px;font-weight:700;color:#fff}
+.vstat .num{font-family:var(--mono);font-weight:500;font-size:44px;line-height:1.05;margin-top:6px;color:#fff}
+.vstat.risk .num{color:#8ff0c9}
+.vstat.opp .num{color:#b9caff}
+.vstat .cap{font-size:13px;color:#e4e9fb;margin-top:6px;opacity:.9}
+.vdivider{width:1px;background:rgba(255,255,255,.18)}
+
+/* ============ BUILD ITEMS (bottom) ============ */
+.cx-build{padding:6px 4px 2px}
+.cx-frow{display:flex;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #eef0f3}
+.cx-frow:first-of-type{border-top:0}
+.cx-frow .name{font-size:13.5px;font-weight:700;flex:0 0 220px}
+.cx-frow .pill{font-family:var(--mono);font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 9px;flex:0 0 auto}
+.pill-build-complete{background:var(--mint-soft);color:#17805e}
+.pill-in-progress{background:var(--amber-soft);color:#9a6a12}
+.pill-live{background:var(--blue-soft);color:#28407f}
+.cx-frow .desc{font-size:12px;color:var(--muted);flex:1}
+
+/* ============ SCORE / BRIEF MODAL ============ */
+.scrim{position:fixed;inset:0;background:rgba(15,20,32,.6);display:none;align-items:center;justify-content:center;padding:30px;z-index:50}
+.scrim.is-open{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:640px;width:100%;max-height:86vh;overflow-y:auto;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:22px 26px 16px;border-bottom:1px solid var(--line)}
+.modal-head h2{font-size:18px;letter-spacing:-.3px}
+.modal-head p{font-size:12.5px;color:var(--muted);margin-top:5px}
+.modal-close{flex:0 0 auto;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:15px;color:#5a6675;cursor:pointer}
+.modal-body{padding:20px 26px 4px}
+.modal-sec{margin-bottom:20px}
+.modal-sec h4{font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.calc-table{width:100%;font-size:12.5px;border-collapse:collapse}
+.calc-table th{text-align:left;font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#8a94a6;padding:0 8px 6px 0}
+.calc-table td{padding:7px 8px 7px 0;border-top:1px solid #f0f2f5;vertical-align:top}
+.calc-table td.k{font-weight:700;white-space:nowrap}
+.calc-table td.n{font-family:var(--mono);text-align:right;white-space:nowrap}
+.calc-table td.p{color:var(--muted);font-size:11.5px}
+.calc-total{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid var(--ink)}
+.calc-total b{font-size:13px}
+.calc-total .n{font-family:var(--mono);font-size:20px;font-weight:500}
+.rec-box{display:flex;gap:10px;background:var(--blue-soft);border-radius:12px;padding:14px 16px;font-size:13px;color:#25355c}
+.rec-box b{display:block;font-size:13.5px;margin-bottom:4px;color:#1a2c58}
+.ev-list{display:grid;gap:8px}
+.ev-item{display:flex;gap:8px;font-size:12.5px;color:#3d4759}
+.ev-item .tag{flex:0 0 auto;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:#67717f;background:#eef1f4;border-radius:5px;padding:2px 6px;margin-top:1px}
+.modal-foot{display:flex;gap:10px;padding:16px 26px 22px}
+.mbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 8px;font-size:13px;font-weight:800;color:#40506a}
+.mbtn.approve{border-color:#9fe0c8;color:#17805e;background:var(--mint-soft)}
+.mbtn.revise{color:#9a6a12}
+.mbtn.reject{color:#b5482f}
+</style>
+</head>
+<body>
+
+<div class="note">
+  <span class="eyebrow">ProofLoop · Presenter Mode — v3</span>
+  <h1>Impact Score is now a link to the full calculation</h1>
+  <p>Click any score in the Decision Dashboard below — it opens a modal with that decision's
+  honest-arithmetic breakdown (sub-score × weight = contribution, same pattern as the app's
+  existing "see the math" view), the signal basis behind each sub-score, the recommendation +
+  rationale, and key evidence — everything needed to actually make the call without leaving
+  the dashboard. Modal also carries the same Approve / Revise / Reject actions.</p>
+</div>
+
+<div class="stage">
+  <div class="wrap">
+    <div class="cockpit-head">
+      <div class="who">
+        <span class="badge">PRESENTER MODE</span>
+        <span class="ws">Atlas Voice AI · Shadow mode</span>
+      </div>
+      <span class="status-line">7 decisions need you · 2 advancing on their own</span>
+    </div>
+
+    <!-- DECISION DASHBOARD -->
+    <div class="panel panel-pad">
+      <div class="panel-title"><h3>Decision Dashboard</h3><span class="cnt">sorted by impact · 7 open</span></div>
+
+      <div class="dgrid head">
+        <span>Decision</span><span>Surfacing agent</span><span>Decides</span><span>Recommendation</span><span>Build item</span><span>Unblocks</span><span>Impact</span><span></span>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Friendlier escalation replies (v2.4)</div><div class="d-sub">Warmer wording is clearer in 23 of 24 cases — but one path risks breaking our 30-second handoff promise.</div></div>
+        <span class="agent-chip">Risk &amp; Compliance Sentinel</span>
+        <span class="who-chip is-you"><i>A</i>You</span>
+        <span class="d-rec">Approve with a 30-second handoff guardrail.</span>
+        <span class="feat-pill">Service Agent — Escalation</span>
+        <span class="unblk">4 tasks</span>
+        <button class="d-score" data-open-score="d-escalation">85</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Billing Agent — launch the pilot?</div><div class="d-sub">Six weeks of shadow data beat the human baseline. Approve a limited 5% pilot, or hold.</div></div>
+        <span class="agent-chip">Rollout Manager</span>
+        <span class="who-chip is-you"><i>A</i>You</span>
+        <span class="d-rec">Approve a 5% pilot with staged expansion.</span>
+        <span class="feat-pill">Billing Resolution Agent</span>
+        <span class="unblk">2 tasks</span>
+        <button class="d-score" data-open-score="d-billing-golive">76</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Auto-approve refunds under $50?</div><div class="d-sub">Where the human-in-the-loop line sits — speed for customers vs. spend control for the business.</div></div>
+        <span class="agent-chip">Rollout Manager</span>
+        <span class="who-chip is-you"><i>A</i>You<span class="tag">C: Diego A.</span></span>
+        <span class="d-rec">Approve up to $50, weekly cap + audit log.</span>
+        <span class="feat-pill">Billing Resolution Agent</span>
+        <span class="unblk">2 tasks</span>
+        <button class="d-score" data-open-score="d-refund-autonomy">62</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">How many retries before a human takes over?</div><div class="d-sub">There's no agreed limit yet — and 3 build tasks are blocked until we set one.</div></div>
+        <span class="agent-chip">Dependency Tracker</span>
+        <span class="who-chip is-other"><i>NC</i>Nadia Chen<span class="tag">delegated</span></span>
+        <span class="d-rec">Set the cap at 2 retries — covers 96%.</span>
+        <span class="feat-pill">Service Agent — Escalation</span>
+        <span class="unblk">3 tasks</span>
+        <button class="d-score" data-open-score="d-repeat-threshold">62</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Give Atlas read access to order history?</div><div class="d-sub">Broader data access improves answers but widens the exposure surface.</div></div>
+        <span class="agent-chip">Evidence Steward</span>
+        <span class="who-chip is-other"><i>ST</i>Sam Tan</span>
+        <span class="d-rec">Approve, scoped to read-only order status.</span>
+        <span class="feat-pill">Billing Resolution Agent</span>
+        <span class="unblk">1 task</span>
+        <button class="d-score" data-open-score="d-order-history-access">53</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Let Atlas handle password resets?</div><div class="d-sub">Adding a new self-service action the agent can take end-to-end.</div></div>
+        <span class="agent-chip">Risk &amp; Compliance Sentinel</span>
+        <span class="who-chip is-you"><i>A</i>You</span>
+        <span class="d-rec">Approve with mandatory ID verification.</span>
+        <span class="feat-pill">Service Agent — Escalation</span>
+        <span class="unblk">1 task</span>
+        <button class="d-score" data-open-score="d-password-reset">51</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+
+      <div class="dgrid drow">
+        <div><div class="d-title">Move Atlas to the newer model?</div><div class="d-sub">Better reasoning across every conversation — but every eval needs re-baselining first.</div></div>
+        <span class="agent-chip">Eval Runner</span>
+        <span class="who-chip is-you"><i>A</i>You<span class="tag">C: Sam T.</span></span>
+        <span class="d-rec">Staged upgrade, gated on eval re-baseline.</span>
+        <span class="feat-pill none">— cross-cutting</span>
+        <span class="unblk zero">—</span>
+        <button class="d-score" data-open-score="d-model-upgrade">41</button>
+        <div class="d-actions"><button class="abtn approve">✓</button><button class="abtn revise">✎</button><button class="abtn reject">✕</button></div>
+      </div>
+    </div>
+
+    <!-- VALUE FROM TODAY'S DECISIONS -->
+    <div class="vpanel">
+      <div class="vhead">
+        <h3>Value from today's decisions</h3>
+        <span class="pill">2 of 7 decided</span>
+      </div>
+      <div class="vstats">
+        <div class="vstat risk">
+          <div class="lbl">Risk mitigated</div>
+          <div class="num">$3.2k/wk</div>
+          <div class="cap">Escalation v2.4 — a broken 30-second handoff promise, avoided.</div>
+        </div>
+        <div class="vdivider"></div>
+        <div class="vstat opp">
+          <div class="lbl">Value unlocked</div>
+          <div class="num">$18k/mo</div>
+          <div class="cap">Billing pilot — projected deflection savings once live.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILD ITEMS -->
+    <div class="panel panel-pad">
+      <div class="panel-title"><h3>Build items</h3><span class="cnt">4 features</span></div>
+      <div class="cx-build">
+        <div class="cx-frow">
+          <span class="name">Billing Resolution Agent</span>
+          <span class="pill pill-build-complete">build-complete</span>
+          <span class="desc">Waiting on pilot go/no-go — 3 decisions linked, 2 still open</span>
+        </div>
+        <div class="cx-frow">
+          <span class="name">Service Agent — Escalation</span>
+          <span class="pill pill-in-progress">in-progress</span>
+          <span class="desc">Needs decision inputs to raise value &amp; clear partial blockers — 3 decisions linked, 3 still open</span>
+        </div>
+        <div class="cx-frow">
+          <span class="name">Intent Router</span>
+          <span class="pill pill-live">live</span>
+          <span class="desc">1 decision linked, auto-advanced</span>
+        </div>
+        <div class="cx-frow">
+          <span class="name">Knowledge / Refunds</span>
+          <span class="pill pill-in-progress">in-progress</span>
+          <span class="desc">1 decision linked, auto-advanced</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE / BRIEF MODAL -->
+<div class="scrim" id="scrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div>
+        <h2 id="modal-title"></h2>
+        <p id="modal-oneliner"></p>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sec">
+        <h4>How the score adds up</h4>
+        <table class="calc-table">
+          <thead><tr><th>Factor</th><th>Basis</th><th>Sub-score</th><th>Weight</th><th>Contribution</th></tr></thead>
+          <tbody id="modal-calc-rows"></tbody>
+        </table>
+        <div class="calc-total"><b>Impact Score</b><span class="n" id="modal-total"></span></div>
+      </div>
+      <div class="modal-sec">
+        <h4>Recommendation</h4>
+        <div class="rec-box"><b id="modal-rec-headline"></b><span id="modal-rec-rationale"></span></div>
+      </div>
+      <div class="modal-sec">
+        <h4>Key evidence</h4>
+        <div class="ev-list" id="modal-evidence"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mbtn approve">✓ Approve</button>
+      <button class="mbtn revise">✎ Revise</button>
+      <button class="mbtn reject">✕ Reject</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Mock data only — mirrors the real app's impact/signals/provenance/recommendation/evidence
+   shape closely enough to demonstrate the modal, but this file has no dependency on data.js. */
+var WEIGHTS = { value: 0.35, unblock: 0.30, reach: 0.20, urgency: 0.15 };
+var DECISIONS = {
+  "d-escalation": {
+    title: "Friendlier escalation replies (v2.4)",
+    one_liner: "Warmer wording is clearer in 23 of 24 cases — but one path risks breaking our 30-second handoff promise.",
+    impact: { value: 84, unblock: 88, reach: 76, urgency: 90 },
+    basis: {
+      value: "$3.2k/wk at risk against a confirmed commitment",
+      unblock: "unblocks 4 build tasks due today",
+      reach: "affects ~1,900 tier-1 chats / week",
+      urgency: "a confirmed commitment is being broken now"
+    },
+    recommendation: { headline: "Approve with a 30-second handoff guardrail.", rationale: "v2.4 improves escalation clarity in 23 of 24 scenarios. One edge case delays human transfer past the promise. A hard 30-second timeout keeps the clarity gains without breaking the commitment." },
+    evidence: [
+      { tag: "eval", note: "Escalation regression suite — 23 of 24 cases passed, run Sep 7 09:42." },
+      { tag: "conflict", note: "Release v2.4 test result — 1 case transferred at 47 seconds under identity uncertainty." },
+      { tag: "decision", note: "Decision DL-007 — Nadia confirmed this promise is externally committed." }
+    ]
+  },
+  "d-billing-golive": {
+    title: "Billing Agent — launch the pilot?",
+    one_liner: "Six weeks of shadow data beat the human baseline. Approve a limited 5% pilot, or hold.",
+    impact: { value: 90, unblock: 60, reach: 82, urgency: 64 },
+    basis: {
+      value: "$18k/mo projected",
+      unblock: "unblocks 2 build tasks due today",
+      reach: "affects billing queue · ~9k chats / week",
+      urgency: "a go/no-go or dependency gate is open"
+    },
+    recommendation: { headline: "Approve a 5% pilot with staged expansion.", rationale: "Across 6 weeks in shadow mode the agent beat the human baseline on deflection and handle time while holding CSAT. Guardrails and rollback triggers are in place for a limited pilot." },
+    evidence: [
+      { tag: "eval", note: "Pre-launch eval battery — 412 billing scenarios, 94% resolved correctly." },
+      { tag: "doc", note: "Refund policy grounding — all refund logic linked to approved policy v2.1." },
+      { tag: "eval", note: "Shadow-mode comparison — beat human baseline on 3 of 4 KPIs over 6 weeks." }
+    ]
+  },
+  "d-refund-autonomy": {
+    title: "Auto-approve refunds under $50?",
+    one_liner: "Where the human-in-the-loop line sits — speed for customers vs. spend control for the business.",
+    impact: { value: 68, unblock: 60, reach: 58, urgency: 58 },
+    basis: {
+      value: "$2.8k/wk projected",
+      unblock: "unblocks 2 build tasks due today",
+      reach: "affects billing queue · ~3,400 refund requests / week",
+      urgency: "a go/no-go or dependency gate is open"
+    },
+    recommendation: { headline: "Approve auto-approval up to $50, with a running weekly cap and full audit log.", rationale: "94% of billing refund requests fall under $50. Auto-approving them removes the single biggest source of handle-time in the billing queue without opening material spend risk." },
+    evidence: [
+      { tag: "eval", note: "Refund amount distribution — 94% of the last 90 days' requests were under $50." },
+      { tag: "doc", note: "Refund policy v2.1 — refunds under $50 already require no manager sign-off today." }
+    ]
+  },
+  "d-repeat-threshold": {
+    title: "How many retries before a human takes over?",
+    one_liner: "There's no agreed limit yet — and 3 build tasks are blocked until we set one.",
+    impact: { value: 58, unblock: 74, reach: 55, urgency: 58 },
+    basis: {
+      value: "no direct dollars — value is unblocking downstream work",
+      unblock: "unblocks 3 build tasks due today",
+      reach: "affects self-resolution routing, no metered volume",
+      urgency: "a go/no-go or dependency gate is open"
+    },
+    recommendation: { headline: "Set the cap at 2 retries.", rationale: "96% of successful self-resolutions happen within 2 attempts. A 2-attempt cap covers nearly all of them while keeping repeat loops from delaying escalation." },
+    evidence: [
+      { tag: "eval", note: "Self-resolution log analysis — 96% of successful resolutions happen within 2 attempts." },
+      { tag: "eval", note: "Repeat-cap simulation — 187 of 194 sessions matched the target resolution behavior." }
+    ]
+  },
+  "d-order-history-access": {
+    title: "Give Atlas read access to order history?",
+    one_liner: "Broader data access improves answers but widens the exposure surface.",
+    impact: { value: 46, unblock: 35, reach: 84, urgency: 62 },
+    basis: {
+      value: "a measurable accuracy gain, no dollars at stake",
+      unblock: "unblocks 1 build task due today",
+      reach: "affects billing queue · ~9k chats / week",
+      urgency: "a go/no-go or dependency gate is open"
+    },
+    recommendation: { headline: "Approve, scoped to read-only order status and history.", rationale: "Grounding replies in real order data cuts down 'I don't have that' responses in the billing queue. Read-only scope and no write-back keeps the exposure surface narrow." },
+    evidence: [
+      { tag: "doc", note: "Identity verification policy v1.0 — read scope excludes payment instruments." }
+    ]
+  },
+  "d-password-reset": {
+    title: "Let Atlas handle password resets?",
+    one_liner: "Adding a new self-service action the agent can take end-to-end.",
+    impact: { value: 52, unblock: 40, reach: 60, urgency: 58 },
+    basis: {
+      value: "$1.2k/wk projected",
+      unblock: "unblocks 1 build task due today",
+      reach: "affects ~2,400 password-reset requests / week",
+      urgency: "a go/no-go or dependency gate is open"
+    },
+    recommendation: { headline: "Approve with mandatory identity verification before reset.", rationale: "Password resets are the #1 self-service request by volume. Requiring identity verification before any account-changing step keeps the action safe to fully delegate." },
+    evidence: [
+      { tag: "eval", note: "Password-reset simulation — 180 of 186 simulated resets completed correctly with 2-factor verification." }
+    ]
+  },
+  "d-model-upgrade": {
+    title: "Move Atlas to the newer model?",
+    one_liner: "Better reasoning across every conversation — but every eval needs re-baselining first.",
+    impact: { value: 48, unblock: 18, reach: 68, urgency: 34 },
+    basis: {
+      value: "a measurable accuracy gain, no dollars at stake",
+      unblock: "advances the build path; blocks no gated task today",
+      reach: "affects all conversations",
+      urgency: "advances on a timer, no hard gate"
+    },
+    recommendation: { headline: "Approve a staged model upgrade, gated on a full eval re-baseline.", rationale: "Early testing shows stronger reasoning on ambiguous requests, but nothing ships until every existing eval suite is re-run and passes at or above today's bar." },
+    evidence: [
+      { tag: "eval", note: "Model upgrade preview eval — 54 of 60 sampled conversations improved or matched." },
+      { tag: "conflict", note: "Regression sample — 6 of 60 preview responses handled ambiguity worse than today's model." }
+    ]
+  }
+};
+var FACTOR_LABEL = { value: "Production value", unblock: "Unblocks today", reach: "Reach", urgency: "Urgency" };
+
+function openScoreModal(id) {
+  var d = DECISIONS[id];
+  if (!d) return;
+  document.getElementById("modal-title").textContent = d.title;
+  document.getElementById("modal-oneliner").textContent = d.one_liner;
+  var rows = Object.keys(WEIGHTS).map(function (k) {
+    var sub = d.impact[k], w = WEIGHTS[k], contrib = (sub * w).toFixed(1);
+    return "<tr><td class=\"k\">" + FACTOR_LABEL[k] + "</td><td class=\"p\">" + d.basis[k] + "</td>" +
+      "<td class=\"n\">" + sub + "</td><td class=\"n\">×" + w.toFixed(2) + "</td><td class=\"n\">" + contrib + "</td></tr>";
+  }).sort(function (a, b) { return 0; }).join("");
+  document.getElementById("modal-calc-rows").innerHTML = rows;
+  var total = Math.round(Object.keys(WEIGHTS).reduce(function (sum, k) { return sum + WEIGHTS[k] * d.impact[k]; }, 0));
+  document.getElementById("modal-total").textContent = total;
+  document.getElementById("modal-rec-headline").textContent = d.recommendation.headline;
+  document.getElementById("modal-rec-rationale").textContent = " " + d.recommendation.rationale;
+  document.getElementById("modal-evidence").innerHTML = d.evidence.map(function (e) {
+    return "<div class=\"ev-item\"><span class=\"tag\">" + e.tag + "</span><span>" + e.note + "</span></div>";
+  }).join("");
+  document.getElementById("scrim").classList.add("is-open");
+}
+function closeScoreModal() { document.getElementById("scrim").classList.remove("is-open"); }
+
+document.addEventListener("click", function (e) {
+  var opener = e.target.closest("[data-open-score]");
+  if (opener) { openScoreModal(opener.getAttribute("data-open-score")); return; }
+  if (e.target.id === "modal-close" || e.target.id === "scrim") closeScoreModal();
+});
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeScoreModal(); });
+</script>
+</body>
+</html>

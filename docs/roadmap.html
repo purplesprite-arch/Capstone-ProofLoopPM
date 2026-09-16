@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ProofLoop — Build Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Tokens — copied verbatim from prototype-2/styles.css so this artifact
+   reads as the same product. This file has zero other dependency on the app.
+   ========================================================================== */
+:root{--navy:#172338;--navy-2:#223149;--ink:#182131;--muted:#3d4759;--line:#e3e7eb;--bg:#f5f6f7;--white:#fff;--blue:#315aef;--blue-soft:#edf1ff;--coral:#e66045;--coral-soft:#fff0eb;--mint:#24a981;--mint-soft:#e8f8f3;--amber:#c98812;--amber-soft:#fff6df;--shadow:0 10px 30px rgba(23,35,56,.08);--radius:14px;--mono:"DM Mono",ui-monospace,monospace}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+a{color:var(--blue);text-decoration:none}
+table{border-collapse:collapse;width:100%}
+.muted{color:var(--muted)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:34px 22px 70px}
+
+/* ---- Page header ---- */
+.rm-header{margin-bottom:22px}
+.rm-header .eyebrow{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--coral)}
+.rm-header h1{font-size:29px;letter-spacing:-.8px;margin:7px 0 8px}
+.rm-header p{font-size:13.5px;color:var(--muted);max-width:66ch;line-height:1.6}
+.rm-nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.rm-nav a{font-size:11px;font-weight:700;color:#40506a;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+.rm-nav a:hover{border-color:#c7cedb}
+
+/* ---- Legend ---- */
+.legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:20px 0 26px;box-shadow:0 4px 14px rgba(23,35,56,.04)}
+.legend-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.legend-group .lg-label{font-size:9.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-right:2px}
+
+.size-chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.2px;padding:3px 7px;border-radius:6px}
+.size-xs,.size-s{background:var(--mint-soft);color:#17805e}
+.size-m{background:var(--blue-soft);color:#28407f}
+.size-l{background:var(--amber-soft);color:#9a6a12}
+.size-xl{background:var(--coral-soft);color:#b5482f}
+
+.status-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#40506a}
+.status-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;display:inline-block}
+.status-dot.is-design{background:var(--blue)}
+.status-dot.is-planned{background:transparent;border:2px solid #b7bfc9}
+
+.dep-chip{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#5a6675;background:#eef1f4;border-radius:6px;padding:3px 7px}
+
+/* ---- Roadmap table ---- */
+.rm-scroll{overflow-x:auto;background:transparent;border-radius:var(--radius)}
+.rm-table{min-width:1080px}
+.rm-table th,.rm-table td{vertical-align:top;padding:0}
+.rm-table thead th{
+  text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--muted);padding:0 10px 10px;
+}
+.rm-table thead th:first-child{color:transparent}
+.rm-table tbody th{
+  text-align:left;padding:6px 12px 6px 0;white-space:nowrap;
+  font-size:12.5px;font-weight:800;color:var(--ink);vertical-align:middle;width:150px;
+}
+.rm-table tbody th .lane-sub{display:block;font-size:9.5px;font-weight:600;color:var(--muted);margin-top:2px;text-transform:none;letter-spacing:0}
+.rm-table td{padding:6px}
+.cell-empty{background:repeating-linear-gradient(135deg,rgba(23,35,56,.02) 0 8px,transparent 8px 16px);border-radius:10px;min-height:64px}
+
+.rm-card{
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:12px 13px 11px;box-shadow:0 4px 14px rgba(23,35,56,.04);
+  display:flex;flex-direction:column;gap:7px;height:100%;min-height:150px;
+}
+.rm-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.rm-title{font-size:12.8px;font-weight:700;letter-spacing:-.1px;line-height:1.3}
+.rm-desc{font-size:10.8px;color:var(--muted);line-height:1.45;flex:1}
+.rm-link{font-size:10.5px;font-weight:800;align-self:flex-start}
+.rm-link:hover{text-decoration:underline}
+.rm-flag{font-size:9.5px;font-weight:800;color:#9a6a12;background:var(--amber-soft);border-radius:6px;padding:3px 7px;align-self:flex-start}
+
+/* ---- Appendix ---- */
+.appendix{margin-top:44px}
+.appendix > h1{font-size:24px;letter-spacing:-.6px;margin-bottom:8px}
+.appendix > .intro{font-size:13px;color:var(--muted);max-width:70ch;line-height:1.6;margin-bottom:8px}
+.app-section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 26px 30px;margin-top:26px;box-shadow:0 6px 20px rgba(23,35,56,.05)}
+.app-section .letter{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--navy);color:#cdd8ff;font-family:var(--mono);font-size:12px;font-weight:500;margin-right:9px}
+.app-section h2{font-size:19px;letter-spacing:-.4px;display:flex;align-items:center}
+.app-section .back-up{display:inline-block;font-size:10.5px;font-weight:700;margin-top:10px}
+.app-sub{margin-top:22px}
+.app-sub h3{font-size:14.5px;letter-spacing:-.1px;margin-bottom:8px}
+.app-sub h3 .tagsize{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--muted);margin-left:8px;text-transform:none;letter-spacing:0}
+.app-sub p{font-size:12.5px;color:#454f60;line-height:1.65;margin-top:4px}
+.app-sub ul{margin:8px 0 0;padding-left:19px}
+.app-sub li{font-size:12.5px;color:#454f60;line-height:1.6;margin-bottom:5px}
+
+.data-table{margin-top:12px;font-size:12px}
+.data-table th{background:#f6f8fa;font-size:10.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+.data-table td{padding:10px 10px;border-bottom:1px solid #eef0f3;color:#3d4759;line-height:1.5;vertical-align:top}
+.data-table tr:last-child td{border-bottom:0}
+.data-table td b, .data-table td strong{color:var(--ink)}
+
+.kpi-row td:first-child{font-weight:800;color:var(--ink);white-space:nowrap}
+
+.raci-a{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#28407f;background:var(--blue-soft);border-radius:7px;padding:3px 8px}
+
+.callout{display:flex;gap:12px;background:#f7f9ff;border:1px solid #dbe3ff;border-radius:12px;padding:14px 16px;margin-top:16px}
+.callout p{font-size:11.5px;line-height:1.6;color:#3f4d6e}
+.callout b{color:#28407f}
+
+.pill-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.pill-tag{font-size:9.5px;font-weight:800;color:#67717f;background:#eef1f4;border-radius:99px;padding:4px 10px}
+.pill-tag.done{color:#17805e;background:var(--mint-soft)}
+
+.stage-list{display:grid;gap:10px;margin-top:12px}
+.stage{display:flex;gap:12px;border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.stage .num{font-family:var(--mono);font-size:12px;color:var(--muted);flex:0 0 auto;width:18px}
+.stage b{font-size:12.5px}
+.stage p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.stage.deprioritized{border-color:#f1c9bd;background:#fffaf8}
+.stage.deprioritized b{color:#b5482f}
+
+footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:center}
+
+/* ---- Responsive ---- */
+@media (max-width:720px){
+  .rm-header h1{font-size:24px}
+  .app-section{padding:20px 18px 24px}
+}
+
+/* ---- Print ---- */
+@media print{
+  body{background:#fff;font-size:12px}
+  .legend,.rm-nav{display:none}
+  .rm-scroll{overflow:visible}
+  .rm-table{min-width:0;width:100%}
+  .app-section{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  .rm-card{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+
+  <header class="rm-header">
+    <span class="eyebrow">ProofLoop · Internal</span>
+    <h1>ProofLoop Build Roadmap</h1>
+    <p>How we're sequencing ProofLoop's own next build phase — Y-axis is feature epics, X-axis is
+    build order only. There are no calendar dates here on purpose; scheduling is handled
+    separately. Click any card for its full design in the appendix below.</p>
+    <nav class="rm-nav" aria-label="Jump to appendix section">
+      <a href="#appendix-foundation">Foundation</a>
+      <a href="#appendix-presenter">Presenter Mode</a>
+      <a href="#appendix-profile">Profile</a>
+      <a href="#appendix-decisions">Decisions</a>
+      <a href="#appendix-build">Build View</a>
+      <a href="#appendix-integrations">Integrations</a>
+    </nav>
+  </header>
+
+  <div class="legend" aria-hidden="false">
+    <div class="legend-group">
+      <span class="lg-label">Size</span>
+      <span class="size-chip size-xs">XS</span>
+      <span class="size-chip size-s">S</span>
+      <span class="size-chip size-m">M</span>
+      <span class="size-chip size-l">L</span>
+      <span class="size-chip size-xl">XL</span>
+    </div>
+    <div class="legend-group">
+      <span class="lg-label">Status</span>
+      <span class="status-tag"><i class="status-dot is-design"></i>In design — fully spec'd</span>
+      <span class="status-tag"><i class="status-dot is-planned"></i>Planned — sequenced, not yet detailed</span>
+    </div>
+    <div class="legend-group">
+      <span class="lg-label">Dependency</span>
+      <span class="dep-chip">needs: &lt;item&gt;</span>
+    </div>
+  </div>
+
+  <div class="rm-scroll">
+  <table class="rm-table">
+    <caption style="text-align:left;font-size:10.5px;color:var(--muted);margin-bottom:8px;caption-side:top">
+      Roadmap grid — rows are feature epics, columns are build-order bands (no dates)
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Epic</th>
+        <th scope="col">Now</th>
+        <th scope="col">Next</th>
+        <th scope="col">Then</th>
+        <th scope="col">Later</th>
+        <th scope="col">Someday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FOUNDATION -->
+      <tr>
+        <th scope="row">Foundation<span class="lane-sub">shared data model</span></th>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Features data model</b>
+            <p class="rm-desc">A shared <code>features</code> entity in <code>data.js</code> joining agents, decisions, and (later) Jira. Unblocks the Build View and the decision↔feature map.</p>
+            <a class="rm-link" href="#appendix-foundation">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+        <td class="cell-empty"></td>
+        <td class="cell-empty"></td>
+        <td class="cell-empty"></td>
+      </tr>
+
+      <!-- PRESENTER MODE -->
+      <tr>
+        <th scope="row">Presenter Mode<span class="lane-sub">live review cockpit</span></th>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-s">S</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Time-picker entry point</b>
+            <p class="rm-desc">A grey "Presenter Mode" affordance added to the open-the-app time picker (zero / some / lots of time) — clearly a different mode, not a fourth time choice.</p>
+            <a class="rm-link" href="#appendix-presenter-entry">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-l">L</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Desktop decision cockpit</b>
+            <p class="rm-desc">Big-screen view of every decision + build item, one in focus at a time, with inline Approve / Revise / Reject per row.</p>
+            <a class="rm-link" href="#appendix-presenter-cockpit">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Present-mode polish</b>
+            <p class="rm-desc">Legibility at distance, focus transitions, keyboard nav (next / prev / approve), full-screen takeover.</p>
+            <a class="rm-link" href="#appendix-presenter-polish">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+        <td class="cell-empty"></td>
+      </tr>
+
+      <!-- PROFILE -->
+      <tr>
+        <th scope="row">Profile<span class="lane-sub">stakeholder preferences</span></th>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-s">S</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Clickable profile shell</b>
+            <p class="rm-desc">Name/avatar becomes a real link → a push view with identity + scope-of-authority.</p>
+            <a class="rm-link" href="#appendix-profile-a1">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Value Focus section</b>
+            <p class="rm-desc">Executive KPI taxonomy — pick 2–3 focus areas; re-ranks the decision queue by impact.</p>
+            <a class="rm-link" href="#appendix-profile-a2">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Recent-decisions log</b>
+            <p class="rm-desc">Decider + conditional approval + impact per row, with a "Raise a concern" action.</p>
+            <a class="rm-link" href="#appendix-profile-a3">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Preference refinements</b>
+            <p class="rm-desc">Risk tolerance, delegation defaults, trust threshold, decision-style mirror, impact scorecard.</p>
+            <a class="rm-link" href="#appendix-profile-a4">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+      </tr>
+
+      <!-- DECISIONS -->
+      <tr>
+        <th scope="row">Decisions<span class="lane-sub">copy + coverage</span></th>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-s">S</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Copy revamp</b>
+            <p class="rm-desc">Plain-language titles + one-liners that name the stakes, for all 6 existing decisions.</p>
+            <a class="rm-link" href="#appendix-decisions-revamp">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-s">S</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">+ New decisions</b>
+            <p class="rm-desc">4 additions covering action-scope, data-access, autonomy-boundary, and model-version decision types.</p>
+            <a class="rm-link" href="#appendix-decisions-new">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">↔ Feature mapping</b>
+            <p class="rm-desc">Every decision explicitly tagged to the feature it blocks or informs.</p>
+            <div class="dep-chip">needs: Foundation</div>
+            <a class="rm-link" href="#appendix-decisions-mapping">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+      </tr>
+
+      <!-- BUILD VIEW -->
+      <tr>
+        <th scope="row">Build View<span class="lane-sub">new tab, Evidence↔Memory</span></th>
+        <td class="cell-empty"></td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-m">M</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Placeholder + feature cards</b>
+            <p class="rm-desc">Static cards per feature (status, summary, mapped decisions) — no live data yet.</p>
+            <div class="dep-chip">needs: Foundation</div>
+            <a class="rm-link" href="#appendix-build-cards">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-l">L</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Live status (Jira-fed)</b>
+            <p class="rm-desc">Feature status reflects the read-only Jira sync instead of static seed data.</p>
+            <div class="dep-chip">needs: Jira read-only sync</div>
+            <a class="rm-link" href="#appendix-build-live">Details →</a>
+          </div>
+        </td>
+        <td class="cell-empty"></td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-l">L</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Full build portfolio</b>
+            <p class="rm-desc">Filtering, search, and a program-level rollup across every feature and agent.</p>
+            <div class="dep-chip">needs: Live status</div>
+            <a class="rm-link" href="#appendix-build-portfolio">Details →</a>
+          </div>
+        </td>
+      </tr>
+
+      <!-- INTEGRATIONS -->
+      <tr>
+        <th scope="row">Integrations<span class="lane-sub">Jira &amp; agile boards</span></th>
+        <td class="cell-empty"></td>
+        <td class="cell-empty"></td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-s">S</span>
+              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+            </div>
+            <b class="rm-title">Jira spike</b>
+            <p class="rm-desc">Confirm auth model, JQL-by-label, and the status-map shape before committing to a build.</p>
+            <a class="rm-link" href="#appendix-integrations-spike">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-l">L</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Jira read-only sync</b>
+            <p class="rm-desc">One label in Jira, one API token, one status-map config. No custom fields, no two-way writes.</p>
+            <div class="dep-chip">needs: Jira spike</div>
+            <a class="rm-link" href="#appendix-integrations-readonly">Details →</a>
+          </div>
+        </td>
+        <td>
+          <div class="rm-card">
+            <div class="rm-card-top">
+              <span class="size-chip size-xl">XL</span>
+              <span class="status-tag"><i class="status-dot is-planned"></i>Planned</span>
+            </div>
+            <b class="rm-title">Jira two-way sync</b>
+            <p class="rm-desc">ProofLoop creates/transitions Jira issues.</p>
+            <span class="rm-flag">Parked — high maintenance risk</span>
+            <a class="rm-link" href="#appendix-integrations-twoway">Details →</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- =====================================================================
+       APPENDIX
+       ===================================================================== -->
+  <main class="appendix">
+    <h1>Design Appendix</h1>
+    <p class="intro">Full design + next-steps detail for every roadmap card, one section per
+    epic. This is the source of truth the roadmap grid summarizes — nothing here is built yet
+    except this document itself.</p>
+
+    <!-- APPENDIX E — FOUNDATION -->
+    <section class="app-section" id="appendix-foundation">
+      <h2><span class="letter">E</span>Foundation</h2>
+      <div class="app-sub">
+        <h3>Features data model <span class="tagsize">M · in design</span></h3>
+        <p>There is currently no <code>features</code>/<code>epics</code> entity in
+        <code>prototype-2/data.js</code> — the Build View and the decision↔feature map both
+        need one. Proposed shape:</p>
+        <ul>
+          <li><code>id, name, agentId, status, summary, progress, decisionIds[], jiraKey?, blockers[]</code></li>
+          <li><code>status</code> ∈ <code>backlog | in-progress | build-complete | piloting | live</code></li>
+          <li>Join key today: <code>agentId</code> and/or a decision <code>id</code> — no new keying scheme required.</li>
+        </ul>
+      </div>
+      <div class="app-sub">
+        <h3>Worker <code>/api</code> groundwork <span class="tagsize">rolled into Foundation</span></h3>
+        <p>The Cloudflare Worker's <code>/api/*</code> route currently returns a <code>501</code>
+        stub. <code>/api/jira</code> becomes the landing spot for the read-only Jira sync
+        (Appendix D) once Foundation lands.</p>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+
+    <!-- APPENDIX F — PRESENTER MODE -->
+    <section class="app-section" id="appendix-presenter">
+      <h2><span class="letter">F</span>Presenter Mode — live stakeholder-review cockpit</h2>
+      <p class="muted" style="font-size:12.5px;line-height:1.6">A desktop / projector-focused
+      decision cockpit the decider runs <em>in front of</em> stakeholders — walk each decision,
+      discuss, and approve live in the room. Distinct from the mobile morning ritual; this is
+      its "big screen" counterpart.</p>
+
+      <div class="app-sub" id="appendix-presenter-entry">
+        <h3>Entry point <span class="tagsize">S · in design</span></h3>
+        <p>On the open-the-app time picker (zero / some / lots of time), add a fourth,
+        <b>grey</b> secondary affordance labelled "Presenter Mode" — grey signals it's a
+        different mode, not a fourth time choice. Selecting it routes to the cockpit instead of
+        the mobile ritual. Implementation hook: add a <code>presenter</code> route to the
+        <code>valid</code> whitelist (<code>app.js</code>) and a <code>presenter(state)</code>
+        render function.</p>
+      </div>
+
+      <div class="app-sub" id="appendix-presenter-cockpit">
+        <h3>The cockpit <span class="tagsize">L · in design</span></h3>
+        <ul>
+          <li><b>Layout tuned for live review:</b> big type legible at distance, calm spacing,
+          one decision in focus at a time with the rest listed compactly so the room can follow.</li>
+          <li><b>Shows decisions and build items on one screen.</b> Each decision shows its
+          impact, recommendation + rationale, key evidence, and any attached conditions or
+          guardrails. Each build item shows status and which decisions block or inform it.</li>
+          <li><b>Inline actions:</b> small Approve / Revise / Reject buttons per decision,
+          reusing the existing <code>data-decide</code> + confirm flow in <code>app.js</code> —
+          no new decision engine. Actioning a blocking decision updates its build item live.</li>
+          <li>Reuses existing renderers (<code>brief</code>, <code>compactCard</code>,
+          <code>scoreBadge</code>) rather than inventing new ones.</li>
+        </ul>
+      </div>
+
+      <div class="app-sub" id="appendix-presenter-polish">
+        <h3>Present-mode polish <span class="tagsize">M · planned</span></h3>
+        <p>Legibility at distance, focus-one-at-a-time transitions, keyboard navigation
+        (next / prev / approve), and a clean full-screen takeover that hides mobile chrome.</p>
+      </div>
+
+      <div class="callout">
+        <p><b>Sizing note:</b> the cockpit reuses the decide/confirm pipeline, so it does not
+        depend on Foundation for decisions — but its build-item rows do, so the richest version
+        follows the Foundation lane.</p>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+
+    <!-- APPENDIX A — PROFILE -->
+    <section class="app-section" id="appendix-profile">
+      <h2><span class="letter">A</span>Stakeholder Profile page</h2>
+      <p class="muted" style="font-size:12.5px;line-height:1.6"><b>Trigger:</b> make
+      <code>.user-card</code> / <code>.user-ava</code> clickable → <code>data-view="profile"</code>;
+      add <code>"profile"</code> to the <code>valid</code> whitelist; add a
+      <code>profile(state)</code> function to <code>render.js</code>. It's a push view (back
+      button to Today). Reuses the existing <code>.choice</code> row idiom — no new component
+      system.</p>
+
+      <div class="app-sub" id="appendix-profile-a1">
+        <h3>A1 · Identity header <span class="tagsize">part of S · in design</span></h3>
+        <p>Avatar, name (Maya Okonkwo), title, workspace, and a one-line
+        <b>scope-of-authority statement</b> — e.g. "Accountable for customer-service behavior
+        &amp; rollout gates; consulted on revenue and compliance."</p>
+      </div>
+
+      <div class="app-sub" id="appendix-profile-a2">
+        <h3>A2 · Value Focus <span class="tagsize">M · in design</span></h3>
+        <p>Role-play framing: a KPI/value SME's job is to make this section land instantly with
+        an executive, in their own language, without turning into a dashboard. The stakeholder
+        picks 2–3 focus areas; each shows a primary metric plus supporting KPIs. Selected
+        focuses later re-rank the decision queue by impact (ties to the existing
+        <code>impact</code> sub-scores). Full taxonomy — 9 categories, including four
+        AI/Agentforce-specific lenses beyond the original five:</p>
+        <table class="data-table">
+          <thead><tr><th>Value focus</th><th>Executive framing</th><th>Primary KPI</th><th>Supporting KPIs</th></tr></thead>
+          <tbody>
+            <tr class="kpi-row"><td>Grow revenue</td><td>"Every interaction is a chance to expand the relationship."</td><td>Cross-sell / up-sell attach rate</td><td>Wallet share, market share, revenue per interaction / AOV, assisted-conversion, Net Revenue Retention</td></tr>
+            <tr class="kpi-row"><td>Cut cost to serve</td><td>"Resolve more without adding headcount."</td><td>Deflection / self-service containment rate</td><td>Cost per contact, Average Handle Time (AHT), First-Contact Resolution, escalation/transfer rate</td></tr>
+            <tr class="kpi-row"><td>Operational efficiency</td><td>"Less swivel-chair, faster complex work."</td><td>Time-to-resolution for complex task X</td><td># systems touched per task, straight-through / automation rate, throughput per FTE, rework rate</td></tr>
+            <tr class="kpi-row"><td>Personalization &amp; experience</td><td>"The right next action, tailored."</td><td>Recommendation adoption / acceptance rate</td><td>Relevance rating, task-success / goal-completion, CSAT/NPS lift, repeat/retention</td></tr>
+            <tr class="kpi-row"><td>Data quality &amp; trust</td><td>"Grounded answers you can defend."</td><td>Data completeness (% required fields)</td><td>Data accuracy vs. ground truth, freshness/latency, source coverage %, groundedness/citation rate</td></tr>
+            <tr class="kpi-row"><td>Trust, safety &amp; compliance <span class="pill-tag" style="margin-left:6px">new</span></td><td>"Answers we can stand behind and audit."</td><td>Policy-adherence rate</td><td>Groundedness / hallucination rate, safe-escalation rate, PII/exposure incidents, audit-readiness</td></tr>
+            <tr class="kpi-row"><td>Human-agent experience <span class="pill-tag" style="margin-left:6px">new</span></td><td>"AI that lifts our people, not replaces them."</td><td>Rep ramp time</td><td>After-call-work reduction, agent CSAT, attrition/burnout, concurrency per rep</td></tr>
+            <tr class="kpi-row"><td>AI adoption &amp; autonomy <span class="pill-tag" style="margin-left:6px">new</span></td><td>"How far the AI program has actually spread."</td><td>% interactions AI-handled</td><td>Containment / autonomy rate, topic/intent coverage, active adoption, fallback-to-human rate</td></tr>
+            <tr class="kpi-row"><td>Speed-to-value / velocity <span class="pill-tag" style="margin-left:6px">new</span></td><td>"How fast we ship new agent capability."</td><td>Time to launch a new topic/skill</td><td>Iteration cycle time, eval-to-prod lead time, deployment frequency</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <p><b>Credibility hook:</b> ProofLoop already computes evidence
+          <code>coverage (linked/total)</code> and eval <code>passed/total</code>
+          (<code>confidenceInputs</code>). Those <em>are</em> the "Data quality &amp; trust" KPIs
+          — the profile speaks the exec's language using metrics the app already produces.</p>
+        </div>
+      </div>
+
+      <div class="app-sub" id="appendix-profile-a3">
+        <h3>A3 · Recent-decisions log <span class="tagsize">M · in design</span></h3>
+        <p>Replaces an earlier RACI-matrix idea with something more alive: a short feed of
+        decisions recently made, showing who decided, any conditional approval, the impact, and
+        a lightweight <b>"Raise a concern"</b> action per row — a feedback/accountability
+        channel that would flag the decider / reopen the item. Shape mirrors the existing
+        Memory log plus each decision's <code>recommendation</code> / <code>delegateTo</code> /
+        guardrail data. Invented seed entries:</p>
+        <table class="data-table">
+          <thead><tr><th>Decision</th><th>Decided by</th><th>Conditional?</th><th>Impact</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Billing Agent — pilot approved (5%)</td><td>Maya Okonkwo</td><td>✓ with rollback triggers armed</td><td>$18k/mo projected savings, +12% deflection</td><td>Raise a concern</td></tr>
+            <tr><td>Escalation replies v2.4 — approved</td><td>Maya Okonkwo</td><td>✓ hard 30-second handoff guardrail</td><td>Clarity up in 23/24 scenarios; commitment protected</td><td>Raise a concern</td></tr>
+            <tr><td>Repeat-escalation limit — set to 2 retries</td><td>Nadia Chen (delegated)</td><td>—</td><td>Unblocked 3 routing tasks; covers 96% of self-resolutions</td><td>Raise a concern</td></tr>
+            <tr><td>Intent-routing v1.3 — auto-advanced</td><td>System (approved policy)</td><td>—</td><td>Passed all evals; no policy change</td><td>Raise a concern</td></tr>
+          </tbody>
+        </table>
+        <p>Reading: the log makes accountability visible (a named decider), surfaces the
+        <em>conditions</em> attached to approvals rather than a bare yes/no, quantifies the
+        stakes, and gives any stakeholder a one-tap way to flag a concern about a call
+        that's already been made.</p>
+      </div>
+
+      <div class="app-sub" id="appendix-profile-a4">
+        <h3>A4 · Preference refinements &amp; brainstormed ideas <span class="tagsize">M · planned</span></h3>
+        <p>v1 ships A1–A3 + Value Focus only, to avoid bloat. The rest is sequenced here as
+        "Later":</p>
+        <ul>
+          <li><b>Risk tolerance</b> slider (conservative ↔ aggressive) + an <b>auto-advance
+          confidence threshold</b> — what % lets informational items advance without me (ties to
+          the existing <code>autoIn</code> field).</li>
+          <li><b>Delegation defaults by domain</b> (ties to the existing <code>delegateTo</code> field).</li>
+          <li><b>Locked commitments I personally own</b> (e.g. the 30-second handoff promise) —
+          a short pinned list.</li>
+          <li><b>Auto-generated "decision style"</b> from Memory (approve/revise/reject ratio) —
+          a self-aware mirror, no manual input required.</li>
+          <li><b>Trust threshold</b> — minimum evidence-coverage % before I'll approve.</li>
+          <li><b>Impact-to-date scorecard</b> ($ saved, decisions made, avg time-to-decide) —
+          reinforces exec value every time the profile is opened.</li>
+        </ul>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+
+    <!-- APPENDIX B — DECISIONS -->
+    <section class="app-section" id="appendix-decisions">
+      <h2><span class="letter">B</span>Decisions revamp</h2>
+
+      <div class="app-sub" id="appendix-decisions-revamp">
+        <h3>Copy revamp <span class="tagsize">S · in design</span></h3>
+        <p>All 6 existing decisions are genuinely Agentforce-relevant → keep every one; tighten
+        the copy. Pattern: a plain-language title, a one-liner that names the stakes, and a
+        rationale that leads with the number.</p>
+        <table class="data-table">
+          <thead><tr><th>Decision</th><th>Before</th><th>After</th></tr></thead>
+          <tbody>
+            <tr><td>Escalation response v2.4</td><td>"A friendlier retry can push human handoff past the promised 30 seconds."</td><td><b>"Friendlier escalation replies (v2.4)"</b> — "Warmer wording is clearer in 23 of 24 cases — but one path risks breaking our 30-second handoff promise."</td></tr>
+            <tr><td>Billing Resolution Agent — pilot go/no-go</td><td>"Evidence supports a limited launch. Approve the pilot plan or hold."</td><td><b>"Billing Agent — launch the pilot?"</b> — "Six weeks of shadow data beat the human baseline. Approve a limited 5% pilot, or hold."</td></tr>
+            <tr><td>Repeat-escalation threshold</td><td>"No agreed limit on repeat escalations. Three build tasks are waiting on it."</td><td><b>"How many retries before a human takes over?"</b> — "There's no agreed limit yet — and 3 build tasks are blocked until we set one."</td></tr>
+            <tr><td>Intent routing patch v1.3</td><td>—</td><td><b>"Intent-routing tune-up (v1.3)"</b> — "Classifier update passed every check and stayed within policy — advancing on its own."</td></tr>
+            <tr><td>Billing refund knowledge update</td><td>—</td><td><b>"New refund examples added"</b> — "Fresh refund cases, every one source-linked — advancing on its own."</td></tr>
+            <tr><td>Tone &amp; style refinement</td><td>—</td><td><b>"Warmer tone, same rules"</b> — "Phrasing softened; no change to policy or claims — advancing on its own."</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="app-sub" id="appendix-decisions-new">
+        <h3>+ New decisions <span class="tagsize">S · in design</span></h3>
+        <p>Four additions, each chosen to demonstrate a distinct Agentforce decision
+        <em>class</em>: action-scope · data-access · autonomy-boundary · model-version.</p>
+        <table class="data-table">
+          <thead><tr><th>Decision</th><th>Class</th><th>One-liner</th><th>Accountable</th></tr></thead>
+          <tbody>
+            <tr><td><b>"Let Atlas handle password resets?"</b></td><td>Action-scope expansion</td><td>Adding a new self-service action the agent can take end-to-end.</td><td>Maya (approve with identity-verification guardrail)</td></tr>
+            <tr><td><b>"Give Atlas read access to order history?"</b></td><td>Data / grounding permission</td><td>Broader data access improves answers but widens the exposure surface.</td><td>Sam (Data/Platform), C: Risk/Compliance</td></tr>
+            <tr><td><b>"Auto-approve refunds under $50?"</b></td><td>Autonomy / spend threshold</td><td>Where the human-in-the-loop line sits — speed vs. spend control.</td><td>Maya, C: CRO</td></tr>
+            <tr><td><b>"Move Atlas to the newer model?"</b></td><td>Model / version upgrade</td><td>Better reasoning, but a re-baseline of every eval.</td><td>Maya, C: Sam</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="app-sub" id="appendix-decisions-mapping">
+        <h3>↔ Feature mapping <span class="tagsize">M · planned · needs Foundation</span></h3>
+        <p>Once the Foundation <code>features</code> model exists, every decision gets a
+        <code>featureId</code> (or is listed in a feature's <code>decisionIds[]</code>) so the
+        Build View can render "blocked by" / "informed by" per feature — see Appendix C.</p>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+
+    <!-- APPENDIX C — BUILD VIEW -->
+    <section class="app-section" id="appendix-build">
+      <h2><span class="letter">C</span>Build View <span style="font-size:12px;font-weight:600;color:var(--muted);margin-left:8px">— new tab, between Evidence and Memory</span></h2>
+      <p class="muted" style="font-size:12.5px;line-height:1.6">Stakeholder-facing view of
+      <b>what's being built in Atlas Voice AI</b> — distinct from this roadmap, which is
+      ProofLoop's own dev plan. Requires the Foundation <code>features</code> entity.</p>
+
+      <div class="app-sub" id="appendix-build-cards">
+        <h3>Placeholder + feature cards <span class="tagsize">M · in design · needs Foundation</span></h3>
+        <p>Static cards per feature: name, status, one-line summary, and its mapped decisions
+        (blocking vs. informing), each linking to the decision's brief.</p>
+        <table class="data-table">
+          <thead><tr><th>Feature</th><th>Status</th><th>Mapped decisions</th></tr></thead>
+          <tbody>
+            <tr><td><b>Billing Resolution Agent</b></td><td>Build-complete</td><td>"Waiting on pilot go/no-go" — links the billing pilot decision, plus the new order-history and refund-autonomy decisions</td></tr>
+            <tr><td><b>Service Agent — Escalation</b></td><td>In progress</td><td>"Needs decision inputs to raise value &amp; clear partial blockers" — links escalation v2.4, the repeat-escalation threshold, and the new password-reset decision</td></tr>
+            <tr><td><b>Intent Router</b></td><td>Live</td><td>Links the intent-routing patch decision</td></tr>
+            <tr><td><b>Knowledge / Refunds</b></td><td>In progress</td><td>Links the refund-knowledge decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="app-sub" id="appendix-build-live">
+        <h3>Live status (Jira-fed) <span class="tagsize">L · planned · needs Jira read-only sync</span></h3>
+        <p>Once the read-only Jira sync (Appendix D) exists, feature <code>status</code> and
+        <code>progress</code> come from the mapped Jira issue instead of static seed data.</p>
+      </div>
+
+      <div class="app-sub" id="appendix-build-portfolio">
+        <h3>Full build portfolio <span class="tagsize">L · planned · needs Live status</span></h3>
+        <p>Filtering, search, and a program-level rollup across every feature and delivery-crew
+        agent — the "zoomed out" view once individual features are live-tracked.</p>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+
+    <!-- APPENDIX D — INTEGRATIONS -->
+    <section class="app-section" id="appendix-integrations">
+      <h2><span class="letter">D</span>Jira &amp; agile-board integration</h2>
+      <p class="muted" style="font-size:12.5px;line-height:1.6">Hard constraint from the brief:
+      <b>no extensive configuration in either tool, no ongoing maintenance burden.</b> If
+      keeping ProofLoop updated means heavily instrumenting Jira, the point of the tool has been
+      missed. Staged path, fitting the Worker's already-stubbed <code>/api/*</code>:</p>
+
+      <div class="stage-list">
+        <div class="stage" id="appendix-integrations-spike">
+          <span class="num">1</span>
+          <div>
+            <b>Spike <span class="tagsize">S · in design</span></b>
+            <p>Confirm the auth model (API token vs. OAuth), whether JQL-by-label is sufficient
+            to find relevant issues, and the shape of a status-map config — before committing to
+            any sync build.</p>
+          </div>
+        </div>
+        <div class="stage" id="appendix-integrations-readonly">
+          <span class="num">2</span>
+          <div>
+            <b>Read-only, label-driven, status-mapped sync <span class="tagsize">L · planned</span> — recommended</b>
+            <p>In Jira: add one label (e.g. <code>proofloop</code>) to relevant issues — no
+            custom fields. In ProofLoop: store a <code>jiraKey</code> (or a saved JQL) per
+            feature. The Worker calls the Jira REST search with a single API token, reads
+            status + summary, and maps Jira status → ProofLoop feature status via a tiny
+            status-map (<code>Done→build-complete</code>, <code>In Progress→in-progress</code>,
+            …). This is the whole integration — cheap to set up, near-zero upkeep.</p>
+            <p class="pill-row">
+              <span class="pill-tag done">no custom fields</span>
+              <span class="pill-tag done">one label</span>
+              <span class="pill-tag done">one API token</span>
+            </p>
+          </div>
+        </div>
+        <div class="stage">
+          <span class="num">·</span>
+          <div>
+            <b>Optional: near-real-time push</b>
+            <p>A single Jira Automation rule POSTs issue transitions to <code>/api/jira</code> —
+            no polling, and no ProofLoop-side Jira credentials needed for the push.</p>
+          </div>
+        </div>
+        <div class="stage deprioritized" id="appendix-integrations-twoway">
+          <span class="num">3</span>
+          <div>
+            <b>Two-way sync <span class="tagsize">XL · planned</span> — parked</b>
+            <p>ProofLoop creating or transitioning Jira issues. This is exactly the
+            high-maintenance, "we're now managing two tools instead of one" scenario the brief
+            warned against — parked at maybe-never unless a concrete need emerges.</p>
+          </div>
+        </div>
+      </div>
+      <a class="back-up" href="#top">↑ Back to roadmap</a>
+    </section>
+  </main>
+
+  <footer class="rm-foot">
+    ProofLoop Build Roadmap — sequencing reflects build order only, not calendar dates.
+  </footer>
+
+</div>
+</body>
+</html>
