@@ -53,6 +53,7 @@
     else if (v === "memory") html = R.memory(state);
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
+    else if (v === "profile") html = R.profile(state);
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
     else html = R.today(state);
 
@@ -62,7 +63,7 @@
     el.classList.add("view-enter");
 
     // nav highlighting (map push-views back to a tab)
-    const navKey = v === "showcase" || v === "pilot" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
+    const navKey = v === "showcase" || v === "pilot" || v === "profile" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
     document.querySelectorAll("[data-tab]").forEach((t) => t.classList.toggle("active", t.dataset.tab === navKey));
 
     // live "needs you" badge on the Decisions tab
@@ -263,7 +264,7 @@
   setAll(".user-role", PL.user.role);
 
   const initial = location.hash.replace("#", "");
-  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot"];
+  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot", "profile"];
   state.view = valid.includes(initial) || initial.indexOf("brief:") === 0 ? initial : "today";
   render();
   openTimeGate();

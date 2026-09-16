@@ -536,6 +536,52 @@
     `;
   }
 
+  /* ---------- profile shell (A1) ----------
+     Reached by tapping the user avatar / user-card (app.js wires those as
+     data-view="profile"). This view is a SHARED SHELL — later build items add
+     their own content by replacing the body of the two seam functions below.
+     Do not add that content inline inside profile(); add it inside the seam
+     function instead, so the header markup here never needs to change. */
+  function profileValueFocusSeam(state) {
+    // VALUE_FOCUS_SEAM — a later feature renders its "Value Focus" module here.
+    // Replace this function's return value (or have it call a new render.js
+    // function, then add that function to the window.PLRender export object)
+    // with the real markup. `state` is already passed in for that feature to
+    // read (e.g. state.all() / state.blocking()) without re-plumbing anything.
+    return `<!-- VALUE_FOCUS_SEAM: render "Value Focus" content here -->`;
+  }
+  function profileRecentDecisionsSeam(state) {
+    // RECENT_DECISIONS_SEAM — a later feature renders the "Recent decisions
+    // log" here. Same contract as profileValueFocusSeam above: replace the
+    // return value, leave profile()'s header untouched.
+    return `<!-- RECENT_DECISIONS_SEAM: render "Recent decisions log" content here -->`;
+  }
+
+  function profile(state) {
+    const u = PL.user;
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
+      <div class="profile-view">
+        <header class="profile-head">
+          <span class="user-ava profile-ava">${u.initials}</span>
+          <div class="profile-id">
+            <h1>${u.name}</h1>
+            <p class="profile-role">${u.role}</p>
+            <p class="profile-ws">${PL.workspace.name}</p>
+          </div>
+        </header>
+
+        <div class="choice">
+          <span class="choice-ic">${icon("shield")}</span>
+          <span><b>Scope of authority</b><small>Accountable for customer-service behavior & rollout gates; consulted on revenue and compliance.</small></span>
+        </div>
+
+        ${profileValueFocusSeam(state)}
+        ${profileRecentDecisionsSeam(state)}
+      </div>
+    `;
+  }
+
   /* ---------- brief detail ---------- */
   function brief(d) {
     if (!d) return `<div class="cleared"><p>Brief not found.</p></div>`;
@@ -688,5 +734,5 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown };
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, profile };
 })();
