@@ -29,6 +29,7 @@ h1,h2,h3,p{margin:0}
 button{font-family:inherit;cursor:pointer}
 .svg-sprite{display:none}
 .icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.icon.filled{fill:currentColor;stroke:none}
 .muted{color:var(--muted)}
 .muted-note{color:var(--muted);font-weight:600}
 
@@ -413,6 +414,7 @@ button{font-family:inherit;cursor:pointer}
 .choice-ic .icon{width:15px}
 .choice-ic.revise{background:var(--amber-soft);color:var(--amber)}
 .choice-ic.reject{background:var(--coral-soft);color:var(--coral)}
+.choice-ic.bars .icon{width:18px}
 .choice>span:last-child{flex:1}
 .choice b{display:block;font-size:12.5px}
 .choice small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}

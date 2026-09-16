@@ -319,10 +319,11 @@
 
   /* ---------- time-available gate ---------- */
   function timePicker() {
+    const colorClass = { zero: "reject", little: "revise", lots: "" };
     const rows = PL.timeModes
       .map(
         (m) => `<button class="choice" data-time="${m.id}">
-          <span class="choice-ic">${icon("sun")}</span>
+          <span class="choice-ic bars ${colorClass[m.id]}">${icon(m.icon, "filled")}</span>
           <span><b>${m.label}</b><small>${m.tagline}</small></span>
         </button>`
       )

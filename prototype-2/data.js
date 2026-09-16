@@ -34,9 +34,9 @@ window.PL = {
   // Time-available gate: asked once per open (never persisted). Drives how much of
   // the Today view surfaces — see timeAvailable branching in render.js's today().
   timeModes: [
-    { id: "zero",   label: "Zero Time",     tagline: "You're lucky I got the app open — I have time for one decision, max." },
-    { id: "little", label: "Little Time",    tagline: "I want to help with decisions, but I don't have all the time in the world." },
-    { id: "lots",   label: "Lots of Time",   tagline: "I surprisingly have lots of time right now — let's dive deep into multiple decisions and their effects." }
+    { id: "zero",   label: "Zero Time",     tagline: "I have time for one decision, max (2 minutes).", icon: "time-1" },
+    { id: "little", label: "Some Time",      tagline: "I can help with a few things (5–10 minutes).", icon: "time-2" },
+    { id: "lots",   label: "Lots of Time",   tagline: "I surprisingly have some time to focus — let's do it (10+ minutes).", icon: "time-3" }
   ],
 
   // People referenced across RACI strips.
