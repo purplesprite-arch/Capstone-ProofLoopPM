@@ -127,7 +127,7 @@
     el.classList.add("view-enter");
 
     // nav highlighting (map push-views back to a tab)
-    const navKey = v === "showcase" || v === "pilot" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
+    const navKey = v === "showcase" || v === "pilot" || v === "profile" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
     document.querySelectorAll("[data-tab]").forEach((t) => t.classList.toggle("active", t.dataset.tab === navKey));
 
     // live "needs you" badge on the Decisions tab
@@ -330,25 +330,6 @@
   setAll(".user-ava", PL.user.initials);
   setAll(".user-name", PL.user.name);
   setAll(".user-role", PL.user.role);
-
-  // Profile entry point (A2 depends on a way in — profile-shell's own entry point isn't
-  // merged yet, so this feature wires the minimal one described in docs/roadmap.html
-  // #appendix-profile: ".user-card"/".user-ava" become a real link into the profile push
-  // view). Scoped to one clickable target per breakpoint so desktop's sidebar card and
-  // its nested avatar don't both become focusable (no nested tab stops).
-  document.querySelectorAll(".topbar .user-ava, .sidebar .user-card").forEach((el) => {
-    el.setAttribute("data-view", "profile");
-    el.setAttribute("role", "button");
-    el.setAttribute("tabindex", "0");
-    el.setAttribute("aria-label", "Open your profile");
-    el.classList.add("clickable");
-  });
-  document.addEventListener("keydown", (e) => {
-    if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[data-view].clickable")) {
-      e.preventDefault();
-      go(e.target.getAttribute("data-view"));
-    }
-  });
 
   const initial = location.hash.replace("#", "");
   const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot", "profile"];
