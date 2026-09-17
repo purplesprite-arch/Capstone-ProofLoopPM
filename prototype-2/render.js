@@ -599,13 +599,12 @@
     `;
   }
 
-  /* ---------- profile ----------
-     roadmap.html Appendix A: a push view (back button to Today) reached from the
-     .user-card / .user-ava identity affordances. A1 (identity header) and A2 (Value Focus)
-     belong to the profile-shell build item, which has not merged on this branch — so this is
-     a minimal scaffold, not the full profile page. profile-shell can replace everything above
-     the RECENT_DECISIONS_SEAM markers below with the real identity header + Value Focus
-     sections without touching the seam's contents. */
+  /* ---------- profile shell (A1) ----------
+     Reached by tapping the user avatar / user-card (app.js wires those as
+     data-view="profile"). This view is a SHARED SHELL — later build items add
+     their own content by replacing the body of the two seam functions below.
+     Do not add that content inline inside profile(); add it inside the seam
+     function instead, so the header markup here never needs to change. */
   function decisionLogRow(row, i) {
     return `<article class="rd-row">
         <div class="rd-body">
@@ -618,23 +617,51 @@
       </article>`;
   }
 
-  function profile() {
+  function profileValueFocusSeam(state) {
+    // VALUE_FOCUS_SEAM — a later feature renders its "Value Focus" module here.
+    // Replace this function's return value (or have it call a new render.js
+    // function, then add that function to the window.PLRender export object)
+    // with the real markup. `state` is already passed in for that feature to
+    // read (e.g. state.all() / state.blocking()) without re-plumbing anything.
+    return `<!-- VALUE_FOCUS_SEAM: render "Value Focus" content here -->`;
+  }
+  function profileRecentDecisionsSeam(state) {
+    // RECENT_DECISIONS_SEAM (A3) — recent-decisions log: who decided, any
+    // conditions attached, and the impact, with a one-tap way to flag a
+    // concern about a call that's already been made.
     const log = PL.decisionLog || [];
     const rows = log.map((row, i) => decisionLogRow(row, i)).join("");
     return `
-      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
-      <header class="page-head">
-        <h1>Profile</h1>
-        <p>Stakeholder profile — identity and value-focus preferences land here soon.</p>
-      </header>
-
-      <!-- RECENT_DECISIONS_SEAM:start -->
       <section class="detail-block recent-decisions">
         <div class="block-head"><h2>Recent decisions</h2><span class="muted">${log.length} logged</span></div>
         <p class="rd-lede">Who decided, any conditions attached, and the impact — with a one-tap way to flag a concern about a call that's already been made.</p>
         <div class="stack rd-stack">${rows || `<p class="muted">No decisions logged yet.</p>`}</div>
       </section>
-      <!-- RECENT_DECISIONS_SEAM:end -->
+    `;
+  }
+
+  function profile(state) {
+    const u = PL.user;
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
+      <div class="profile-view">
+        <header class="profile-head">
+          <span class="user-ava profile-ava">${u.initials}</span>
+          <div class="profile-id">
+            <h1>${u.name}</h1>
+            <p class="profile-role">${u.role}</p>
+            <p class="profile-ws">${PL.workspace.name}</p>
+          </div>
+        </header>
+
+        <div class="choice">
+          <span class="choice-ic">${icon("shield")}</span>
+          <span><b>Scope of authority</b><small>Accountable for customer-service behavior & rollout gates; consulted on revenue and compliance.</small></span>
+        </div>
+
+        ${profileValueFocusSeam(state)}
+        ${profileRecentDecisionsSeam(state)}
+      </div>
     `;
   }
 

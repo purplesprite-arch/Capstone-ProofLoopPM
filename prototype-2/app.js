@@ -51,7 +51,7 @@
     else if (v === "agents") html = R.agents();
     else if (v === "evidence") html = R.evidence();
     else if (v === "memory") html = R.memory(state);
-    else if (v === "profile") html = R.profile();
+    else if (v === "profile") html = R.profile(state);
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
@@ -63,7 +63,7 @@
     el.classList.add("view-enter");
 
     // nav highlighting (map push-views back to a tab)
-    const navKey = v === "showcase" || v === "pilot" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
+    const navKey = v === "showcase" || v === "pilot" || v === "profile" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
     document.querySelectorAll("[data-tab]").forEach((t) => t.classList.toggle("active", t.dataset.tab === navKey));
 
     // live "needs you" badge on the Decisions tab
@@ -140,7 +140,13 @@
     const concern = t.closest("[data-concern]");
     if (concern) {
       const row = (PL.decisionLog || [])[+concern.dataset.concern];
-      if (row) showToast("Concern flagged", `${row.decidedBy} has been notified and can reopen "${row.decisionTitle}."`);
+      if (row) {
+        const selfDecided = row.decidedBy === PL.user.name;
+        const msg = selfDecided
+          ? `Logged for follow-up — Chief of Staff will loop back with you to revisit "${row.decisionTitle}."`
+          : `${row.decidedBy} has been notified and can reopen "${row.decisionTitle}."`;
+        showToast("Concern flagged", msg);
+      }
       return;
     }
 
