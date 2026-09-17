@@ -599,6 +599,62 @@
     `;
   }
 
+  /* ---------- profile: Value Focus (A2) ----------
+     profile-shell (A1 identity header, the rest of the profile push view) is a SEPARATE
+     build item and was NOT merged to main when this feature was built — see the build
+     summary for that limitation. What follows is a minimal stand-in shell (clearly marked
+     below) that exists only so Value Focus has a page to render into; a future integration
+     of profile-shell should replace the PROFILE_SHELL_PLACEHOLDER block, and can leave the
+     VALUE_FOCUS_SEAM block below untouched. */
+  function valueFocusCard(v, selected) {
+    return `<button type="button" class="choice vf-card${selected ? " is-selected" : ""}" data-vf="${v.key}" aria-pressed="${selected ? "true" : "false"}">
+        <span class="choice-ic vf-ic${selected ? " is-on" : ""}">${icon(selected ? "check" : "spark")}</span>
+        <span class="vf-body">
+          <b>${v.label}</b>
+          <small class="vf-framing">“${v.framing}”</small>
+          <span class="vf-kpi"><i>Primary KPI</i>${v.primaryKpi}</span>
+          <span class="vf-kpi vf-kpi-supporting"><i>Also tracks</i>${v.supportingKpis.join(" · ")}</span>
+        </span>
+      </button>`;
+  }
+
+  function valueFocusSection(state) {
+    const selected = state.valueFocus || [];
+    const cards = PL.valueFocusTaxonomy.map((v) => valueFocusCard(v, selected.indexOf(v.key) !== -1)).join("");
+    const n = selected.length;
+    const status =
+      n === 0 ? "Pick 2–3 focus areas — ProofLoop will surface matching decisions first, still ranked by impact."
+      : n === 1 ? "1 selected — pick at least one more to start re-ranking the queue."
+      : `${n} selected — the Decisions queue now surfaces these first, ranked by impact within that group.`;
+    return `<section class="detail-block vf-section">
+        <div class="block-head"><h2>Value focus</h2><span class="muted">${n} of 3 selected</span></div>
+        <p class="vf-intro">What should ProofLoop optimize for, in your words? Pick 2–3 — each shows the primary metric plus what it rolls up.</p>
+        <div class="vf-grid">${cards}</div>
+        <p class="vf-status" aria-live="polite">${status}</p>
+      </section>`;
+  }
+
+  function profile(state) {
+    /* ---- PROFILE_SHELL_PLACEHOLDER (not this feature's scope — see note above) ---- */
+    const idStub = `<section class="detail-block profile-id-stub">
+        <span class="user-ava">${PL.user.initials}</span>
+        <div><strong>${PL.user.name}</strong><small>${PL.user.role} · ${PL.workspace.name}</small></div>
+      </section>`;
+    /* ---- end placeholder ---- */
+
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
+      <header class="page-head">
+        <h1>Profile</h1>
+        <p>Identity and scope of authority ship with the profile shell. This page currently hosts Value Focus only.</p>
+      </header>
+      ${idStub}
+      <!-- VALUE_FOCUS_SEAM -->
+      ${valueFocusSection(state)}
+      <!-- /VALUE_FOCUS_SEAM -->
+    `;
+  }
+
   /* ---------- rollout: value showcase ---------- */
   function showcase() {
     const r = PL.rollout;
@@ -688,5 +744,5 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown };
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, profile };
 })();

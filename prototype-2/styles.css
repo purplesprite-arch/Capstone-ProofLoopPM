@@ -422,6 +422,37 @@ button{font-family:inherit;cursor:pointer}
 .decide-note .icon{width:13px;flex:0 0 auto;margin-top:1px}
 
 /* ==========================================================================
+   Profile — Value Focus (A2)
+   profile-shell (A1 identity header + rest of the profile push view) is a separate,
+   not-yet-merged build item — .profile-id-stub below is a minimal placeholder only.
+   ========================================================================== */
+.clickable{cursor:pointer}
+.clickable:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+
+.profile-id-stub{display:flex;align-items:center;gap:12px}
+.profile-id-stub div{display:grid;gap:2px;min-width:0}
+.profile-id-stub strong{font-size:14px}
+.profile-id-stub small{font-size:11px;color:var(--muted)}
+
+.vf-intro{font-size:12px;color:var(--muted);line-height:1.5;margin:-2px 0 4px}
+.vf-grid{display:block}
+.vf-card{align-items:flex-start;width:100%}
+.vf-card.is-selected{border-color:#9fe0c8;background:var(--mint-soft)}
+.vf-ic{background:#eef0f3;color:#9aa4b2}
+.vf-ic.is-on{background:var(--mint-soft);color:var(--mint)}
+.vf-body{display:grid;gap:4px;flex:1;min-width:0}
+.vf-framing{font-style:italic}
+.vf-kpi{display:block;font-size:10.5px;color:#4d5867;line-height:1.5}
+.vf-kpi i{font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.3px;font-size:8px;color:var(--muted);margin-right:6px}
+.vf-kpi-supporting{color:var(--muted)}
+.vf-status{font-size:11px;font-weight:700;color:var(--muted);margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+
+@media (min-width: 720px){
+  .vf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .vf-card{margin-top:0}
+}
+
+/* ==========================================================================
    Value showcase (rollout go/no-go)
    ========================================================================== */
 .showcase,.pilot{display:grid;gap:15px}

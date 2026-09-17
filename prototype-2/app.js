@@ -6,6 +6,69 @@
   const PL = window.PL;
   const R = window.PLRender;
 
+  /* ---------- Value Focus (A2): persistence + queue re-ranking ----------
+     FIRST use of persistence anywhere in this prototype — everything else here is
+     purely in-memory (see state.types/state.resolved). localStorage access is wrapped
+     in try/catch throughout so a disabled/unavailable store (private mode, file://
+     restrictions, storage quota) degrades to a session-only selection instead of
+     throwing. The Impact Score itself (R.score) is never touched — only the ORDER
+     decisions are listed in changes, via the comparator below.
+     NOTE: this block must be defined (in particular VALUE_FOCUS_STORAGE_KEY, a `const`)
+     before `state` below, since state's initializer calls loadValueFocus() eagerly —
+     a `const` is not hoisted the way a `function` declaration is, so declaring it after
+     `state` throws a "Cannot access before initialization" TDZ error the first time
+     the app boots (caught locally, but it silently discarded the persisted selection —
+     confirmed with a real page load + reload during verification, not just read by eye). */
+  const VALUE_FOCUS_STORAGE_KEY = "proofloop.valueFocus";
+  function loadValueFocus() {
+    try {
+      const raw = window.localStorage && window.localStorage.getItem(VALUE_FOCUS_STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      const known = PL.valueFocusTaxonomy.map((v) => v.key);
+      return Array.isArray(parsed) ? parsed.filter((k) => known.indexOf(k) !== -1) : [];
+    } catch (e) {
+      return []; // localStorage unavailable — start empty, selection still works this session
+    }
+  }
+  function saveValueFocus(keys) {
+    try {
+      if (window.localStorage) window.localStorage.setItem(VALUE_FOCUS_STORAGE_KEY, JSON.stringify(keys));
+    } catch (e) {
+      // localStorage unavailable — selection stays in memory for this session only
+    }
+  }
+  function toggleValueFocus(key) {
+    const cur = state.valueFocus.slice();
+    const i = cur.indexOf(key);
+    if (i !== -1) {
+      cur.splice(i, 1);
+    } else if (cur.length >= 3) {
+      showToast("Pick at most 3", "Remove one focus area before adding another.");
+      return;
+    } else {
+      cur.push(key);
+    }
+    state.valueFocus = cur;
+    saveValueFocus(cur);
+    render();
+  }
+  // Two-tier sort: focus-matching decisions first, then the EXISTING, UNMODIFIED Impact
+  // Score decides order both within and across that grouping. score() is untouched.
+  function matchesFocus(d, focusKeys) {
+    if (!focusKeys || !focusKeys.length) return false;
+    const tags = (PL.valueFocusTagMap && PL.valueFocusTagMap[d.id]) || [];
+    return tags.some((t) => focusKeys.indexOf(t) !== -1);
+  }
+  function rankByFocusThenScore(focusKeys) {
+    return (a, b) => {
+      const fa = matchesFocus(a, focusKeys) ? 0 : 1;
+      const fb = matchesFocus(b, focusKeys) ? 0 : 1;
+      if (fa !== fb) return fa - fb;
+      return R.score(b.impact) - R.score(a.impact);
+    };
+  }
+
   /* ---------- runtime state ---------- */
   // We clone the decision types so the demo can mutate them (toggle, resolve)
   // without editing the seed data.
@@ -15,6 +78,7 @@
     resolved: {},       // decisionId -> outcome label
     timeAvailable: null, // "zero" | "little" | "lots" — asked once per open, never persisted
     memory: PL.memory.map((g) => ({ day: g.day, items: g.items.slice() })),
+    valueFocus: loadValueFocus(), // profile → Value Focus (A2): selected taxonomy keys, persisted (see below)
 
     decisionFor(id) {
       const d = PL.decisions.find((x) => x.id === id) || (id === "d-billing-golive" ? billingDecision() : null);
@@ -27,12 +91,12 @@
     blocking() {
       return this.all()
         .filter((d) => d.type === "decision" && !this.resolved[d.id])
-        .sort((a, b) => R.score(b.impact) - R.score(a.impact));
+        .sort(rankByFocusThenScore(this.valueFocus));
     },
     informative() {
       return this.all()
         .filter((d) => d.type === "informative" && !this.resolved[d.id])
-        .sort((a, b) => R.score(b.impact) - R.score(a.impact));
+        .sort(rankByFocusThenScore(this.valueFocus));
     }
   };
   function billingDecision() {
@@ -53,6 +117,7 @@
     else if (v === "memory") html = R.memory(state);
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
+    else if (v === "profile") html = R.profile(state);
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
     else html = R.today(state);
 
@@ -130,6 +195,10 @@
       else showToast("Back on your desk", "Added to the decisions that need you, ranked by impact.");
       return;
     }
+
+    // Value Focus card (profile view) — toggle selection, persist, re-render
+    const vfCard = t.closest("[data-vf]");
+    if (vfCard) { toggleValueFocus(vfCard.dataset.vf); return; }
 
     // quick decide (briefing + brief detail + rollout)
     const decide = t.closest("[data-decide]");
@@ -262,8 +331,27 @@
   setAll(".user-name", PL.user.name);
   setAll(".user-role", PL.user.role);
 
+  // Profile entry point (A2 depends on a way in — profile-shell's own entry point isn't
+  // merged yet, so this feature wires the minimal one described in docs/roadmap.html
+  // #appendix-profile: ".user-card"/".user-ava" become a real link into the profile push
+  // view). Scoped to one clickable target per breakpoint so desktop's sidebar card and
+  // its nested avatar don't both become focusable (no nested tab stops).
+  document.querySelectorAll(".topbar .user-ava, .sidebar .user-card").forEach((el) => {
+    el.setAttribute("data-view", "profile");
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-label", "Open your profile");
+    el.classList.add("clickable");
+  });
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[data-view].clickable")) {
+      e.preventDefault();
+      go(e.target.getAttribute("data-view"));
+    }
+  });
+
   const initial = location.hash.replace("#", "");
-  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot"];
+  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot", "profile"];
   state.view = valid.includes(initial) || initial.indexOf("brief:") === 0 ? initial : "today";
   render();
   openTimeGate();
