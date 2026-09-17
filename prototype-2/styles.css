@@ -53,7 +53,7 @@ button{font-family:inherit;cursor:pointer}
 .topbar .ws{margin-left:auto;text-align:right;min-width:0}
 .topbar .ws-name{display:block;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38vw}
 .topbar .ws-context{display:block;font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38vw}
-.user-ava{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#dbe3ff;color:#3153b4;font-size:11px;font-weight:800;flex:0 0 auto}
+.user-ava{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#dbe3ff;color:#3153b4;font-size:11px;font-weight:800;flex:0 0 auto;border:0;padding:0}
 .topbar .user-ava{margin-left:2px}
 
 /* Desktop sidebar — hidden on mobile */
@@ -326,6 +326,16 @@ button{font-family:inherit;cursor:pointer}
 .pill.revised{color:#9a6a12;background:var(--amber-soft)}
 
 /* ==========================================================================
+   Profile shell (A1) — reached via the user avatar / user-card
+   ========================================================================== */
+.profile-view{margin-bottom:22px}
+.profile-head{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.profile-ava{width:56px;height:56px;font-size:18px}
+.profile-id h1{font-size:19px;letter-spacing:-.5px}
+.profile-role{font-size:12.5px;color:var(--muted);margin-top:4px}
+.profile-ws{font-size:11px;font-weight:700;color:#4a5566;margin-top:5px}
+
+/* ==========================================================================
    Brief detail
    ========================================================================== */
 .brief-detail{display:grid;gap:15px}
@@ -572,8 +582,9 @@ button{font-family:inherit;cursor:pointer}
   .sidebar .tab:hover{background:rgba(255,255,255,.08);color:#fff}
   .sidebar .tab.active{background:rgba(255,255,255,.1);color:#fff}
   .sidebar .tab-badge{position:static;margin-left:auto}
-  .sidebar .user-card{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.1);padding-top:16px}
-  .sidebar .user-card>div{min-width:0;flex:1}
+  .sidebar .user-card{margin-top:auto;display:flex;align-items:center;gap:10px;width:100%;border:0;border-top:1px solid rgba(255,255,255,.1);border-radius:0;background:none;color:inherit;text-align:left;padding:16px 0 0}
+  .sidebar .user-card:hover{background:rgba(255,255,255,.06)}
+  .sidebar .user-card>.user-info{min-width:0;flex:1}
   .sidebar .user-name{display:block;font-size:12px;font-weight:700}
   .sidebar .user-role{display:block;font-size:9.5px;color:#9aa7ba;margin-top:2px}
 
