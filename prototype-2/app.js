@@ -114,12 +114,12 @@
     else if (v === "decisions") html = R.decisions(state);
     else if (v === "agents") html = R.agents();
     else if (v === "evidence") html = R.evidence();
+    else if (v === "build") html = R.buildView(state);
     else if (v === "memory") html = R.memory(state);
     else if (v === "profile") html = R.profile(state);
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
     else if (v === "presenter") html = R.presenter(state);
-    else if (v === "profile") html = R.profile(state);
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
     else html = R.today(state);
 
@@ -237,6 +237,10 @@
     const scoreTap = t.closest("[data-score]");
     if (scoreTap) { openBreakdown(scoreTap.dataset.score); return; }
 
+    // presenter cockpit: Impact Score tap → same honest breakdown, plus recommendation + evidence + decide actions
+    const cockpitScore = t.closest("[data-cockpit-score]");
+    if (cockpitScore) { openCockpitScoreModal(cockpitScore.dataset.cockpitScore); return; }
+
     // evidence trace expander
     const traceBtn = t.closest("[data-trace]");
     if (traceBtn) {
@@ -276,6 +280,17 @@
       <p class="modal-sub">${d.title}</p>
       ${R.breakdown(d)}
       <p class="modal-foot">Score = 0.35·value + 0.30·unblocks + 0.20·reach + 0.15·urgency. Weights are tuned to protect production value first.</p>`;
+    openModal();
+  }
+
+  /* ---------- presenter cockpit: Impact Score modal (breakdown + recommendation + evidence + decide) ---------- */
+  function openCockpitScoreModal(id) {
+    const d = state.decisionFor(id);
+    if (!d) return;
+    const body = document.getElementById("modal-body");
+    body.innerHTML = `<div class="modal-head"><h2>${d.title}</h2><button class="icon-btn" data-close aria-label="Close">${R.icon("x")}</button></div>
+      <p class="modal-sub">${d.one_liner}</p>
+      ${R.cockpitScoreModal(d)}`;
     openModal();
   }
 
@@ -357,7 +372,7 @@
   setAll(".user-role", PL.user.role);
 
   const initial = location.hash.replace("#", "");
-  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot", "presenter", "profile"];
+  const valid = ["today", "decisions", "agents", "evidence", "build", "memory", "showcase", "pilot", "presenter", "profile"];
   state.view = valid.includes(initial) || initial.indexOf("brief:") === 0 ? initial : "today";
   render();
   openTimeGate();

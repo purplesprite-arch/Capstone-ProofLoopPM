@@ -784,16 +784,174 @@
     `;
   }
 
-  /* ---------- presenter mode entry point (placeholder — presenter-cockpit feature fills this in) ---------- */
-  function presenter(state) {
+  /* ---------- presenter mode: decision cockpit ----------
+     Matches docs/presenter-cockpit-mockup.html. Every number here is read straight off
+     PL.decisions/PL.features/state — nothing is hand-authored for this view. The Impact
+     Score tap (data-cockpit-score, wired in app.js) reuses the same score()/contributions()/
+     breakdown() honest-arithmetic pipeline as the "see the math" flow elsewhere. */
+  function featureFor(d) {
+    return (PL.features || []).find((f) => (f.decisionIds || []).indexOf(d.id) !== -1);
+  }
+
+  function cockpitWhoChip(d) {
+    const r = d.raci || {};
+    const consultedTag = (id) => (P[id] ? `<span class="tag">C: ${P[id].short}</span>` : "");
+    if (r.a === PL.user.id) {
+      return `<span class="who-chip is-you"><i>A</i>You${r.c && r.c[0] ? consultedTag(r.c[0]) : ""}</span>`;
+    }
+    const p = P[r.a];
+    return `<span class="who-chip is-other"><i>${p ? p.initials : "?"}</i>${p ? p.short : r.a}</span>`;
+  }
+
+  function cockpitDashboardHead() {
+    return `<div class="dgrid head">
+        <span>Decision</span><span>Surfacing agent</span><span>Decides</span><span>Recommendation</span><span>Build item</span><span>Unblocks</span><span>Impact</span><span></span>
+      </div>`;
+  }
+
+  function cockpitDashboardRow(d) {
+    const sig = d.signals || {};
+    const f = featureFor(d);
+    const n = sig.blocksToday || 0;
+    const rec = d.recommendation || {};
+    return `<div class="dgrid drow">
+        <div><div class="d-title">${d.title}</div><div class="d-sub">${d.one_liner}</div></div>
+        ${agentChip(d.agentId)}
+        ${cockpitWhoChip(d)}
+        <span class="d-rec">${rec.headline || ""}</span>
+        <span class="feat-pill${f ? "" : " none"}">${f ? f.name : "— cross-cutting"}</span>
+        <span class="unblk${n ? "" : " zero"}">${n ? n + " task" + (n === 1 ? "" : "s") : "—"}</span>
+        <button class="d-score" data-cockpit-score="${d.id}" aria-label="See how the impact score for ${d.title} adds up">${score(d.impact)}</button>
+        <div class="d-actions">
+          <button class="abtn approve" data-decide="approve" data-id="${d.id}" aria-label="Approve">${icon("check")}</button>
+          <button class="abtn revise" data-decide="revise" data-id="${d.id}" aria-label="Request revision">${icon("edit")}</button>
+          <button class="abtn reject" data-decide="reject" data-id="${d.id}" aria-label="Reject">${icon("x")}</button>
+        </div>
+      </div>`;
+  }
+
+  // Values are read off the SAME open/resolved decisions the dashboard above shows — nothing hardcoded.
+  function cockpitValuePanel(state) {
+    const decisions = state.all().filter((d) => d.type === "decision");
+    const decided = decisions.filter((d) => state.resolved[d.id]);
+    const byKind = (kind) => decided.filter((d) => d.signals && d.signals.dollarsKind === kind);
+    const sumWeekly = (items) => items.reduce((sum, d) => sum + (d.signals.weeklyDollars || 0), 0);
+    const fmt = (n) => (n >= 1000 ? "$" + (Math.round(n / 100) / 10).toString().replace(/\.0$/, "") + "k/wk" : "$" + n + "/wk");
+    const caption = (items, verb) =>
+      items.length ? `${items[0].title}${items.length > 1 ? ` + ${items.length - 1} more` : ""} — ${verb}.` : `No decisions resolved yet.`;
+    const risk = byKind("at-risk");
+    const opp = byKind("opportunity");
+    return `<div class="vpanel">
+        <div class="vhead"><h3>Value from today's decisions</h3><span class="pill">${decided.length} of ${decisions.length} decided</span></div>
+        <div class="vstats">
+          <div class="vstat risk"><div class="lbl">Risk mitigated</div><div class="num">${fmt(sumWeekly(risk))}</div><div class="cap">${caption(risk, "risk mitigated")}</div></div>
+          <div class="vdivider"></div>
+          <div class="vstat opp"><div class="lbl">Value unlocked</div><div class="num">${fmt(sumWeekly(opp))}</div><div class="cap">${caption(opp, "value unlocked")}</div></div>
+        </div>
+      </div>`;
+  }
+
+  function cockpitBuildItems(state) {
+    const features = PL.features || [];
+    const rows = features
+      .map((f) => {
+        const ids = f.decisionIds || [];
+        const open = ids.filter((id) => !state.resolved[id]).length;
+        return `<div class="cx-frow">
+            <span class="name">${f.name}</span>
+            <span class="pill ${f.status}">${f.status}</span>
+            <span class="desc">${f.summary} — ${ids.length} decision${ids.length === 1 ? "" : "s"} linked, ${open} still open</span>
+          </div>`;
+      })
+      .join("");
+    return `<div class="cx-card cx-card-pad">
+        <div class="cx-card-title"><h3>Build items</h3><span class="cx-card-cnt">${features.length} features</span></div>
+        <div class="cx-build">${rows}</div>
+      </div>`;
+  }
+
+  function cockpitScoreModal(d) {
+    const rec = d.recommendation || {};
+    const ev = (d.evidence || []).map(sourceCard).join("");
     return `
-      <button class="back" data-view="today">${icon("arrow-left")}Back to Today</button>
-      <header class="page-head">
-        <h1>Presenter Mode</h1>
-        <p>The full presenter cockpit is coming soon — this screen is just the entry point for now.</p>
-      </header>
+      ${breakdown(d)}
+      <section class="rec-card">
+        <div class="rec-label">${icon("spark")}ProofLoop recommends</div>
+        <h2>${rec.headline || ""}</h2>
+        <p>${rec.rationale || ""}</p>
+      </section>
+      ${ev ? `<section class="detail-block"><div class="block-head"><h2>Key evidence</h2><span class="muted">${d.evidence.length} sources</span></div><div class="stack">${ev}</div></section>` : ""}
+      <div class="modal-actions">
+        <button class="btn ghost" data-decide="reject" data-id="${d.id}">${icon("x")}Reject</button>
+        <button class="btn ghost" data-decide="revise" data-id="${d.id}">${icon("edit")}Revise</button>
+        <button class="btn primary" data-decide="approve" data-id="${d.id}">${icon("check")}Approve</button>
+      </div>
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, presenter, profile };
+  function presenter(state) {
+    const open = state
+      .all()
+      .filter((d) => d.type === "decision" && !state.resolved[d.id])
+      .sort((a, b) => score(b.impact) - score(a.impact));
+    const advancing = state.all().filter((d) => d.type === "informative" && !state.resolved[d.id]).length;
+    const rows = open.map(cockpitDashboardRow).join("");
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to Today</button>
+      <div class="cockpit">
+        <div class="cockpit-head">
+          <div class="who"><span class="badge">Presenter Mode</span><span class="ws">${PL.workspace.name} · ${PL.workspace.env}</span></div>
+          <span class="status-line">${open.length} decision${open.length === 1 ? "" : "s"} need you · ${advancing} advancing on ${advancing === 1 ? "its" : "their"} own</span>
+        </div>
+
+        <div class="cx-card cx-card-pad">
+          <div class="cx-card-title"><h3>Decision Dashboard</h3><span class="cx-card-cnt">sorted by impact · ${open.length} open</span></div>
+          ${cockpitDashboardHead()}
+          ${rows || `<p class="muted">No open decisions — nice work.</p>`}
+        </div>
+
+        ${cockpitValuePanel(state)}
+
+        ${cockpitBuildItems(state)}
+      </div>
+    `;
+  }
+
+  /* ---------- build view: read-only feature snapshot ----------
+     Static, no live Jira/backend — a card per PL.features entry, linking to its decisions
+     via the existing data-open brief navigation (blocking = type "decision", informing =
+     type "informative"). */
+  function buildFeatureCard(f, state) {
+    const links = (f.decisionIds || [])
+      .map((id) => {
+        const d = state.decisionFor(id);
+        if (!d) return "";
+        const blocking = d.type === "decision" && !state.resolved[id];
+        const label = state.resolved[id] ? "Decided" : blocking ? "Blocking" : "Informing";
+        return `<button class="link-btn" data-open="${id}">${icon(blocking ? "alert" : "check")}<b>${label}:</b> ${d.title}</button>`;
+      })
+      .join("");
+    return `<article class="build-card">
+        <div class="build-card-head">
+          <h2>${f.name}</h2>
+          <span class="pill ${f.status}">${f.status}</span>
+        </div>
+        <p class="build-summary">${f.summary}</p>
+        <div class="build-progress" role="img" aria-label="${f.progress}% complete"><i style="width:${f.progress}%"></i></div>
+        <div class="build-links stack">${links || `<p class="muted">No linked decisions.</p>`}</div>
+      </article>`;
+  }
+
+  function buildView(state) {
+    const cards = (PL.features || []).map((f) => buildFeatureCard(f, state)).join("");
+    return `
+      <header class="page-head">
+        <h1>Build</h1>
+        <p>What's actually being built, and which decisions are blocking or informing it. Static snapshot, not live Jira data.</p>
+      </header>
+      <div class="build-group">${cards}</div>
+    `;
+  }
+
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, presenter, profile, cockpitScoreModal, buildView };
 })();
