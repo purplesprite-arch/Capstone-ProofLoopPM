@@ -510,5 +510,51 @@ window.PL = {
     { day: "September 6", items: [
       { icon: "check", tone: "approved", title: "Decision DL-008 approved", body: "Intent routing patch advanced with no added conditions.", meta: "4:18 PM · resolved in 2m 14s", status: "Approved" }
     ] }
-  ]
+  ],
+
+  // Profile → Value Focus (A2). Executive KPI taxonomy — the stakeholder picks 2-3 of these
+  // and the Decisions queue re-ranks (focus-match first, then the existing Impact Score).
+  // See docs/roadmap.html #appendix-profile-a2 for the approved source table this mirrors.
+  valueFocusTaxonomy: [
+    { key: "grow-revenue", label: "Grow revenue", framing: "Every interaction is a chance to expand the relationship.",
+      primaryKpi: "Cross-sell / up-sell attach rate",
+      supportingKpis: ["Wallet share", "Market share", "Revenue per interaction / AOV", "Assisted-conversion", "Net Revenue Retention"] },
+    { key: "cut-cost-to-serve", label: "Cut cost to serve", framing: "Resolve more without adding headcount.",
+      primaryKpi: "Deflection / self-service containment rate",
+      supportingKpis: ["Cost per contact", "Average Handle Time (AHT)", "First-Contact Resolution", "Escalation/transfer rate"] },
+    { key: "operational-efficiency", label: "Operational efficiency", framing: "Less swivel-chair, faster complex work.",
+      primaryKpi: "Time-to-resolution for complex task X",
+      supportingKpis: ["# systems touched per task", "Straight-through / automation rate", "Throughput per FTE", "Rework rate"] },
+    { key: "personalization-experience", label: "Personalization & experience", framing: "The right next action, tailored.",
+      primaryKpi: "Recommendation adoption / acceptance rate",
+      supportingKpis: ["Relevance rating", "Task-success / goal-completion", "CSAT/NPS lift", "Repeat/retention"] },
+    { key: "data-quality-trust", label: "Data quality & trust", framing: "Grounded answers you can defend.",
+      primaryKpi: "Data completeness (% required fields)",
+      supportingKpis: ["Data accuracy vs. ground truth", "Freshness/latency", "Source coverage %", "Groundedness/citation rate"] },
+    { key: "trust-safety-compliance", label: "Trust, safety & compliance", framing: "Answers we can stand behind and audit.",
+      primaryKpi: "Policy-adherence rate",
+      supportingKpis: ["Groundedness / hallucination rate", "Safe-escalation rate", "PII/exposure incidents", "Audit-readiness"] },
+    { key: "human-agent-experience", label: "Human-agent experience", framing: "AI that lifts our people, not replaces them.",
+      primaryKpi: "Rep ramp time",
+      supportingKpis: ["After-call-work reduction", "Agent CSAT", "Attrition/burnout", "Concurrency per rep"] },
+    { key: "ai-adoption-autonomy", label: "AI adoption & autonomy", framing: "How far the AI program has actually spread.",
+      primaryKpi: "% interactions AI-handled",
+      supportingKpis: ["Containment / autonomy rate", "Topic/intent coverage", "Active adoption", "Fallback-to-human rate"] },
+    { key: "speed-to-value", label: "Speed-to-value / velocity", framing: "How fast we ship new agent capability.",
+      primaryKpi: "Time to launch a new topic/skill",
+      supportingKpis: ["Iteration cycle time", "Eval-to-prod lead time", "Deployment frequency"] }
+  ],
+
+  // Decision → Value Focus tag lookup. A small side table (by decision id) rather than a
+  // field on each decision object, so this feature never edits decisions authored elsewhere.
+  // Tags are a curated editorial judgment about which taxonomy lens each decision speaks to —
+  // not a computed score — used only to group the queue before the honest Impact Score sorts it.
+  valueFocusTagMap: {
+    "d-escalation": ["trust-safety-compliance", "cut-cost-to-serve"],
+    "d-billing-golive": ["cut-cost-to-serve", "ai-adoption-autonomy"],
+    "d-repeat-threshold": ["operational-efficiency", "cut-cost-to-serve"],
+    "d-intent-routing": ["data-quality-trust", "ai-adoption-autonomy"],
+    "d-refund-knowledge": ["data-quality-trust"],
+    "d-tone-tweak": ["personalization-experience"]
+  }
 };

@@ -326,16 +326,6 @@ button{font-family:inherit;cursor:pointer}
 .pill.revised{color:#9a6a12;background:var(--amber-soft)}
 
 /* ==========================================================================
-   Profile shell (A1) — reached via the user avatar / user-card
-   ========================================================================== */
-.profile-view{margin-bottom:22px}
-.profile-head{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
-.profile-ava{width:56px;height:56px;font-size:18px}
-.profile-id h1{font-size:19px;letter-spacing:-.5px}
-.profile-role{font-size:12.5px;color:var(--muted);margin-top:4px}
-.profile-ws{font-size:11px;font-weight:700;color:#4a5566;margin-top:5px}
-
-/* ==========================================================================
    Brief detail
    ========================================================================== */
 .brief-detail{display:grid;gap:15px}
@@ -432,6 +422,37 @@ button{font-family:inherit;cursor:pointer}
 .choice small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
 .decide-note{display:flex;gap:7px;font-size:10px;line-height:1.5;color:#8a94a3;border-top:1px solid var(--line);padding-top:13px;margin-top:15px}
 .decide-note .icon{width:13px;flex:0 0 auto;margin-top:1px}
+
+/* ==========================================================================
+   Profile shell (A1) — reached via the user avatar / user-card
+   ========================================================================== */
+.profile-view{margin-bottom:22px}
+.profile-head{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.profile-ava{width:56px;height:56px;font-size:18px}
+.profile-id h1{font-size:19px;letter-spacing:-.5px}
+.profile-role{font-size:12.5px;color:var(--muted);margin-top:4px}
+.profile-ws{font-size:11px;font-weight:700;color:#4a5566;margin-top:5px}
+
+/* ==========================================================================
+   Profile — Value Focus (A2)
+   ========================================================================== */
+.vf-intro{font-size:12px;color:var(--muted);line-height:1.5;margin:-2px 0 4px}
+.vf-grid{display:block}
+.vf-card{align-items:flex-start;width:100%}
+.vf-card.is-selected{border-color:#9fe0c8;background:var(--mint-soft)}
+.vf-ic{background:#eef0f3;color:#9aa4b2}
+.vf-ic.is-on{background:var(--mint-soft);color:var(--mint)}
+.vf-body{display:grid;gap:4px;flex:1;min-width:0}
+.vf-framing{font-style:italic}
+.vf-kpi{display:block;font-size:10.5px;color:#4d5867;line-height:1.5}
+.vf-kpi i{font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.3px;font-size:8px;color:var(--muted);margin-right:6px}
+.vf-kpi-supporting{color:var(--muted)}
+.vf-status{font-size:11px;font-weight:700;color:var(--muted);margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+
+@media (min-width: 720px){
+  .vf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .vf-card{margin-top:0}
+}
 
 /* ==========================================================================
    Value showcase (rollout go/no-go)

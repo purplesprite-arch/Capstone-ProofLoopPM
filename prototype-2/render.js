@@ -541,52 +541,6 @@
     `;
   }
 
-  /* ---------- profile shell (A1) ----------
-     Reached by tapping the user avatar / user-card (app.js wires those as
-     data-view="profile"). This view is a SHARED SHELL — later build items add
-     their own content by replacing the body of the two seam functions below.
-     Do not add that content inline inside profile(); add it inside the seam
-     function instead, so the header markup here never needs to change. */
-  function profileValueFocusSeam(state) {
-    // VALUE_FOCUS_SEAM — a later feature renders its "Value Focus" module here.
-    // Replace this function's return value (or have it call a new render.js
-    // function, then add that function to the window.PLRender export object)
-    // with the real markup. `state` is already passed in for that feature to
-    // read (e.g. state.all() / state.blocking()) without re-plumbing anything.
-    return `<!-- VALUE_FOCUS_SEAM: render "Value Focus" content here -->`;
-  }
-  function profileRecentDecisionsSeam(state) {
-    // RECENT_DECISIONS_SEAM — a later feature renders the "Recent decisions
-    // log" here. Same contract as profileValueFocusSeam above: replace the
-    // return value, leave profile()'s header untouched.
-    return `<!-- RECENT_DECISIONS_SEAM: render "Recent decisions log" content here -->`;
-  }
-
-  function profile(state) {
-    const u = PL.user;
-    return `
-      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
-      <div class="profile-view">
-        <header class="profile-head">
-          <span class="user-ava profile-ava">${u.initials}</span>
-          <div class="profile-id">
-            <h1>${u.name}</h1>
-            <p class="profile-role">${u.role}</p>
-            <p class="profile-ws">${PL.workspace.name}</p>
-          </div>
-        </header>
-
-        <div class="choice">
-          <span class="choice-ic">${icon("shield")}</span>
-          <span><b>Scope of authority</b><small>Accountable for customer-service behavior & rollout gates; consulted on revenue and compliance.</small></span>
-        </div>
-
-        ${profileValueFocusSeam(state)}
-        ${profileRecentDecisionsSeam(state)}
-      </div>
-    `;
-  }
-
   /* ---------- brief detail ---------- */
   function brief(d) {
     if (!d) return `<div class="cleared"><p>Brief not found.</p></div>`;
@@ -646,6 +600,82 @@
             <p class="decide-note">${icon("lock")}Your decision and its evidence are added to decision memory.</p>
           </div>
         </aside>
+      </div>
+    `;
+  }
+
+  /* ---------- profile shell (A1) ----------
+     Reached by tapping the user avatar / user-card (app.js wires those as
+     data-view="profile"). This view is a SHARED SHELL — later build items add
+     their own content by replacing the body of the two seam functions below.
+     Do not add that content inline inside profile(); add it inside the seam
+     function instead, so the header markup here never needs to change.
+     (Ported verbatim from profile-shell (A1) on main, which had not merged
+     to this branch's fork point when Value Focus (A2) was first built — see
+     build summary for that history. profileRecentDecisionsSeam is left as
+     the untouched placeholder; the recent-decisions log is a separate build
+     item (A3) and out of scope here.) */
+  function valueFocusCard(v, selected) {
+    return `<button type="button" class="choice vf-card${selected ? " is-selected" : ""}" data-vf="${v.key}" aria-pressed="${selected ? "true" : "false"}">
+        <span class="choice-ic vf-ic${selected ? " is-on" : ""}">${icon(selected ? "check" : "spark")}</span>
+        <span class="vf-body">
+          <b>${v.label}</b>
+          <small class="vf-framing">“${v.framing}”</small>
+          <span class="vf-kpi"><i>Primary KPI</i>${v.primaryKpi}</span>
+          <span class="vf-kpi vf-kpi-supporting"><i>Also tracks</i>${v.supportingKpis.join(" · ")}</span>
+        </span>
+      </button>`;
+  }
+
+  function valueFocusSection(state) {
+    const selected = state.valueFocus || [];
+    const cards = PL.valueFocusTaxonomy.map((v) => valueFocusCard(v, selected.indexOf(v.key) !== -1)).join("");
+    const n = selected.length;
+    const status =
+      n === 0 ? "Pick 2–3 focus areas — ProofLoop will surface matching decisions first, still ranked by impact."
+      : n === 1 ? "1 selected — the Decisions queue already surfaces it first, ranked by impact. Pick 1–2 more for fuller coverage."
+      : `${n} selected — the Decisions queue now surfaces these first, ranked by impact within that group.`;
+    return `<section class="detail-block vf-section">
+        <div class="block-head"><h2>Value focus</h2><span class="muted">${n} of 3 selected</span></div>
+        <p class="vf-intro">What should ProofLoop optimize for, in your words? Pick 2–3 — each shows the primary metric plus what it rolls up.</p>
+        <div class="vf-grid">${cards}</div>
+        <p class="vf-status" aria-live="polite">${status}</p>
+      </section>`;
+  }
+
+  function profileValueFocusSeam(state) {
+    // VALUE_FOCUS_SEAM (A2) — stakeholder Value Focus taxonomy: pick 2-3 KPI-anchored
+    // focus areas, which persist to localStorage and re-rank the Decisions queue.
+    return valueFocusSection(state);
+  }
+  function profileRecentDecisionsSeam(state) {
+    // RECENT_DECISIONS_SEAM — a later feature renders the "Recent decisions
+    // log" here. Same contract as profileValueFocusSeam above: replace the
+    // return value, leave profile()'s header untouched.
+    return `<!-- RECENT_DECISIONS_SEAM: render "Recent decisions log" content here -->`;
+  }
+
+  function profile(state) {
+    const u = PL.user;
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
+      <div class="profile-view">
+        <header class="profile-head">
+          <span class="user-ava profile-ava">${u.initials}</span>
+          <div class="profile-id">
+            <h1>${u.name}</h1>
+            <p class="profile-role">${u.role}</p>
+            <p class="profile-ws">${PL.workspace.name}</p>
+          </div>
+        </header>
+
+        <div class="choice">
+          <span class="choice-ic">${icon("shield")}</span>
+          <span><b>Scope of authority</b><small>Accountable for customer-service behavior & rollout gates; consulted on revenue and compliance.</small></span>
+        </div>
+
+        ${profileValueFocusSeam(state)}
+        ${profileRecentDecisionsSeam(state)}
       </div>
     `;
   }
