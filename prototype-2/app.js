@@ -115,6 +115,7 @@
     else if (v === "agents") html = R.agents();
     else if (v === "evidence") html = R.evidence();
     else if (v === "memory") html = R.memory(state);
+    else if (v === "profile") html = R.profile(state);
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
     else if (v === "presenter") html = R.presenter(state);
@@ -213,6 +214,20 @@
     // quick decide (briefing + brief detail + rollout)
     const decide = t.closest("[data-decide]");
     if (decide) { openDecision(decide.dataset.decide, decide.dataset.id); return; }
+
+    // profile → recent-decisions log: "Raise a concern" (lightweight, local — no persistence)
+    const concern = t.closest("[data-concern]");
+    if (concern) {
+      const row = (PL.decisionLog || [])[+concern.dataset.concern];
+      if (row) {
+        const selfDecided = row.decidedBy === PL.user.name;
+        const msg = selfDecided
+          ? `Logged for follow-up — Chief of Staff will loop back with you to revisit "${row.decisionTitle}."`
+          : `${row.decidedBy} has been notified and can reopen "${row.decisionTitle}."`;
+        showToast("Concern flagged", msg);
+      }
+      return;
+    }
 
     // why → scroll-free reveal of the score math (uses a modal)
     const why = t.closest("[data-why]");

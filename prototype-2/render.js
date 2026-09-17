@@ -609,12 +609,7 @@
      data-view="profile"). This view is a SHARED SHELL — later build items add
      their own content by replacing the body of the two seam functions below.
      Do not add that content inline inside profile(); add it inside the seam
-     function instead, so the header markup here never needs to change.
-     (Ported verbatim from profile-shell (A1) on main, which had not merged
-     to this branch's fork point when Value Focus (A2) was first built — see
-     build summary for that history. profileRecentDecisionsSeam is left as
-     the untouched placeholder; the recent-decisions log is a separate build
-     item (A3) and out of scope here.) */
+     function instead, so the header markup here never needs to change. */
   function valueFocusCard(v, selected) {
     return `<button type="button" class="choice vf-card${selected ? " is-selected" : ""}" data-vf="${v.key}" aria-pressed="${selected ? "true" : "false"}">
         <span class="choice-ic vf-ic${selected ? " is-on" : ""}">${icon(selected ? "check" : "spark")}</span>
@@ -643,16 +638,36 @@
       </section>`;
   }
 
+  function decisionLogRow(row, i) {
+    return `<article class="rd-row">
+        <div class="rd-body">
+          <b class="rd-title">${row.decisionTitle}</b>
+          <span class="rd-decider">${icon("check", "rd-ic")}Decided by <b>${row.decidedBy}</b></span>
+          ${row.conditional ? `<span class="rd-conditional">${icon("lock", "rd-ic")}Conditional: ${row.conditional}</span>` : ""}
+          <p class="rd-impact">${row.impactSummary}</p>
+        </div>
+        <button class="link-btn rd-concern" data-concern="${i}">${icon("alert")}Raise a concern</button>
+      </article>`;
+  }
+
   function profileValueFocusSeam(state) {
     // VALUE_FOCUS_SEAM (A2) — stakeholder Value Focus taxonomy: pick 2-3 KPI-anchored
     // focus areas, which persist to localStorage and re-rank the Decisions queue.
     return valueFocusSection(state);
   }
   function profileRecentDecisionsSeam(state) {
-    // RECENT_DECISIONS_SEAM — a later feature renders the "Recent decisions
-    // log" here. Same contract as profileValueFocusSeam above: replace the
-    // return value, leave profile()'s header untouched.
-    return `<!-- RECENT_DECISIONS_SEAM: render "Recent decisions log" content here -->`;
+    // RECENT_DECISIONS_SEAM (A3) — recent-decisions log: who decided, any
+    // conditions attached, and the impact, with a one-tap way to flag a
+    // concern about a call that's already been made.
+    const log = PL.decisionLog || [];
+    const rows = log.map((row, i) => decisionLogRow(row, i)).join("");
+    return `
+      <section class="detail-block recent-decisions">
+        <div class="block-head"><h2>Recent decisions</h2><span class="muted">${log.length} logged</span></div>
+        <p class="rd-lede">Who decided, any conditions attached, and the impact — with a one-tap way to flag a concern about a call that's already been made.</p>
+        <div class="stack rd-stack">${rows || `<p class="muted">No decisions logged yet.</p>`}</div>
+      </section>
+    `;
   }
 
   function profile(state) {
