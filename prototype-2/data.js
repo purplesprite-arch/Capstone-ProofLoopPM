@@ -271,6 +271,135 @@ window.PL = {
         coverage: { linked: 1, total: 1 },
         mostRecentAt: "2026-08-29T00:00:00"    // slightly older review pass — lands in the "recent" band, not "fresh"
       }
+    },
+
+    {
+      id: "d-password-reset",
+      title: "Let Atlas handle password resets?",
+      agentId: "risk-sentinel",
+      type: "decision",
+      one_liner: "Adding a new self-service action the agent can take end-to-end.",
+      impact: { value: 52, unblock: 40, reach: 60, urgency: 58 },
+      signals: { valueKind: "revenue-opportunity", dollarsDisplay: "$800/wk", weeklyDollars: 800, dollarsKind: "opportunity", commitmentAtStake: false, blocksToday: 1, reachPerWeek: 3000, urgencyKind: "gate-window" },
+      metrics: { headline: "$800/wk projected", kpi: "-40% reset tickets", reach: "~3,000 reset requests / week", blocksToday: 1 },
+      raci: { r: ["andrew-aasen"], a: "maya-okonkwo", c: ["legal"], i: ["nadia-chen"] },
+      delegateTo: "nadia-chen",
+      severity: "New capability",
+      recommendation: {
+        choice: "approve",
+        headline: "Approve, gated on mandatory identity verification before any reset.",
+        rationale: "The reset flow completed correctly end-to-end in 38 of 40 scenarios. The two exceptions reset without a strong identity signal — a mandatory verification step before any reset closes that gap without giving up the automation."
+      },
+      evidence: [
+        { kind: "eval",     title: "Password-reset flow eval", note: "38 of 40 scenarios completed correctly without human help.", claim: "observed" },
+        { kind: "doc",      title: "Identity verification policy", note: "Any reset requires a verified account-ownership signal before it executes.", claim: "confirmed" },
+        { kind: "conflict", title: "Password-reset flow eval", note: "2 of 40 scenarios reset without a strong identity signal.", claim: "contradicts" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 38, total: 40 },       // matches the "38 of 40 scenarios" evidence note above
+        coverage: { linked: 3, total: 3 },     // all 3 evidence entries above are source-linked
+        mostRecentAt: "2026-09-07T08:15:00"    // same-day eval run, ahead of this morning's briefing
+      },
+      gate: "This adds a new autonomous action for Atlas, not just a content update. It needs an accountable owner before build work starts on identity verification.",
+      openedMinsAgo: 30
+    },
+
+    {
+      id: "d-order-history-access",
+      title: "Give Atlas read access to order history?",
+      agentId: "evidence-steward",
+      type: "decision",
+      one_liner: "Broader data access improves answers but widens the exposure surface.",
+      impact: { value: 46, unblock: 35, reach: 84, urgency: 62 },
+      signals: { valueKind: "revenue-opportunity", dollarsDisplay: "$900/wk", weeklyDollars: 900, dollarsKind: "opportunity", commitmentAtStake: false, blocksToday: 1, reachPerWeek: 7500, urgencyKind: "gate-window" },
+      metrics: { headline: "$900/wk projected", kpi: "+6 pt containment", reach: "~7,500 order-status chats / week", blocksToday: 1 },
+      raci: { r: ["andrew-aasen"], a: "sam-tan", c: ["legal"], i: ["maya-okonkwo"] },
+      delegateTo: "nadia-chen",
+      severity: "Data access",
+      recommendation: {
+        choice: "approve",
+        headline: "Approve, scoped to read-only order status and history only.",
+        rationale: "In 36 of 40 test chats, order-history access alone was enough to answer the customer without a human. Scoping to read-only status and history keeps that gain while limiting what Atlas can see."
+      },
+      evidence: [
+        { kind: "eval",     title: "Order-history read scope eval", note: "36 of 40 test chats answered correctly using order data alone.", claim: "observed" },
+        { kind: "doc",      title: "Data access policy", note: "Read-only order status/history aligns with the data-minimization guidance in Policy v1.7.", claim: "confirmed" },
+        { kind: "conflict", title: "Data access review", note: "Exposure review for edge-case PII fields is still open.", claim: "contradicts" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 36, total: 40 },       // matches the "36 of 40 test chats" evidence note above
+        coverage: { linked: 3, total: 3 },     // all 3 evidence entries above are source-linked
+        mostRecentAt: "2026-09-06T00:00:00"    // scope eval closed out the day before this morning's briefing
+      },
+      gate: "This widens what Atlas can see about a customer, not just what it can do. It needs an accountable owner before the read-only endpoint ships broadly.",
+      openedMinsAgo: 50
+    },
+
+    {
+      id: "d-refund-autonomy",
+      title: "Auto-approve refunds under $50?",
+      agentId: "rollout-manager",
+      type: "decision",
+      one_liner: "Where the human-in-the-loop line sits — speed for customers vs. spend control for the business.",
+      impact: { value: 68, unblock: 60, reach: 58, urgency: 58 },
+      signals: { valueKind: "revenue-opportunity", dollarsDisplay: "$2.6k/wk", weeklyDollars: 2600, dollarsKind: "opportunity", commitmentAtStake: false, blocksToday: 2, reachPerWeek: 2200, urgencyKind: "gate-window" },
+      metrics: { headline: "$2.6k/wk projected", kpi: "-2 day refund cycle", reach: "~2,200 sub-$50 refund requests / week", blocksToday: 2 },
+      // NOTE (limitation): the source spec asked for a consulted party matching short name "Diego A.",
+      // but no such id exists in PL.people yet (only referenced in docs/presenter-cockpit-mockup.html,
+      // not in this data model — likely meant to land via the still-unmerged decisions-copy-revamp
+      // feature). Not invented here; "legal" (Risk & Legal) is used instead as a real, contextually
+      // appropriate consulted party for a spend-control decision.
+      raci: { r: ["andrew-aasen", "sam-tan"], a: "maya-okonkwo", c: ["legal"], i: ["nadia-chen"] },
+      delegateTo: "nadia-chen",
+      severity: "Autonomy threshold",
+      recommendation: {
+        choice: "approve",
+        headline: "Approve auto-approval up to $50, with a running weekly cap and full audit log.",
+        rationale: "Simulating the $50 auto-approval rule against 340 recent sub-$50 refund requests matched the human-approved outcome in 312 cases. A running weekly cap and full audit log cover the handful of simulated weeks that drifted past a safe spend limit."
+      },
+      evidence: [
+        { kind: "eval",     title: "Auto-refund simulation", note: "312 of 340 sub-$50 refund cases matched the human-approved outcome.", claim: "observed" },
+        { kind: "doc",      title: "Refund policy v2.1", note: "Auto-approval logic mirrors the $50 threshold already approved in policy.", claim: "confirmed" },
+        { kind: "conflict", title: "Weekly cap stress test", note: "3 of 340 simulated weeks exceeded a $2,000 running cap without alerting.", claim: "contradicts" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 312, total: 340 },     // matches the "312 of 340" evidence note above
+        coverage: { linked: 3, total: 3 },     // all 3 evidence entries above are source-linked
+        mostRecentAt: "2026-09-05T00:00:00"    // simulation closed out two days before this morning's briefing
+      },
+      gate: "This sets where autonomy ends and human review begins for money leaving the business. It needs an accountable owner before the cap and audit log ship.",
+      openedMinsAgo: 75
+    },
+
+    {
+      id: "d-model-upgrade",
+      title: "Move Atlas to the newer model?",
+      agentId: "eval-runner",
+      type: "decision",
+      one_liner: "Better reasoning across every conversation — but every eval needs re-baselining first.",
+      impact: { value: 48, unblock: 18, reach: 68, urgency: 34 },
+      signals: { valueKind: "accuracy-gain", dollarsDisplay: null, weeklyDollars: null, dollarsKind: null, commitmentAtStake: false, blocksToday: 0, reachPerWeek: null, urgencyKind: "scheduled" },
+      metrics: { headline: "requires eval re-baseline", kpi: "gain unquantified pending re-baseline", reach: "all Atlas conversations", blocksToday: 0 },
+      raci: { r: ["priya-rao"], a: "maya-okonkwo", c: ["sam-tan"], i: ["andrew-aasen"] },
+      delegateTo: "nadia-chen",
+      severity: "Model change",
+      recommendation: {
+        choice: "approve",
+        headline: "Approve a staged upgrade, gated on a full eval re-baseline.",
+        rationale: "An exploratory benchmark on the candidate model shows a reasoning gain, but it hasn't run against our approved eval suite yet. A staged upgrade gated on a full re-baseline lets us confirm the gain holds before it reaches every conversation."
+      },
+      evidence: [
+        { kind: "eval",     title: "New-model exploratory benchmark", note: "Passed 91 of 100 general-reasoning prompts — not yet run against the approved suite.", claim: "observed" },
+        { kind: "doc",      title: "Eval suite policy", note: "Any model change requires a full re-run of the approved eval suite before release.", claim: "confirmed" },
+        { kind: "conflict", title: "Escalation regression suite", note: "Not yet re-run against the candidate model — no pass rate exists for it there.", claim: "contradicts" }
+      ],
+      confidenceInputs: {
+        eval: { passed: 91, total: 100 },      // the exploratory benchmark only — not the approved suite, by design
+        coverage: { linked: 2, total: 3 },     // the regression-suite re-run gap is exactly the one unlinked claim
+        mostRecentAt: "2026-08-20T00:00:00"    // exploratory benchmark predates today by about 18 days
+      },
+      gate: "This changes the model underneath every conversation. It needs an accountable owner before any eval re-baseline work begins.",
+      openedMinsAgo: 95
     }
   ],
 
