@@ -47,6 +47,7 @@ table{border-collapse:collapse;width:100%}
 .status-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#40506a}
 .status-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;display:inline-block}
 .status-dot.is-design{background:var(--blue)}
+.status-dot.is-built{background:var(--mint)}
 .status-dot.is-planned{background:transparent;border:2px solid #b7bfc9}
 
 .dep-chip{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#5a6675;background:#eef1f4;border-radius:6px;padding:3px 7px}
@@ -170,6 +171,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
     </div>
     <div class="legend-group">
       <span class="lg-label">Status</span>
+      <span class="status-tag"><i class="status-dot is-built"></i>Built — merged to main</span>
       <span class="status-tag"><i class="status-dot is-design"></i>In design — fully spec'd</span>
       <span class="status-tag"><i class="status-dot is-planned"></i>Planned — sequenced, not yet detailed</span>
     </div>
@@ -202,7 +204,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-m">M</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Features data model</b>
             <p class="rm-desc">A shared <code>features</code> entity in <code>data.js</code> joining agents, decisions, and (later) Jira. Unblocks the Build View and the decision↔feature map.</p>
@@ -222,7 +224,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-s">S</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Time-picker entry point</b>
             <p class="rm-desc">A grey "Presenter Mode" affordance added to the open-the-app time picker (zero / some / lots of time) — clearly a different mode, not a fourth time choice.</p>
@@ -233,7 +235,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-l">L</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Desktop decision cockpit</b>
             <p class="rm-desc">Big-screen view of every decision + build item, one in focus at a time, with inline Approve / Revise / Reject per row.</p>
@@ -262,7 +264,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-s">S</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Clickable profile shell</b>
             <p class="rm-desc">Name/avatar becomes a real link → a push view with identity + scope-of-authority.</p>
@@ -273,7 +275,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-m">M</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Value Focus section</b>
             <p class="rm-desc">Executive KPI taxonomy — pick 2–3 focus areas; re-ranks the decision queue by impact.</p>
@@ -284,7 +286,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-m">M</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Recent-decisions log</b>
             <p class="rm-desc">Decider + conditional approval + impact per row, with a "Raise a concern" action.</p>
@@ -312,7 +314,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-s">S</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Copy revamp</b>
             <p class="rm-desc">Plain-language titles + one-liners that name the stakes, for all 6 existing decisions.</p>
@@ -323,7 +325,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-s">S</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">+ New decisions</b>
             <p class="rm-desc">4 additions covering action-scope, data-access, autonomy-boundary, and model-version decision types.</p>
@@ -354,7 +356,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-m">M</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Placeholder + feature cards</b>
             <p class="rm-desc">Static cards per feature (status, summary, mapped decisions) — no live data yet.</p>
@@ -398,7 +400,7 @@ footer.rm-foot{margin-top:40px;font-size:11px;color:var(--muted);text-align:cent
           <div class="rm-card">
             <div class="rm-card-top">
               <span class="size-chip size-s">S</span>
-              <span class="status-tag"><i class="status-dot is-design"></i>In design</span>
+              <span class="status-tag"><i class="status-dot is-built"></i>Built</span>
             </div>
             <b class="rm-title">Jira spike</b>
             <p class="rm-desc">Confirm auth model, JQL-by-label, and the status-map shape before committing to a build.</p>
