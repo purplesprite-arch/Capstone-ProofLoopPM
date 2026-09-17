@@ -599,6 +599,45 @@
     `;
   }
 
+  /* ---------- profile ----------
+     roadmap.html Appendix A: a push view (back button to Today) reached from the
+     .user-card / .user-ava identity affordances. A1 (identity header) and A2 (Value Focus)
+     belong to the profile-shell build item, which has not merged on this branch — so this is
+     a minimal scaffold, not the full profile page. profile-shell can replace everything above
+     the RECENT_DECISIONS_SEAM markers below with the real identity header + Value Focus
+     sections without touching the seam's contents. */
+  function decisionLogRow(row, i) {
+    return `<article class="rd-row">
+        <div class="rd-body">
+          <b class="rd-title">${row.decisionTitle}</b>
+          <span class="rd-decider">${icon("check", "rd-ic")}Decided by <b>${row.decidedBy}</b></span>
+          ${row.conditional ? `<span class="rd-conditional">${icon("lock", "rd-ic")}Conditional: ${row.conditional}</span>` : ""}
+          <p class="rd-impact">${row.impactSummary}</p>
+        </div>
+        <button class="link-btn rd-concern" data-concern="${i}">${icon("alert")}Raise a concern</button>
+      </article>`;
+  }
+
+  function profile() {
+    const log = PL.decisionLog || [];
+    const rows = log.map((row, i) => decisionLogRow(row, i)).join("");
+    return `
+      <button class="back" data-view="today">${icon("arrow-left")}Back to today</button>
+      <header class="page-head">
+        <h1>Profile</h1>
+        <p>Stakeholder profile — identity and value-focus preferences land here soon.</p>
+      </header>
+
+      <!-- RECENT_DECISIONS_SEAM:start -->
+      <section class="detail-block recent-decisions">
+        <div class="block-head"><h2>Recent decisions</h2><span class="muted">${log.length} logged</span></div>
+        <p class="rd-lede">Who decided, any conditions attached, and the impact — with a one-tap way to flag a concern about a call that's already been made.</p>
+        <div class="stack rd-stack">${rows || `<p class="muted">No decisions logged yet.</p>`}</div>
+      </section>
+      <!-- RECENT_DECISIONS_SEAM:end -->
+    `;
+  }
+
   /* ---------- rollout: value showcase ---------- */
   function showcase() {
     const r = PL.rollout;
@@ -688,5 +727,5 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown };
+  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, profile };
 })();

@@ -356,5 +356,18 @@ window.PL = {
     { day: "September 6", items: [
       { icon: "check", tone: "approved", title: "Decision DL-008 approved", body: "Intent routing patch advanced with no added conditions.", meta: "4:18 PM · resolved in 2m 14s", status: "Approved" }
     ] }
+  ],
+
+  // Stakeholder Profile — A3 "Recent-decisions log" (roadmap.html Appendix A, A3).
+  // Short feed of decisions recently made: who decided, any conditional approval, and the
+  // impact — plus a lightweight "Raise a concern" action per row (app.js). Titles below use
+  // this branch's actual current decision titles (see PL.decisions) + an outcome phrase,
+  // since the decisions-copy-revamp feature has not merged here yet — see prototype-2 build
+  // notes / worktree limitations for that gap.
+  decisionLog: [
+    { decisionTitle: "Billing Resolution Agent — pilot approved (5%)", decidedBy: "Maya Okonkwo", conditional: "with rollback triggers armed", impactSummary: "$18k/mo projected savings, +12% deflection" },
+    { decisionTitle: "Escalation response v2.4 — approved", decidedBy: "Maya Okonkwo", conditional: "hard 30-second handoff guardrail", impactSummary: "Clarity up in 23/24 scenarios; commitment protected" },
+    { decisionTitle: "Repeat-escalation threshold — set to 2 retries", decidedBy: "Nadia Chen (delegated)", conditional: null, impactSummary: "Unblocked 3 routing tasks; covers 96% of self-resolutions" },
+    { decisionTitle: "Intent routing patch v1.3 — auto-advanced", decidedBy: "System (approved policy)", conditional: null, impactSummary: "Passed all evals; no policy change" }
   ]
 };

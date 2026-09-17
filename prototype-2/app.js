@@ -51,6 +51,7 @@
     else if (v === "agents") html = R.agents();
     else if (v === "evidence") html = R.evidence();
     else if (v === "memory") html = R.memory(state);
+    else if (v === "profile") html = R.profile();
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
@@ -134,6 +135,14 @@
     // quick decide (briefing + brief detail + rollout)
     const decide = t.closest("[data-decide]");
     if (decide) { openDecision(decide.dataset.decide, decide.dataset.id); return; }
+
+    // profile → recent-decisions log: "Raise a concern" (lightweight, local — no persistence)
+    const concern = t.closest("[data-concern]");
+    if (concern) {
+      const row = (PL.decisionLog || [])[+concern.dataset.concern];
+      if (row) showToast("Concern flagged", `${row.decidedBy} has been notified and can reopen "${row.decisionTitle}."`);
+      return;
+    }
 
     // why → scroll-free reveal of the score math (uses a modal)
     const why = t.closest("[data-why]");
@@ -263,7 +272,7 @@
   setAll(".user-role", PL.user.role);
 
   const initial = location.hash.replace("#", "");
-  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot"];
+  const valid = ["today", "decisions", "agents", "evidence", "memory", "showcase", "pilot", "profile"];
   state.view = valid.includes(initial) || initial.indexOf("brief:") === 0 ? initial : "today";
   render();
   openTimeGate();
