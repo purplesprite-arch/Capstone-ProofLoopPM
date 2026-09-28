@@ -750,3 +750,69 @@ button{font-family:inherit;cursor:pointer}
 @media (min-width: 900px){
   .build-group{grid-template-columns:1fr 1fr}
 }
+
+/* ==========================================================================
+   Engagement grade badge — profile seam (compact) + Value Model header (.lg)
+   ========================================================================== */
+.grade-badge{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;margin:12px 0}
+.grade-badge.lg{padding:20px;margin:18px 0}
+.grade-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.grade-top b{font-size:16px;letter-spacing:-.3px}
+.grade-badge.lg .grade-top b{font-size:20px}
+.grade-sub{font-size:10px;font-weight:800;letter-spacing:.3px;color:var(--muted);text-transform:uppercase}
+.rung-ladder{display:flex;gap:5px;margin-top:10px}
+.rung-ladder.small{gap:3px;margin-top:0;align-items:center}
+.rung-step{width:22px;height:6px;border-radius:99px;background:#eef0f3}
+.rung-ladder.small .rung-step{width:12px;height:5px}
+.rung-step.is-on{background:var(--blue)}
+.rung-label{font-size:9.5px;font-weight:700;color:var(--muted);margin-left:6px;white-space:nowrap}
+.grade-cap{font-size:11px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.grade-cap b{color:var(--ink)}
+
+/* ==========================================================================
+   Value Model screen — progressive lever inputs
+   ========================================================================== */
+.lever-domain-group{margin-top:22px}
+.lever-domain-group h2{font-size:13px;font-weight:800;letter-spacing:.3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.lever-grid{display:grid;gap:14px}
+.lever-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.lever-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.lever-card-head b{font-size:14px}
+.lever-value{margin-bottom:14px}
+.lever-value.qualitative{font-size:12px;color:var(--muted);font-style:italic;margin:0 0 10px}
+.range-bar{height:6px;border-radius:99px;background:#eef0f3;overflow:hidden}
+.range-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue-soft),var(--blue));border-radius:99px}
+.range-nums{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:7px;flex-wrap:wrap}
+.range-nums b{font-family:var(--mono);font-size:16px}
+.range-nums span{font-size:10.5px;color:var(--muted)}
+.calc-cols{margin-top:10px}
+.calc-col{background:#f7f8fa;border-radius:9px;padding:8px 10px}
+.calc-col small{display:block;font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--muted)}
+.calc-col b{font-family:var(--mono);font-size:13px;margin-top:3px;display:block}
+.lever-body{border-top:1px solid var(--line);padding-top:12px}
+.lever-section{margin-bottom:12px}
+.lever-section:last-child{margin-bottom:0}
+.lever-section.econ{border-top:1px dashed var(--line);padding-top:12px;margin-top:14px}
+.lever-section-title{font-size:10.5px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.rung-next-tag{font-size:8.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--amber);background:var(--amber-soft);border-radius:99px;padding:2px 7px;margin-left:4px}
+.lever-section.is-next{opacity:.85}
+.lever-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lever-field{display:grid;gap:4px;font-size:9.5px;font-weight:700;color:var(--muted)}
+.lever-field.wide{grid-column:1 / -1}
+.lever-input{width:100%;border:1px solid #d7dde5;border-radius:8px;padding:8px 9px;font:12.5px Manrope;outline:none;resize:vertical}
+.lever-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.econ-label{font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.delivery-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#9a6a12;background:var(--amber-soft);border-radius:99px;padding:5px 10px}
+.delivery-chip .icon{width:13px}
+.delivery-chip.slip{margin-top:10px}
+.delivery-card .lever-goal{font-size:12px;color:var(--muted);margin-bottom:10px}
+.delivery-card .lever-fields{grid-template-columns:1fr;max-width:220px}
+.defer-note{font-size:11px;color:var(--muted);margin-top:10px}
+.defer-note b{color:var(--ink)}
+.defer-note .pill{margin-right:4px}
+
+@media (min-width: 720px){
+  .lever-grid{grid-template-columns:1fr 1fr}
+}
+
+.vstat.delivery .num{color:#ffd28a;font-size:30px}

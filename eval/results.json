@@ -1,0 +1,1863 @@
+{
+  "meta": {
+    "generatedBy": "eval/run.js",
+    "scenarioBankSize": 34,
+    "anchorCount": 10,
+    "expansionCount": 15,
+    "adversarialCount": 9,
+    "prLoopNowIso": "2026-09-07T09:50:00"
+  },
+  "tier1": {
+    "scoreConfidence": {
+      "checks": [
+        {
+          "id": "d-escalation",
+          "title": "Friendlier escalation replies (v2.4)",
+          "expectedScore": 85,
+          "actualScore": 85,
+          "scorePass": true,
+          "expectedConfidence": 91,
+          "actualConfidence": 91,
+          "confidencePass": true
+        },
+        {
+          "id": "d-billing-golive",
+          "title": "Billing Agent -- launch the pilot?",
+          "expectedScore": 76,
+          "actualScore": 76,
+          "scorePass": true,
+          "expectedConfidence": 98,
+          "actualConfidence": 98,
+          "confidencePass": true
+        },
+        {
+          "id": "d-repeat-threshold",
+          "title": "How many retries before a human takes over?",
+          "expectedScore": 62,
+          "actualScore": 62,
+          "scorePass": true,
+          "expectedConfidence": 74,
+          "actualConfidence": 74,
+          "confidencePass": true
+        },
+        {
+          "id": "d-intent-routing",
+          "title": "Intent-routing tune-up (v1.3)",
+          "expectedScore": 44,
+          "actualScore": 44,
+          "scorePass": true,
+          "expectedConfidence": 99,
+          "actualConfidence": 99,
+          "confidencePass": true
+        },
+        {
+          "id": "d-refund-knowledge",
+          "title": "New refund examples added",
+          "expectedScore": 37,
+          "actualScore": 37,
+          "scorePass": true,
+          "expectedConfidence": 99,
+          "actualConfidence": 99,
+          "confidencePass": true
+        },
+        {
+          "id": "d-tone-tweak",
+          "title": "Warmer tone, same rules",
+          "expectedScore": 30,
+          "actualScore": 30,
+          "scorePass": true,
+          "expectedConfidence": 96,
+          "actualConfidence": 96,
+          "confidencePass": true
+        },
+        {
+          "id": "d-password-reset",
+          "title": "Let Atlas handle password resets?",
+          "expectedScore": 51,
+          "actualScore": 51,
+          "scorePass": true,
+          "expectedConfidence": 88,
+          "actualConfidence": 88,
+          "confidencePass": true
+        },
+        {
+          "id": "d-order-history-access",
+          "title": "Give Atlas read access to order history?",
+          "expectedScore": 53,
+          "actualScore": 53,
+          "scorePass": true,
+          "expectedConfidence": 87,
+          "actualConfidence": 87,
+          "confidencePass": true
+        },
+        {
+          "id": "d-refund-autonomy",
+          "title": "Auto-approve refunds under $50?",
+          "expectedScore": 62,
+          "actualScore": 62,
+          "scorePass": true,
+          "expectedConfidence": 87,
+          "actualConfidence": 87,
+          "confidencePass": true
+        },
+        {
+          "id": "d-model-upgrade",
+          "title": "Move Atlas to the newer model?",
+          "expectedScore": 41,
+          "actualScore": 41,
+          "scorePass": true,
+          "expectedConfidence": 76,
+          "actualConfidence": 76,
+          "confidencePass": true
+        }
+      ],
+      "allPass": true
+    },
+    "bankSanity": {
+      "checks": [
+        {
+          "id": "d-escalation",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 85,
+          "confidence": 91
+        },
+        {
+          "id": "d-billing-golive",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 76,
+          "confidence": 98
+        },
+        {
+          "id": "d-repeat-threshold",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 62,
+          "confidence": 74
+        },
+        {
+          "id": "d-intent-routing",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 44,
+          "confidence": 99
+        },
+        {
+          "id": "d-refund-knowledge",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 37,
+          "confidence": 99
+        },
+        {
+          "id": "d-tone-tweak",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 30,
+          "confidence": 96
+        },
+        {
+          "id": "d-password-reset",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 51,
+          "confidence": 88
+        },
+        {
+          "id": "d-order-history-access",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 53,
+          "confidence": 87
+        },
+        {
+          "id": "d-refund-autonomy",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 62,
+          "confidence": 87
+        },
+        {
+          "id": "d-model-upgrade",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 41,
+          "confidence": 76
+        },
+        {
+          "id": "exp-store-credit",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 47,
+          "confidence": 97
+        },
+        {
+          "id": "exp-auto-cancel-orders",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 50,
+          "confidence": 82
+        },
+        {
+          "id": "exp-ship-address-write",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 44,
+          "confidence": 87
+        },
+        {
+          "id": "exp-loyalty-tier-view",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 39,
+          "confidence": 99
+        },
+        {
+          "id": "exp-cancel-no-retention",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 60,
+          "confidence": 79
+        },
+        {
+          "id": "exp-discount-negotiation",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 56,
+          "confidence": 97
+        },
+        {
+          "id": "exp-summarizer-swap",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 37,
+          "confidence": 66
+        },
+        {
+          "id": "exp-spanish-locale-model",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 52,
+          "confidence": 98
+        },
+        {
+          "id": "exp-faq-refresh",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 27,
+          "confidence": 99
+        },
+        {
+          "id": "exp-typo-fix",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 20,
+          "confidence": 99
+        },
+        {
+          "id": "exp-holiday-banner",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 23,
+          "confidence": 99
+        },
+        {
+          "id": "exp-sentiment-recalibration",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 37,
+          "confidence": 99
+        },
+        {
+          "id": "exp-returns-agent-shadow",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 26,
+          "confidence": 65
+        },
+        {
+          "id": "exp-shipping-kb-refresh",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 26,
+          "confidence": 99
+        },
+        {
+          "id": "exp-returns-agent-golive",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 52,
+          "confidence": 79
+        },
+        {
+          "id": "adv-out-of-band-value",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 48,
+          "confidence": 91
+        },
+        {
+          "id": "adv-commitment-mislabeled-informative",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 77,
+          "confidence": 83
+        },
+        {
+          "id": "adv-contradictory-evidence",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 47,
+          "confidence": 72
+        },
+        {
+          "id": "adv-stale-evidence",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 52,
+          "confidence": 90
+        },
+        {
+          "id": "adv-zero-evidence",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 35,
+          "confidence": 15
+        },
+        {
+          "id": "adv-neartie-a",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 59,
+          "confidence": 98
+        },
+        {
+          "id": "adv-neartie-b",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 54,
+          "confidence": 97
+        },
+        {
+          "id": "adv-dollars-only-baseline-trap",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 41,
+          "confidence": 71
+        },
+        {
+          "id": "adv-wrong-owner-authored",
+          "scoreValid": true,
+          "confidenceValid": true,
+          "score": 71,
+          "confidence": 88
+        }
+      ],
+      "allPass": true
+    },
+    "bandContainment": {
+      "results": [
+        {
+          "id": "d-escalation",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-billing-golive",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-repeat-threshold",
+          "bankSource": "anchor",
+          "outOfBandFactors": [
+            "value"
+          ]
+        },
+        {
+          "id": "d-intent-routing",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-refund-knowledge",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-tone-tweak",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-password-reset",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-order-history-access",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-refund-autonomy",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "d-model-upgrade",
+          "bankSource": "anchor",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-store-credit",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-auto-cancel-orders",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-ship-address-write",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-loyalty-tier-view",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-cancel-no-retention",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-discount-negotiation",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-summarizer-swap",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-spanish-locale-model",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-faq-refresh",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-typo-fix",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-holiday-banner",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-sentiment-recalibration",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-returns-agent-shadow",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-shipping-kb-refresh",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "exp-returns-agent-golive",
+          "bankSource": "expansion",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-out-of-band-value",
+          "bankSource": "adversarial",
+          "outOfBandFactors": [
+            "value"
+          ]
+        },
+        {
+          "id": "adv-commitment-mislabeled-informative",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-contradictory-evidence",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-stale-evidence",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-zero-evidence",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-neartie-a",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-neartie-b",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-dollars-only-baseline-trap",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        },
+        {
+          "id": "adv-wrong-owner-authored",
+          "bankSource": "adversarial",
+          "outOfBandFactors": []
+        }
+      ],
+      "outOfBandFindings": [
+        {
+          "id": "d-repeat-threshold",
+          "bankSource": "anchor",
+          "outOfBandFactors": [
+            "value"
+          ]
+        },
+        {
+          "id": "adv-out-of-band-value",
+          "bankSource": "adversarial",
+          "outOfBandFactors": [
+            "value"
+          ]
+        }
+      ]
+    },
+    "integrityLinter": {
+      "findings": [
+        {
+          "id": "confidence-conflict",
+          "severity": "critical",
+          "title": "Rollout showcase confidence disagrees with the decision's own computed confidence",
+          "mechanism": "PL.rollout.confidence used to be a hardcoded literal; render.js's showcase() now calls confidenceScore(d-billing-golive) directly, so the showcase and the decision can never disagree.",
+          "confirmed": false,
+          "detail": "Fixed: PL.rollout.confidence literal removed from data.js; showcase() now renders confidenceScore(d-billing-golive) = 98 directly, matching the decision's own displayed confidence everywhere else in the app."
+        },
+        {
+          "id": "provisional-confidence-weights",
+          "severity": "medium",
+          "title": "Confidence weights are provisional/unvalidated, presented as a calibrated percentage",
+          "mechanism": "PL.confidenceWeights (data.js) sets the four weights confidenceScore() uses; no held-out expert-labeled set exists yet to fit them against.",
+          "confirmed": true,
+          "detail": "Self-disclosed in-code (data.js, above confidenceWeights): flagged PROVISIONAL/UNVALIDATED, pending a held-out expert-confidence set that doesn't exist in this capstone."
+        },
+        {
+          "id": "escalation-gate-is-authored",
+          "severity": "high",
+          "title": "\"Needs a human\" is an authored field, not an AI judgment",
+          "mechanism": "Checked for render.js's classifyEscalation(d) (derives type from signals.commitmentAtStake, isRollout, gate, severity) and confirmed app.js's decisionFor()/all() read its output (esc.type) instead of the seed's `type` literal directly.",
+          "confirmed": false,
+          "detail": "Fixed: classifyEscalation(d) now derives \"needs a human\" from signals for every decision; app.js routes decisionFor()/all() through it. Its verdict matches all 10 seed decisions' authored type (0 disagreements), and it's what closes the missing-commitment-guardrail gap for adv-commitment-mislabeled-informative-shaped cases."
+        },
+        {
+          "id": "watch-floor-coverage-gap",
+          "severity": "high",
+          "title": "Most blocking decisions have no escalated-status agent watching them",
+          "mechanism": "Compared every type:\"decision\" id in PL.decisions against every agents[].escalatedTo id.",
+          "confirmed": true,
+          "detail": "4 of 7 blocking decisions have no agent in \"escalated\" status pointing to them: d-password-reset, d-order-history-access, d-refund-autonomy, d-model-upgrade."
+        },
+        {
+          "id": "chief-of-staff-narrative-drift",
+          "severity": "medium",
+          "title": "Chief of Staff's briefing summary doesn't match the real decision/informative split",
+          "mechanism": "The finding string used to be a hardcoded literal in data.js; render.js's agents() now computes it live from state.blocking()/informative(), so it can never drift from the real split.",
+          "confirmed": false,
+          "detail": "Fixed: rendered briefing claims \"routed 7 to you, 3 advancing\" — matches real data (7 type:\"decision\" + 3 type:\"informative\" = 10 total) because it's computed from the same state, not authored separately."
+        },
+        {
+          "id": "out-of-band-value-authoring-disagreement",
+          "severity": "high",
+          "title": "Seed data disagrees with its own mapped Value-Model lever — the live app silently resolves this in the lever's favor and never discloses it",
+          "mechanism": "d-repeat-threshold inherits the \"cut-cost-to-serve\" Value Model lever via valueFocusTagMap (rung 3), which prices out to a \"critical\" band (80–100) — overriding the plain-signal band its own authored signals (valueKind:\"unblocks-work\", no dollars) would otherwise imply. app.js's applyModeledValue() then substitutes that band's own midpoint for the decision's displayed value before any render happens, upstream of breakdown()/openBreakdown.",
+          "confirmed": true,
+          "detail": "Authored seed impact.value = 58 → breakdown() on the raw seed flags it as out-of-band (outside [80, 100]): true. Live-app-effective value after applyModeledValue's override = 90 (the band's own midpoint) → in-band, flag suppressed: true. The two subsystems (hand-authored signals-driven bands vs. the Value Model lever overlay) disagree about this decision's value score, and the app resolves that disagreement by always trusting the lever — silently, with no UI trace that an override happened at all."
+        },
+        {
+          "id": "confidence-hard-cap-99",
+          "severity": "low",
+          "title": "Perfect-input decisions display 99% confidence, never 100%",
+          "mechanism": "confidenceScore() computes raw = round(weighted sum of the 4 factors), then returns Math.min(99, raw) — a deliberate cap (PRD §7) so absolute certainty is never displayed.",
+          "confirmed": true,
+          "detail": "7 scenario(s) in the bank have all-perfect confidence inputs (100% eval pass, 100% coverage, zero contradicting evidence, ≤7 days old): d-intent-routing, d-refund-knowledge, exp-faq-refresh, exp-typo-fix, exp-holiday-banner, exp-sentiment-recalibration, exp-shipping-kb-refresh. All 7 of them display exactly 99%, confirming the cap — not a coincidence of the formula landing on 99 naturally."
+        },
+        {
+          "id": "dead-data-score-handler",
+          "severity": "low",
+          "title": "app.js wires a [data-score] click handler that can never fire",
+          "mechanism": "Searched render.js for any element emitting a data-score attribute (excluding the unrelated data-cockpit-score, which never contains the substring \"data-score=\").",
+          "confirmed": true,
+          "detail": "app.js defines the [data-score] handler, but no template in render.js ever emits that attribute — only data-cockpit-score (wired to the presenter cockpit's openCockpitScoreModal) and data-why (wired to openBreakdown) actually fire. Dead code, not a functional defect: the equivalent \"see the math\" flow is still reachable via data-why."
+        },
+        {
+          "id": "missing-commitment-guardrail",
+          "severity": "critical",
+          "title": "The Decision<->Informative toggle has no guardrail against demoting a commitment-breaking change",
+          "mechanism": "Searched app.js's toggle handler (the [data-set] click delegate) for any reference to commitmentAtStake or an agent-identity check before accepting the type flip.",
+          "confirmed": false,
+          "detail": "Expected pattern not found — re-check app.js for structural changes."
+        },
+        {
+          "id": "stale-reserved-ids-comment",
+          "severity": "low",
+          "title": "A code comment claims 3 decisions 'don't exist yet' — they do",
+          "mechanism": "Checked PL.decisions for the 3 ids the features[] comment (data.js) describes as reserved/not-yet-existing.",
+          "confirmed": true,
+          "detail": "d-order-history-access, d-refund-autonomy, and d-password-reset are all full decision objects in PL.decisions today — the comment describing them as reserved placeholders is stale documentation, not a functional defect."
+        },
+        {
+          "id": "decisionlog-title-divergence",
+          "severity": "informational",
+          "title": "Recent-decisions log titles don't literally match PL.decisions titles",
+          "mechanism": "Compared each PL.decisionLog[].decisionTitle against PL.decisions[].title.",
+          "confirmed": true,
+          "detail": "Self-documented in-code (data.js, above decisionLog): this worktree branched before an unmerged 'decisions-copy-revamp' branch landed on main, so decisionLog carries the post-revamp wording while PL.decisions above still carries pre-revamp wording for the same 4 ids. Not a hidden defect — listed here for the report's completeness, not as something to fix."
+        }
+      ],
+      "confirmedCount": 7,
+      "totalCount": 11
+    }
+  },
+  "tier2": {
+    "note": "Ground truth = a synthetic 5-persona delivery-lead panel (revenue-first, risk-first, ops-first, customer-experience, engineering-delivery) each independently ranking and labeling the blinded 34-scenario bank, plus 3 independent LLM-judge runs scoring every authored recommendation on a 5-dimension rubric. This is a disclosed synthetic proxy, not real delivery leads — see Methodology and the Human-Validation Protocol for how it gets replaced with real expert labels. Every number below is a real computation over that panel/judge data (eval/aggregate-panel.js), not a placeholder.",
+    "capabilities": [
+      {
+        "capability": "Impact ranking",
+        "metrics": [
+          "Precision@1",
+          "Precision@3",
+          "Spearman ρ",
+          "NDCG"
+        ],
+        "prdTarget": "Precision@1 ≥ 80%",
+        "illustrative": false,
+        "value": {
+          "Precision@1": 0,
+          "Precision@3": 0.6666666666666666,
+          "Spearman ρ": 0.8022918258212376,
+          "NDCG": 0.971099075320907
+        },
+        "note": "Precision@1 is a single binary hit/miss over one 34-item ranking (this run's system #1 was not the panel's median-rank #1) — a coarse, high-variance signal at n=1; Precision@3, Spearman ρ, and NDCG are the more stable reads here and all show strong agreement with the panel's ranking."
+      },
+      {
+        "capability": "Escalation classification (needs-a-human)",
+        "metrics": [
+          "precision",
+          "recall",
+          "F1",
+          "false-block rate",
+          "false-delegate rate",
+          "catastrophic-miss rate"
+        ],
+        "prdTarget": "escalation precision ≥ 85%, catastrophic-miss rate ≈ 0",
+        "illustrative": false,
+        "value": {
+          "precision": 0.9090909090909091,
+          "recall": 0.9090909090909091,
+          "f1": 0.9090909090909091,
+          "falseBlockRate": 0.16666666666666666,
+          "falseDelegateRate": 0.09090909090909091,
+          "catastrophicMissRate": 0.3333333333333333
+        },
+        "note": "Ground truth = panel-majority escalation label (Fleiss' κ = 0.93 across the 5 personas — near-perfect agreement). Of 3 commitment-at-stake scenarios in the bank, 1 is a deliberately-constructed miss (adv-commitment-mislabeled-informative) — this is the adversarial guardrail-gap case, not a surprise regression."
+      },
+      {
+        "capability": "RACI routing",
+        "metrics": [
+          "accountable-owner accuracy"
+        ],
+        "prdTarget": "(routing accuracy, no numeric PRD target set)",
+        "illustrative": false,
+        "value": {
+          "accountableOwnerAccuracy": 0.5
+        },
+        "note": "Compares ProofLoop's authored accountableOwner against the panel-majority owner, mapped via a keyword role-family heuristic (accountable-delivery-exec / engineering / content-knowledge / data-security / legal) since the panel was never shown ProofLoop's named-owner roster and answered in free-text role terms. This makes it the noisiest metric in this report — treat 50% as a directional signal, not a precise rate; see Limitations. 16 of 32 scored scenarios disagreed, including the 3 deliberately-constructed RACI-mismatch cases already confirmed deterministically in Tier 3."
+      },
+      {
+        "capability": "Confidence calibration",
+        "metrics": [
+          "ECE",
+          "Brier score",
+          "over/under-confidence"
+        ],
+        "prdTarget": "calibration error ≤ 10 pts",
+        "illustrative": false,
+        "value": {
+          "ece": 0.10490196078431363,
+          "brier": 0.055634640522875804
+        },
+        "note": "Accuracy proxy = mean LLM-judge correctChoice score (rescaled 0-1) per scenario, binned against displayed confidence in 10 deciles for ECE."
+      },
+      {
+        "capability": "Recommendation quality",
+        "metrics": [
+          "LLM-judge rubric (1-5)",
+          "inter-judge agreement"
+        ],
+        "prdTarget": "(business usefulness, no numeric PRD target set)",
+        "illustrative": false,
+        "value": {
+          "judgeMean": 4.329411764705883,
+          "interJudgeAgreement": 0.9294117647058824
+        },
+        "note": "Mean across all 5 rubric dimensions, 3 independent judge runs, 34 scenarios. Per-dimension means: correctChoice 4.34, grounded 4.05, actionable 4.67, addressesRisk 4.66, noHallucination 3.93. Inter-judge agreement = fraction of (scenario × dimension) scores within 1 point across the 3 runs."
+      },
+      {
+        "capability": "Grounding / traceability",
+        "metrics": [
+          "citation coverage",
+          "faithfulness",
+          "contradiction handling"
+        ],
+        "prdTarget": "100% traceability (Agentic RAID)",
+        "illustrative": false,
+        "value": {
+          "citationCoverage": 0.8098039215686278,
+          "faithfulness": 0.7862745098039216
+        },
+        "note": "faithfulness = mean noHallucination score (rescaled 0-1); citationCoverage = mean grounded score (rescaled 0-1). 9 of 34 scenarios drew a noHallucination=1 flag from at least one judge run — see the appendix for the full list and rationale; several recur across all 3 runs, indicating reproducible grounding gaps in ProofLoop's authored recommendation text, not judge noise."
+      },
+      {
+        "capability": "Rollout readiness",
+        "metrics": [
+          "go/no-go agreement vs. expert verdict"
+        ],
+        "prdTarget": "(agreement rate, no numeric PRD target set)",
+        "illustrative": false,
+        "value": {
+          "goNoGoAgreement": 1
+        },
+        "note": "Only 2 rollout-class scenarios exist in this bank (d-billing-golive, exp-returns-agent-golive) — full agreement at n=2 is not a statistically meaningful rate; more rollout-shaped scenarios are needed before this metric is trustworthy. See Limitations."
+      }
+    ],
+    "panelJudgeSummary": {
+      "fleissKappaEscalation": 0.9340164570718832,
+      "meanPairwisePersonaSpearman": 0.8354774637127578,
+      "interJudgeAgreement": 0.9294117647058824,
+      "hallucinationFlags": [
+        {
+          "id": "d-billing-golive",
+          "noHallucinationScores": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "d-repeat-threshold",
+          "noHallucinationScores": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "exp-cancel-no-retention",
+          "noHallucinationScores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "exp-summarizer-swap",
+          "noHallucinationScores": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "id": "exp-spanish-locale-model",
+          "noHallucinationScores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "exp-returns-agent-golive",
+          "noHallucinationScores": [
+            2,
+            1,
+            2
+          ]
+        },
+        {
+          "id": "adv-commitment-mislabeled-informative",
+          "noHallucinationScores": [
+            1,
+            2,
+            5
+          ]
+        },
+        {
+          "id": "adv-stale-evidence",
+          "noHallucinationScores": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "adv-wrong-owner-authored",
+          "noHallucinationScores": [
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "raciDisagreements": [
+        {
+          "id": "d-repeat-threshold",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "d-tone-tweak",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "d-password-reset",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "d-model-upgrade",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-auto-cancel-orders",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-ship-address-write",
+          "authoredOwner": "sam-tan",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-loyalty-tier-view",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-summarizer-swap",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-typo-fix",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-holiday-banner",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-returns-agent-shadow",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "maya-okonkwo",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "adv-commitment-mislabeled-informative",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "maya-okonkwo",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-contradictory-evidence",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-stale-evidence",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-neartie-a",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-wrong-owner-authored",
+          "authoredOwner": "sam-tan",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "legal"
+        }
+      ]
+    }
+  },
+  "tier3": {
+    "deterministic": {
+      "catastrophicMissConstruction": {
+        "scenarioId": "adv-commitment-mislabeled-informative",
+        "confirmed": true,
+        "detail": "Scenario is type:\"informative\" (auto-advances) with signals.commitmentAtStake:true (breaks a confirmed policy commitment) and a fraud signal in its evidence. Combined with finding missing-commitment-guardrail (#9), this exact combination has nothing in app.js to stop it from silently auto-advancing today."
+      },
+      "zeroEvidenceGuard": {
+        "confirmed": true,
+        "results": [
+          {
+            "id": "adv-zero-evidence",
+            "threw": false,
+            "value": 15,
+            "finite": true,
+            "inRange": true
+          },
+          {
+            "id": "exp-returns-agent-shadow",
+            "threw": false,
+            "value": 65,
+            "finite": true,
+            "inRange": true
+          }
+        ],
+        "detail": "Both scenarios have eval:{0,0} and/or empty evidence — this exercises pct()'s division-by-zero guard (total ? round(n/total*100) : 0). Neither throws nor produces NaN; confidenceScore() correctly returns a low-but-defined number (grounding absence reads as low confidence, not a crash and not a misleadingly high default)."
+      },
+      "nearTiePair": {
+        "confirmed": true,
+        "scoreA": 59,
+        "scoreB": 54,
+        "delta": 5,
+        "detail": "adv-neartie-a scores 59, adv-neartie-b scores 54 (Δ5) — a genuine near-tie by composite score. Whether the independent panel ranks them in the SAME order as the composite is a Phase B question (needs the synthetic panel); this scenario pair is confirmed to exercise that question rather than being a wide, uninteresting gap."
+      },
+      "dollarsOnlyBaselineTrap": {
+        "confirmed": true,
+        "dollarsRank": 1,
+        "scoreRank": 16,
+        "poolSize": 17,
+        "detail": "Ranked 17 dollar-bearing scenarios two ways. adv-dollars-only-baseline-trap has the largest weekly-dollar figure in the bank ($5.2k/wk) and ranks #1 on a naive dollars-only baseline, but only #16 on the real composite score() — demoted because reach is narrow, nothing blocks today's build, and there's no urgency. This demonstrates the composite adds value over a dollars-first ranking on a case computed today, without needing the synthetic panel."
+      },
+      "raciRoutingMismatches": {
+        "count": 3,
+        "allConstructionsConfirmed": true,
+        "allMismatchesConfirmed": true,
+        "items": [
+          {
+            "id": "d-order-history-access",
+            "authoredOwnerId": "sam-tan",
+            "expectedAuthoredOwnerId": "sam-tan",
+            "correctOwnerId": "maya-okonkwo",
+            "constructionConfirmed": true,
+            "mismatchConfirmed": true
+          },
+          {
+            "id": "exp-ship-address-write",
+            "authoredOwnerId": "sam-tan",
+            "expectedAuthoredOwnerId": "sam-tan",
+            "correctOwnerId": "maya-okonkwo",
+            "constructionConfirmed": true,
+            "mismatchConfirmed": true
+          },
+          {
+            "id": "adv-wrong-owner-authored",
+            "authoredOwnerId": "sam-tan",
+            "expectedAuthoredOwnerId": "sam-tan",
+            "correctOwnerId": "legal",
+            "constructionConfirmed": true,
+            "mismatchConfirmed": true
+          }
+        ],
+        "detail": "3 scenario(s) carry an independently-reasoned RACI routing disagreement: d-order-history-access (authored sam-tan, ground truth says maya-okonkwo); exp-ship-address-write (authored sam-tan, ground truth says maya-okonkwo); adv-wrong-owner-authored (authored sam-tan, ground truth says legal)."
+      }
+    },
+    "redTeamMatrix": {
+      "note": "Likelihood is now derived from the real Phase B panel/judge run (rates above); severity remains a fixed editorial judgment per failure mode (catastrophic/high/moderate), not something the panel scored directly. Detection and status are real for every row except prompt injection, which stays out of scope (no LLM in ProofLoop's current build loop).",
+      "rows": [
+        {
+          "failureMode": "Under-escalation of a commitment-breaking change",
+          "likelihood": "medium — 1 of 3 commitment-at-stake scenarios in this bank missed (catastrophic-miss rate 33%)",
+          "severity": "catastrophic",
+          "detection": "adv-commitment-mislabeled-informative + missing-commitment-guardrail finding",
+          "status": "confirmed gap — no guardrail exists; panel-confirmed catastrophic miss on adv-commitment-mislabeled-informative"
+        },
+        {
+          "failureMode": "Over-escalation (erodes trust in the ritual)",
+          "likelihood": "low-medium — false-block rate 17% vs. panel",
+          "severity": "moderate",
+          "detection": "false-delegate rate (Tier 2, Phase B)",
+          "status": "measured: false-block rate 17%, false-delegate rate 9% (escalation F1 91%)"
+        },
+        {
+          "failureMode": "Hallucinated/ungrounded number (honest-arithmetic violation)",
+          "likelihood": "medium — 9 of 34 authored recommendations flagged by at least one judge run",
+          "severity": "high",
+          "detection": "band-containment sweep (Tier 1b) + grounding/traceability metric (Tier 2)",
+          "status": "9 scenarios flagged noHallucination=1 by ≥1 of 3 judge runs (faithfulness 79%); the displayed Impact/Confidence numbers themselves remain 0 ungrounded (Tier 1) — this failure mode lives in authored recommendation prose, not the computed scores"
+        },
+        {
+          "failureMode": "Mis-routing to the wrong accountable owner",
+          "likelihood": "medium-high — panel disagreed with the authored owner on 16 of 32 scenarios (noisy heuristic, see Tier 2 RACI note)",
+          "severity": "high",
+          "detection": "RACI routing mismatch checks (Tier 3)",
+          "status": "3 confirmed deterministically in this run's bank (Tier 3); panel-based Tier 2 signal is directional only given free-text role-matching noise"
+        },
+        {
+          "failureMode": "Calibration failure (real-looking wrong confidence)",
+          "likelihood": "medium — ECE 10.5 pts vs. ≤10pt target",
+          "severity": "high",
+          "detection": "confidence-conflict finding + ECE (Tier 2, Phase B)",
+          "status": "0 live conflicts — the 87-vs-98 rollout/decision mismatch found in this run is fixed (showcase() now derives confidence live); ECE 10.5 pts, Brier 0.056 against judge-derived accuracy proxy"
+        },
+        {
+          "failureMode": "Delegation-becomes-abdication (compliance item demoted to informative)",
+          "likelihood": "medium — same construction as the catastrophic-miss case above",
+          "severity": "catastrophic",
+          "detection": "adv-commitment-mislabeled-informative + adv-zero-evidence",
+          "status": "confirmed gap — no guardrail exists"
+        },
+        {
+          "failureMode": "Stale-data decision",
+          "likelihood": "low-medium — recency banding behaves correctly; judge still flagged 1 stale-evidence recommendation as under-grounded",
+          "severity": "moderate",
+          "detection": "adv-stale-evidence + recency banding",
+          "status": "recency correctly drags confidence down (Tier 3); adv-stale-evidence also drew a noHallucination=1 flag from the judge for citing specifics not present in the shown evidence"
+        },
+        {
+          "failureMode": "Prompt injection via build-change text (LLM-backed future state)",
+          "likelihood": "not applicable today — no LLM in ProofLoop's current build loop",
+          "severity": "high",
+          "detection": "not yet applicable — current build has no LLM in the loop",
+          "status": "out of scope for this run; re-test once an LLM is in the authoring/recommendation path"
+        }
+      ]
+    }
+  },
+  "scenarioBank": [
+    {
+      "id": "d-escalation",
+      "bankSource": "anchor",
+      "title": "Friendlier escalation replies (v2.4)",
+      "type": "decision",
+      "score": 85,
+      "confidence": 91,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve with a hard 30-second handoff guardrail — the wording gain is real but must not be allowed to break the confirmed external commitment.",
+        "tags": [
+          "anchor",
+          "commitment",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "d-billing-golive",
+      "bankSource": "anchor",
+      "title": "Billing Agent -- launch the pilot?",
+      "type": "decision",
+      "score": 76,
+      "confidence": 98,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "rollout",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": "go",
+        "panelRank": null,
+        "recommendationGold": "Approve a limited 5% pilot with the stated guardrails and rollback triggers — six weeks of shadow data beating baseline on 3 of 4 KPIs supports a staged, not full, launch.",
+        "tags": [
+          "anchor",
+          "rollout",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "d-repeat-threshold",
+      "bankSource": "anchor",
+      "title": "How many retries before a human takes over?",
+      "type": "decision",
+      "score": 62,
+      "confidence": 74,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Set the cap at 2 attempts — 96% of successful self-resolutions land within 2, and the coverage gap (EG-03) should close alongside the decision, not after it.",
+        "tags": [
+          "anchor",
+          "clean"
+        ],
+        "expectedFlags": [
+          {
+            "factor": "value",
+            "authored": 58,
+            "bandName": "critical",
+            "bandLo": 80,
+            "bandHi": 100,
+            "reason": "inherits the 'cut-cost-to-serve' lever (~$7.3k/wk, rung 3) via valueFocusTagMap, which overrides the plain-signal band its own signals imply"
+          }
+        ]
+      }
+    },
+    {
+      "id": "d-intent-routing",
+      "bankSource": "anchor",
+      "title": "Intent-routing tune-up (v1.3)",
+      "type": "informative",
+      "score": 44,
+      "confidence": 99,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — 142/142 passed, matches approved routing policy, no scope change.",
+        "tags": [
+          "anchor",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "d-refund-knowledge",
+      "bankSource": "anchor",
+      "title": "New refund examples added",
+      "type": "informative",
+      "score": 37,
+      "confidence": 99,
+      "accountableOwner": "nadia-chen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "nadia-chen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — fully sourced content addition, no policy change.",
+        "tags": [
+          "anchor",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "d-tone-tweak",
+      "bankSource": "anchor",
+      "title": "Warmer tone, same rules",
+      "type": "informative",
+      "score": 30,
+      "confidence": 96,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — cosmetic phrasing only, no behavioral or policy change.",
+        "tags": [
+          "anchor",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "d-password-reset",
+      "bankSource": "anchor",
+      "title": "Let Atlas handle password resets?",
+      "type": "decision",
+      "score": 51,
+      "confidence": 88,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "action-scope",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve gated on mandatory identity verification — the two failing cases in the eval are exactly the ones that reset without a strong identity signal.",
+        "tags": [
+          "anchor",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "d-order-history-access",
+      "bankSource": "anchor",
+      "title": "Give Atlas read access to order history?",
+      "type": "decision",
+      "score": 53,
+      "confidence": 87,
+      "accountableOwner": "sam-tan",
+      "groundTruth": {
+        "decisionClass": "data-access",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve scoped to read-only order status/history — but the accountable owner should be the exec, not engineering, given the open PII exposure review and the exposure-surface framing in the decision's own gate text.",
+        "tags": [
+          "anchor",
+          "raci-mismatch",
+          "data-access"
+        ],
+        "expectedRoutingMismatch": {
+          "authoredOwnerId": "sam-tan",
+          "correctOwnerId": "maya-okonkwo"
+        }
+      }
+    },
+    {
+      "id": "d-refund-autonomy",
+      "bankSource": "anchor",
+      "title": "Auto-approve refunds under $50?",
+      "type": "decision",
+      "score": 62,
+      "confidence": 87,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve auto-approval up to $50 with a running weekly cap and audit log — the simulation match rate is strong and the cap directly covers the stress-test's failure mode.",
+        "tags": [
+          "anchor",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "d-model-upgrade",
+      "bankSource": "anchor",
+      "title": "Move Atlas to the newer model?",
+      "type": "decision",
+      "score": 41,
+      "confidence": 76,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve a staged upgrade gated on a full eval re-baseline — the exploratory benchmark is promising but hasn't run against the approved suite yet.",
+        "tags": [
+          "anchor",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "exp-store-credit",
+      "bankSource": "expansion",
+      "title": "Let Atlas issue store-credit vouchers up to $25?",
+      "type": "decision",
+      "score": 47,
+      "confidence": 97,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "action-scope",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve with a per-voucher cap and per-customer monthly limit; flag the 3 failing cases for follow-up.",
+        "tags": [
+          "action-scope",
+          "clean",
+          "decision"
+        ]
+      }
+    },
+    {
+      "id": "exp-auto-cancel-orders",
+      "bankSource": "expansion",
+      "title": "Auto-cancel unconfirmed orders after 48 hours?",
+      "type": "decision",
+      "score": 50,
+      "confidence": 82,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "action-scope",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve auto-cancel with a 24h reminder step first.",
+        "tags": [
+          "action-scope",
+          "clean",
+          "decision"
+        ]
+      }
+    },
+    {
+      "id": "exp-ship-address-write",
+      "bankSource": "expansion",
+      "title": "Give Atlas write access to update shipping addresses mid-transit?",
+      "type": "decision",
+      "score": 44,
+      "confidence": 87,
+      "accountableOwner": "sam-tan",
+      "groundTruth": {
+        "decisionClass": "data-access",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve gated on carrier confirmation; the accountable owner should be the exec, not engineering — this is a customer-facing write action with real mis-ship risk.",
+        "tags": [
+          "data-access",
+          "decision",
+          "raci-nuance"
+        ],
+        "expectedRoutingMismatch": {
+          "authoredOwnerId": "sam-tan",
+          "correctOwnerId": "maya-okonkwo"
+        }
+      }
+    },
+    {
+      "id": "exp-loyalty-tier-view",
+      "bankSource": "expansion",
+      "title": "Let Atlas view loyalty-tier status in every chat?",
+      "type": "informative",
+      "score": 39,
+      "confidence": 99,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "data-access",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — low-sensitivity read, no policy change, safe to auto-advance.",
+        "tags": [
+          "data-access",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-cancel-no-retention",
+      "bankSource": "expansion",
+      "title": "Auto-approve subscription cancellations with no retention offer?",
+      "type": "decision",
+      "score": 60,
+      "confidence": 79,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Do not fully skip retention; require exactly one offer before auto-approving cancellation.",
+        "tags": [
+          "autonomy-boundary",
+          "decision",
+          "revise-case"
+        ]
+      }
+    },
+    {
+      "id": "exp-discount-negotiation",
+      "bankSource": "expansion",
+      "title": "Let Atlas offer discount codes up to 15% without approval?",
+      "type": "decision",
+      "score": 56,
+      "confidence": 97,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve with a weekly spend cap and audit log.",
+        "tags": [
+          "autonomy-boundary",
+          "decision",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "exp-summarizer-swap",
+      "bankSource": "expansion",
+      "title": "Swap the summarization sub-model to a faster, cheaper variant?",
+      "type": "decision",
+      "score": 37,
+      "confidence": 66,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve staged swap gated on full re-baseline, same pattern as the primary model-upgrade decision.",
+        "tags": [
+          "model-version",
+          "decision",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "exp-spanish-locale-model",
+      "bankSource": "expansion",
+      "title": "Enable the new multilingual model for Spanish-language chats?",
+      "type": "decision",
+      "score": 52,
+      "confidence": 98,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Approve, scoped to Spanish-language chats only.",
+        "tags": [
+          "model-version",
+          "decision",
+          "clean"
+        ]
+      }
+    },
+    {
+      "id": "exp-faq-refresh",
+      "bankSource": "expansion",
+      "title": "Weekly FAQ content refresh -- 9 new articles added",
+      "type": "informative",
+      "score": 27,
+      "confidence": 99,
+      "accountableOwner": "nadia-chen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "nadia-chen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative.",
+        "tags": [
+          "content",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-typo-fix",
+      "bankSource": "expansion",
+      "title": "Typo fix in refund confirmation message",
+      "type": "informative",
+      "score": 20,
+      "confidence": 99,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — trivial cosmetic fix.",
+        "tags": [
+          "content",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-holiday-banner",
+      "bankSource": "expansion",
+      "title": "Updated holiday-hours banner copy",
+      "type": "informative",
+      "score": 23,
+      "confidence": 99,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative.",
+        "tags": [
+          "content",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-sentiment-recalibration",
+      "bankSource": "expansion",
+      "title": "Sentiment-detection threshold recalibrated (+0.6 pt accuracy)",
+      "type": "informative",
+      "score": 37,
+      "confidence": 99,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — passed eval, no policy change.",
+        "tags": [
+          "model-version",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-returns-agent-shadow",
+      "bankSource": "expansion",
+      "title": "New agent onboarding: shadow mode for Returns Agent begins",
+      "type": "informative",
+      "score": 26,
+      "confidence": 65,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "rollout",
+        "isDecisionTruth": false,
+        "correctOwnerId": "andrew-aasen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative — no live exposure yet.",
+        "tags": [
+          "rollout",
+          "clean",
+          "informative",
+          "zero-eval-guard"
+        ]
+      }
+    },
+    {
+      "id": "exp-shipping-kb-refresh",
+      "bankSource": "expansion",
+      "title": "Knowledge base source refresh -- shipping policy v3.2",
+      "type": "informative",
+      "score": 26,
+      "confidence": 99,
+      "accountableOwner": "nadia-chen",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": false,
+        "correctOwnerId": "nadia-chen",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly informative.",
+        "tags": [
+          "content",
+          "clean",
+          "informative"
+        ]
+      }
+    },
+    {
+      "id": "exp-returns-agent-golive",
+      "bankSource": "expansion",
+      "title": "Returns Agent -- launch the pilot?",
+      "type": "decision",
+      "score": 52,
+      "confidence": 79,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "rollout",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": "hold",
+        "panelRank": null,
+        "recommendationGold": "Hold — extend shadow mode 2 more weeks. The billing agent's comparable go-live had six weeks of data and beat baseline on 3 of 4 KPIs; this has two weeks and 2 of 4. The app's own 'approve' recommendation is premature relative to its evidence base.",
+        "tags": [
+          "rollout",
+          "readiness-disagreement",
+          "recommendation-overconfidence"
+        ]
+      }
+    },
+    {
+      "id": "adv-out-of-band-value",
+      "bankSource": "adversarial",
+      "title": "Add a 'proactive win-back' outreach message for lapsed customers?",
+      "type": "decision",
+      "score": 48,
+      "confidence": 91,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "expectedFlags": [
+          {
+            "factor": "value",
+            "authored": 82,
+            "bandName": "low",
+            "bandLo": 0,
+            "bandHi": 39
+          }
+        ],
+        "recommendationGold": "The authored value score (82) is not supported by the underlying signals (no dollars, cosmetic classification, tiny sample) — this should be flagged for review before its recommendation is trusted.",
+        "tags": [
+          "adversarial",
+          "out-of-band-value",
+          "integrity"
+        ]
+      }
+    },
+    {
+      "id": "adv-commitment-mislabeled-informative",
+      "bankSource": "adversarial",
+      "title": "Skip the identity-verification step for refund requests under $20?",
+      "type": "informative",
+      "score": 77,
+      "confidence": 83,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "autonomy-boundary",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "expectedGuardrailBlock": true,
+        "recommendationGold": "This must escalate to the accountable exec, not auto-advance: it breaks a confirmed policy commitment (identity verification, no exception), has a real fraud signal, and money is at stake. The shipped type:'informative' + auto-advance is the single most dangerous failure mode in the product.",
+        "tags": [
+          "adversarial",
+          "commitment-mislabeled",
+          "catastrophic-miss",
+          "guardrail"
+        ]
+      }
+    },
+    {
+      "id": "adv-contradictory-evidence",
+      "bankSource": "adversarial",
+      "title": "Trust the new intent classifier's confidence threshold as-is?",
+      "type": "decision",
+      "score": 47,
+      "confidence": 72,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "model-version",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Correctly flags internal disagreement; confidence should read as LOW because 3 of 4 sources contradict, even though the eval pass rate alone looks fine.",
+        "tags": [
+          "adversarial",
+          "contradictory-evidence",
+          "confidence-calibration"
+        ]
+      }
+    },
+    {
+      "id": "adv-stale-evidence",
+      "bankSource": "adversarial",
+      "title": "Keep the refund-eligibility rule as last validated?",
+      "type": "decision",
+      "score": 52,
+      "confidence": 90,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "data-access",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "A perfect-looking eval result that is 45+ days old should show materially lower confidence than an equally perfect fresh result — recency must visibly drag the score down.",
+        "tags": [
+          "adversarial",
+          "stale-evidence",
+          "confidence-calibration"
+        ]
+      }
+    },
+    {
+      "id": "adv-zero-evidence",
+      "bankSource": "adversarial",
+      "title": "Let Atlas apply loyalty-point adjustments automatically?",
+      "type": "informative",
+      "score": 35,
+      "confidence": 15,
+      "accountableOwner": "andrew-aasen",
+      "groundTruth": {
+        "decisionClass": "action-scope",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "Zero evidence and zero eval coverage for a new autonomous money-adjustment action is itself grounds to escalate — the absence of grounding is the signal, and this should never have auto-advanced.",
+        "tags": [
+          "adversarial",
+          "zero-evidence",
+          "grounding",
+          "guard-test"
+        ]
+      }
+    },
+    {
+      "id": "adv-neartie-a",
+      "bankSource": "adversarial",
+      "title": "Add a proactive delay-notification for delayed shipments?",
+      "type": "decision",
+      "score": 59,
+      "confidence": 98,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "panelRankNote": "Panel ranked adv-neartie-b above this scenario despite this one's marginally higher composite score.",
+        "recommendationGold": "Approve.",
+        "tags": [
+          "adversarial",
+          "near-tie",
+          "ranking-stress"
+        ]
+      }
+    },
+    {
+      "id": "adv-neartie-b",
+      "bankSource": "adversarial",
+      "title": "Add a proactive fraud-hold notification before canceling a suspicious order?",
+      "type": "decision",
+      "score": 54,
+      "confidence": 97,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "panelRankNote": "Panel ranked this above adv-neartie-a: preventing a wrongful fraud-driven cancellation is a trust/compliance-adjacent harm that the four generic sub-scores under-weight relative to a plain revenue-opportunity item of similar size.",
+        "recommendationGold": "Approve — and note the panel considers this higher-priority than its composite score alone suggests.",
+        "tags": [
+          "adversarial",
+          "near-tie",
+          "ranking-stress",
+          "qualitative-override"
+        ]
+      }
+    },
+    {
+      "id": "adv-dollars-only-baseline-trap",
+      "bankSource": "adversarial",
+      "title": "Add a premium-warranty upsell prompt after every resolved repair chat?",
+      "type": "decision",
+      "score": 41,
+      "confidence": 71,
+      "accountableOwner": "maya-okonkwo",
+      "groundTruth": {
+        "decisionClass": "content",
+        "isDecisionTruth": true,
+        "correctOwnerId": "maya-okonkwo",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "recommendationGold": "A naive dollars-only ranking would put this near the top of the whole bank; the composite correctly demotes it because reach is narrow, nothing is blocked today, and there's no urgency — this is the scenario that proves the composite adds value over a dollars-first baseline.",
+        "tags": [
+          "adversarial",
+          "dollars-only-baseline",
+          "ranking-validity"
+        ]
+      }
+    },
+    {
+      "id": "adv-wrong-owner-authored",
+      "bankSource": "adversarial",
+      "title": "Allow Atlas to auto-redact and forward chats flagged for potential PII exposure?",
+      "type": "decision",
+      "score": 71,
+      "confidence": 88,
+      "accountableOwner": "sam-tan",
+      "groundTruth": {
+        "decisionClass": "data-access",
+        "isDecisionTruth": true,
+        "correctOwnerId": "legal",
+        "readinessVerdict": null,
+        "panelRank": null,
+        "expectedRoutingMismatch": {
+          "authoredOwnerId": "sam-tan",
+          "authoredInformedOnly": [
+            "maya-okonkwo",
+            "legal"
+          ],
+          "correctOwnerId": "legal"
+        },
+        "recommendationGold": "The accountable owner for a PII-exposure/compliance remediation should be Legal & Risk, not engineering — the authored RACI under-routes a compliance-critical decision to the build team, with Legal merely informed instead of accountable.",
+        "tags": [
+          "adversarial",
+          "wrong-owner",
+          "raci-routing",
+          "compliance"
+        ]
+      }
+    }
+  ]
+}

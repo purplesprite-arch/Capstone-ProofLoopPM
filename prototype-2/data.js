@@ -52,8 +52,7 @@ window.PL = {
   // The delivery crew. Most stay behind the scenes; only escalated agents appear in the briefing.
   agents: [
     { id: "chief-of-staff",     name: "Chief of Staff",          icon: "compass",  status: "orchestrating",
-      monitors: "Routing, RACI, the day's plan",
-      finding: "Assembled today's briefing — routed 3 to you, 4 advancing on their own." },
+      monitors: "Routing, RACI, the day's plan" /* finding is computed live in render.js's agents() from state.blocking()/informative(), not authored here */ },
     { id: "impact-analyst",     name: "Impact Analyst",          icon: "gauge",    status: "watching",
       monitors: "Feature-level ROI and ranking",
       finding: "Scored 7 changes. Escalation v2.4 ranks #1 at 85." },
@@ -433,7 +432,8 @@ window.PL = {
     agentId: "billing-resolver",
     agentName: "Billing Resolution Agent",
     subtitle: "6 weeks in shadow mode · benchmarked against the human baseline",
-    confidence: 87,
+    // Confidence is NOT authored here — the showcase derives it from d-billing-golive's own
+    // confidenceScore() so the same decision never shows two different confidence numbers.
     dollarsSaved: "$18k / month",
     dollarsNote: "projected at full rollout",
     kpis: [
@@ -515,34 +515,108 @@ window.PL = {
   // Profile → Value Focus (A2). Executive KPI taxonomy — the stakeholder picks 2-3 of these
   // and the Decisions queue re-ranks (focus-match first, then the existing Impact Score).
   // See docs/roadmap.html #appendix-profile-a2 for the approved source table this mirrors.
+  // domain/direction/unitLabel added for the Value Model (progressive value capture) —
+  // direction "revenue" vs "cost" controls which cockpit stat a lever's dollars roll into;
+  // domain is the growing, cross-industry registry grouping (Service, Sales, Marketing,
+  // Operations, Data, Integrations, ...). New domains/levers are added here as data —
+  // no calc code changes required (see PL.valueModelSeed below).
   valueFocusTaxonomy: [
     { key: "grow-revenue", label: "Grow revenue", framing: "Every interaction is a chance to expand the relationship.",
+      domain: "Sales", direction: "revenue", unitLabel: "%",
       primaryKpi: "Cross-sell / up-sell attach rate",
       supportingKpis: ["Wallet share", "Market share", "Revenue per interaction / AOV", "Assisted-conversion", "Net Revenue Retention"] },
     { key: "cut-cost-to-serve", label: "Cut cost to serve", framing: "Resolve more without adding headcount.",
+      domain: "Service", direction: "cost", unitLabel: "%",
       primaryKpi: "Deflection / self-service containment rate",
       supportingKpis: ["Cost per contact", "Average Handle Time (AHT)", "First-Contact Resolution", "Escalation/transfer rate"] },
     { key: "operational-efficiency", label: "Operational efficiency", framing: "Less swivel-chair, faster complex work.",
+      domain: "Operations", direction: "cost", unitLabel: "%",
       primaryKpi: "Time-to-resolution for complex task X",
       supportingKpis: ["# systems touched per task", "Straight-through / automation rate", "Throughput per FTE", "Rework rate"] },
     { key: "personalization-experience", label: "Personalization & experience", framing: "The right next action, tailored.",
+      domain: "Marketing", direction: "revenue", unitLabel: "%",
       primaryKpi: "Recommendation adoption / acceptance rate",
       supportingKpis: ["Relevance rating", "Task-success / goal-completion", "CSAT/NPS lift", "Repeat/retention"] },
     { key: "data-quality-trust", label: "Data quality & trust", framing: "Grounded answers you can defend.",
+      domain: "Data", direction: "cost", unitLabel: "%",
       primaryKpi: "Data completeness (% required fields)",
       supportingKpis: ["Data accuracy vs. ground truth", "Freshness/latency", "Source coverage %", "Groundedness/citation rate"] },
     { key: "trust-safety-compliance", label: "Trust, safety & compliance", framing: "Answers we can stand behind and audit.",
+      domain: "Data", direction: "cost", unitLabel: "%",
       primaryKpi: "Policy-adherence rate",
       supportingKpis: ["Groundedness / hallucination rate", "Safe-escalation rate", "PII/exposure incidents", "Audit-readiness"] },
     { key: "human-agent-experience", label: "Human-agent experience", framing: "AI that lifts our people, not replaces them.",
+      domain: "Operations", direction: "cost", unitLabel: "%",
       primaryKpi: "Rep ramp time",
       supportingKpis: ["After-call-work reduction", "Agent CSAT", "Attrition/burnout", "Concurrency per rep"] },
     { key: "ai-adoption-autonomy", label: "AI adoption & autonomy", framing: "How far the AI program has actually spread.",
+      domain: "Operations", direction: "cost", unitLabel: "%",
       primaryKpi: "% interactions AI-handled",
       supportingKpis: ["Containment / autonomy rate", "Topic/intent coverage", "Active adoption", "Fallback-to-human rate"] },
     { key: "speed-to-value", label: "Speed-to-value / velocity", framing: "How fast we ship new agent capability.",
+      domain: "Integrations", direction: "cost", unitLabel: "%",
       primaryKpi: "Time to launch a new topic/skill",
-      supportingKpis: ["Iteration cycle time", "Eval-to-prod lead time", "Deployment frequency"] }
+      supportingKpis: ["Iteration cycle time", "Eval-to-prod lead time", "Deployment frequency"] },
+    // Sales levers — added to prove the registry spans beyond customer-service KPIs.
+    { key: "cross-sell-attach", label: "Cross-sell / up-sell attach", framing: "Every resolved case is also a chance to attach the next product.",
+      domain: "Sales", direction: "revenue", unitLabel: "% attach",
+      primaryKpi: "Cross-sell / up-sell attach rate",
+      supportingKpis: ["Revenue per interaction", "Assisted-conversion", "Net Revenue Retention"] },
+    { key: "close-rate", label: "Close rate", framing: "Turn more qualified conversations into signed deals.",
+      domain: "Sales", direction: "revenue", unitLabel: "% close",
+      primaryKpi: "Close rate",
+      supportingKpis: ["Win rate vs. competitor", "Average deal size", "Sales-qualified-lead conversion"] },
+    { key: "deal-velocity", label: "Deal velocity", framing: "Shrink the time between qualified and closed.",
+      domain: "Sales", direction: "revenue", unitLabel: "days to close",
+      primaryKpi: "Average days to close",
+      supportingKpis: ["Stage-to-stage cycle time", "Time-in-stage outliers", "Forecast accuracy"] }
+  ],
+
+  /* Value Model (progressive value capture) — one entry per lever, keyed to a
+     valueFocusTaxonomy key above. Each lever's `model` fills in as data is supplied,
+     climbing a 5-rung data-grounding ladder (goal -> benchmark -> baseline -> target ->
+     actuals). render.js's leverRung()/leverValueRange() read only the fields present here —
+     nothing is hand-scored. Delivery levers (kind:"delivery") carry NO dollar fields by
+     design: slip only shrinks the realization window of the value lever(s) it defers,
+     it never becomes a fabricated "cost of delay" figure.
+     This is the SEED — app.js overlays any user-entered overrides on top at runtime
+     (see loadValueModel/PL.valueModelState) without ever mutating this array. */
+  valueModelSeed: [
+    { key: "cross-sell-attach", kind: "value", period: { weeks: 13 },
+      model: {
+        goal: "Lift cross-sell attach on inbound billing chats.",
+        benchmark: { lo: 8, hi: 14, unit: "% attach", source: "SaaS support-commerce benchmark, 2025" },
+        baseline: { value: 6.5, unit: "% attach", asOf: "2026-08-01" },
+        target: { value: 11, unit: "% attach", timeframe: "by Q4", committedBy: "nadia-chen" },
+        bottomUp: { volumePerWeek: 9000, unitEconomics: 42 },
+        topDown: { customerTargetGap: 480000, attributionShare: 0.25 }
+      } },
+    { key: "cut-cost-to-serve", kind: "value", period: { weeks: 13 },
+      model: {
+        goal: "Resolve more tier-1 chats without adding headcount.",
+        benchmark: { lo: 45, hi: 62, unit: "% containment", source: "CS automation benchmark, 2025" },
+        baseline: { value: 41, unit: "% containment", asOf: "2026-07-15" },
+        bottomUp: { volumePerWeek: 1900, unitEconomics: 7.4 },
+        topDown: { customerTargetGap: 190000, attributionShare: 0.5 }
+      } },
+    { key: "close-rate", kind: "value", period: { weeks: 13 },
+      model: {
+        goal: "Lift close rate on agent-assisted opportunities.",
+        benchmark: { lo: 18, hi: 26, unit: "% close", source: "Mid-market SaaS sales benchmark, 2025" }
+      } },
+    { key: "grow-revenue", kind: "value", period: { weeks: 13 }, model: { goal: "Grow overall account revenue through every AI-assisted interaction." } },
+    { key: "deal-velocity", kind: "value", period: { weeks: 13 }, model: { goal: "Shrink average days-to-close for AI-touched opportunities." } },
+    { key: "operational-efficiency", kind: "value", period: { weeks: 13 }, model: { goal: "Cut swivel-chair time on complex, multi-system tasks." } },
+    { key: "personalization-experience", kind: "value", period: { weeks: 13 }, model: { goal: "Make every recommendation feel tailored, not generic." } },
+    { key: "data-quality-trust", kind: "value", period: { weeks: 13 }, model: { goal: "Make every grounded answer defensible in an audit." } },
+    { key: "trust-safety-compliance", kind: "value", period: { weeks: 13 }, model: { goal: "Keep every answer inside policy, provably." } },
+    { key: "human-agent-experience", kind: "value", period: { weeks: 13 }, model: { goal: "Free reps from repetitive after-call work." } },
+    { key: "ai-adoption-autonomy", kind: "value", period: { weeks: 13 }, model: { goal: "Grow the share of interactions the AI safely handles end-to-end." } },
+    { key: "speed-to-value", kind: "value", period: { weeks: 13 }, model: { goal: "Ship new agent capability faster, safely." } },
+    // Delivery lever — dollar-free by design. Slip defers WHEN cut-cost-to-serve's value
+    // starts accruing; it never generates its own dollar figure.
+    { key: "delivery-escalation-service", kind: "delivery",
+      model: { goal: "Ship the escalation-service integration before value starts accruing.", defers: ["cut-cost-to-serve"], slipDays: 10, valueStartOffsetWeeks: 1.4 } }
   ],
 
   // Decision → Value Focus tag lookup. A small side table (by decision id) rather than a

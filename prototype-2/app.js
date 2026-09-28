@@ -69,9 +69,80 @@
     };
   }
 
+  /* ---------- Value Model: persistence + the single decision-value injection point ----------
+     Same pattern as Value Focus above (localStorage, wrapped in try/catch, degrades to a
+     session-only model if storage is unavailable) — but this slice holds per-lever data-
+     grounding inputs (goal/benchmark/baseline/target/actuals), not a simple key list, so
+     loading deep-merges any persisted `model` overrides onto the seed lever-by-lever rather
+     than replacing it outright; a lever the user never touched still reads the seed.
+     Must be declared before `state` for the same TDZ reason documented above. */
+  const VALUE_MODEL_STORAGE_KEY = "proofloop.valueModel";
+  function cloneLever(l) { return JSON.parse(JSON.stringify(l)); }
+  function loadValueModel() {
+    const seedClone = PL.valueModelSeed.map(cloneLever);
+    try {
+      const raw = window.localStorage && window.localStorage.getItem(VALUE_MODEL_STORAGE_KEY);
+      if (!raw) return seedClone;
+      const overrides = JSON.parse(raw); // { [leverKey]: modelOverrideObject }
+      return seedClone.map((l) => (overrides[l.key] ? Object.assign({}, l, { model: Object.assign({}, l.model, overrides[l.key]) }) : l));
+    } catch (e) {
+      return seedClone; // localStorage unavailable — model still works this session, just not persisted
+    }
+  }
+  function saveValueModel(model) {
+    try {
+      if (!window.localStorage) return;
+      const overrides = {};
+      model.forEach((l) => { overrides[l.key] = l.model; });
+      window.localStorage.setItem(VALUE_MODEL_STORAGE_KEY, JSON.stringify(overrides));
+    } catch (e) {
+      // localStorage unavailable — model stays in memory for this session only
+    }
+  }
+  // path is a dot path INSIDE a lever's model, e.g. "baseline.value" or "target.timeframe".
+  function updateLever(key, path, value) {
+    const lever = state.valueModel.find((l) => l.key === key);
+    if (!lever) return;
+    const parts = path.split(".");
+    let node = lever.model;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (typeof node[parts[i]] !== "object" || node[parts[i]] === null) node[parts[i]] = {};
+      node = node[parts[i]];
+    }
+    const leaf = parts[parts.length - 1];
+    const num = Number(value);
+    node[leaf] = value === "" ? undefined : (!isNaN(num) && value.trim && value.trim() !== "" && /^-?\d+(\.\d+)?$/.test(value.trim()) ? num : value);
+    PL.valueModelState = state.valueModel;
+    saveValueModel(state.valueModel);
+    render();
+  }
+  // Levers with at least a named goal act as the active Value Focus for queue re-ranking —
+  // feature #7's re-ranking is kept, now driven by the model instead of a manual pick list.
+  function activeFocusKeys() {
+    return (state.valueModel || []).filter((l) => R.leverRung(l) >= 1).map((l) => l.key);
+  }
+
   /* ---------- runtime state ---------- */
   // We clone the decision types so the demo can mutate them (toggle, resolve)
   // without editing the seed data.
+  // Single injection point: if a decision maps to a lever grounded enough to produce an
+  // actual $ figure (rung >= 2 AND a positive modeled weekly value), its impact.value
+  // sub-score becomes that band's MIDPOINT — same band breakdown()/provenance() already
+  // show, so the score badge and the "see the math" modal never disagree. Everything else
+  // (unblock/reach/urgency, and value for unmapped or still-qualitative decisions) is
+  // untouched — this only ever overrides a clone, never PL.decisions itself.
+  function applyModeledValue(clone) {
+    const lever = R.leverForDecision(clone);
+    if (!lever) return clone;
+    const range = R.leverValueRange(lever);
+    if (range.qualitative || range.metricOnly) return clone;
+    const weeks = (lever.period && lever.period.weeks) || 13;
+    if (range.mid / weeks <= 0) return clone;
+    const band = R.valueBand(clone.signals || {}, lever);
+    const point = Math.round((band.lo + band.hi) / 2);
+    return Object.assign({}, clone, { impact: Object.assign({}, clone.impact, { value: point }) });
+  }
+
   const state = {
     view: "today",
     types: {},          // decisionId -> "decision" | "informative"
@@ -79,26 +150,38 @@
     timeAvailable: null, // "zero" | "little" | "lots" — asked once per open, never persisted
     memory: PL.memory.map((g) => ({ day: g.day, items: g.items.slice() })),
     valueFocus: loadValueFocus(), // profile → Value Focus (A2): selected taxonomy keys, persisted (see below)
+    valueModel: loadValueModel(), // Value Model: per-lever data-grounding inputs, persisted (see above)
 
+    // "Needs a human" is derived (R.classifyEscalation), not read straight off the seed's `type`
+    // literal — a manual toggle (state.types) still overrides it, same as before.
     decisionFor(id) {
       const d = PL.decisions.find((x) => x.id === id) || (id === "d-billing-golive" ? billingDecision() : null);
       if (!d) return null;
-      return Object.assign({}, d, { type: this.types[d.id] || d.type });
+      const esc = R.classifyEscalation(d);
+      return applyModeledValue(Object.assign({}, d, { type: this.types[d.id] || esc.type, escalationReason: esc.reason }));
     },
     all() {
-      return PL.decisions.map((d) => Object.assign({}, d, { type: this.types[d.id] || d.type }));
+      return PL.decisions.map((d) => {
+        const esc = R.classifyEscalation(d);
+        return applyModeledValue(Object.assign({}, d, { type: this.types[d.id] || esc.type, escalationReason: esc.reason }));
+      });
     },
     blocking() {
       return this.all()
         .filter((d) => d.type === "decision" && !this.resolved[d.id])
-        .sort(rankByFocusThenScore(this.valueFocus));
+        .sort(rankByFocusThenScore(activeFocusKeys()));
     },
     informative() {
       return this.all()
         .filter((d) => d.type === "informative" && !this.resolved[d.id])
-        .sort(rankByFocusThenScore(this.valueFocus));
+        .sort(rankByFocusThenScore(activeFocusKeys()));
     }
   };
+  // Publish the live model for render.js's pure functions (liveModel() falls back to the
+  // seed until this line runs, and to this object afterward) — mirrors how PL.weights is
+  // read directly rather than passed through every call.
+  PL.valueModelState = state.valueModel;
+
   function billingDecision() {
     return PL.decisions.find((d) => d.id === "d-billing-golive");
   }
@@ -112,7 +195,7 @@
     let html = "";
     if (v === "today") html = R.today(state);
     else if (v === "decisions") html = R.decisions(state);
-    else if (v === "agents") html = R.agents();
+    else if (v === "agents") html = R.agents(state);
     else if (v === "evidence") html = R.evidence();
     else if (v === "build") html = R.buildView(state);
     else if (v === "memory") html = R.memory(state);
@@ -120,6 +203,7 @@
     else if (v === "showcase") html = R.showcase();
     else if (v === "pilot") html = R.pilot();
     else if (v === "presenter") html = R.presenter(state);
+    else if (v === "valuemodel") html = R.valueModel(state);
     else if (v && v.indexOf("brief:") === 0) html = R.brief(state.decisionFor(v.slice(6)));
     else html = R.today(state);
 
@@ -128,8 +212,9 @@
     void el.offsetWidth; // reflow so the animation restarts
     el.classList.add("view-enter");
 
-    // nav highlighting (map push-views back to a tab)
-    const navKey = v === "showcase" || v === "pilot" || v === "presenter" || v === "profile" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
+    // nav highlighting (map push-views back to a tab) — valuemodel is reached from profile,
+    // one level deeper, so it maps back the same way profile itself does.
+    const navKey = v === "showcase" || v === "pilot" || v === "presenter" || v === "profile" || v === "valuemodel" ? "today" : v.indexOf("brief:") === 0 ? "decisions" : v;
     document.querySelectorAll("[data-tab]").forEach((t) => t.classList.toggle("active", t.dataset.tab === navKey));
 
     // live "needs you" badge on the Decisions tab
@@ -198,6 +283,13 @@
       const id = wrap.dataset.toggle;
       const next = seg.dataset.set;
       const base = PL.decisions.find((x) => x.id === id);
+      // Commitment guardrail: a decision that breaks a confirmed external commitment can't be
+      // demoted to informative by the toggle, no matter what — this is the exact gap the eval's
+      // adversarial "commitment-mislabeled-informative" scenario is built to catch.
+      if (next === "informative" && base && base.signals && base.signals.commitmentAtStake === true) {
+        showToast("Can't advance this on its own", `${base.title} breaks a confirmed external commitment — it stays on your desk no matter how it's classified.`);
+        return;
+      }
       state.types[id] = next;
       const moved = next === "informative";
       const who = base && base.delegateTo && PL.people[base.delegateTo] ? PL.people[base.delegateTo].short : "the team";
@@ -260,6 +352,16 @@
 
     // confirm a decision
     if (t.closest("#confirm-decision")) { confirmDecision(); return; }
+  });
+
+  // Value Model lever inputs — "change" (fires on blur/Enter), NOT "input", so the full
+  // #view re-render inside updateLever() never steals focus mid-keystroke. Format is
+  // data-lever-field="leverKey|dot.path.into.model", matching updateLever's own signature.
+  document.addEventListener("change", (e) => {
+    const field = e.target.closest("[data-lever-field]");
+    if (!field) return;
+    const [key, path] = field.dataset.leverField.split("|");
+    updateLever(key, path, field.value);
   });
 
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !gateOpen) closeModal(); });
@@ -372,7 +474,7 @@
   setAll(".user-role", PL.user.role);
 
   const initial = location.hash.replace("#", "");
-  const valid = ["today", "decisions", "agents", "evidence", "build", "memory", "showcase", "pilot", "presenter", "profile"];
+  const valid = ["today", "decisions", "agents", "evidence", "build", "memory", "showcase", "pilot", "presenter", "profile", "valuemodel"];
   state.view = valid.includes(initial) || initial.indexOf("brief:") === 0 ? initial : "today";
   render();
   openTimeGate();

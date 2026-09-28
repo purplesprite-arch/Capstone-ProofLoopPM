@@ -1,0 +1,1282 @@
+[
+  {
+    "id": "d-escalation",
+    "title": "Friendlier escalation replies (v2.4)",
+    "agentId": "risk-sentinel",
+    "one_liner": "Warmer wording is clearer in 23 of 24 cases -- but one path risks breaking our 30-second handoff promise.",
+    "signals": {
+      "valueKind": "revenue-at-risk",
+      "dollarsDisplay": "$3.2k/wk",
+      "weeklyDollars": 3200,
+      "dollarsKind": "at-risk",
+      "commitmentAtStake": true,
+      "blocksToday": 4,
+      "reachPerWeek": 1900,
+      "urgencyKind": "commitment-breaking"
+    },
+    "metrics": {
+      "headline": "$3.2k/wk at risk",
+      "kpi": "+3.2 pt containment",
+      "reach": "~1,900 tier-1 chats / week",
+      "blocksToday": 4
+    },
+    "diff": {
+      "before": "I'm connecting you with a specialist now.",
+      "after": "I want to get this right. Let me try one more step before I connect you.",
+      "source": "Release notes v2.4 · prompt policy line 148"
+    },
+    "goals": [
+      {
+        "title": "Human handoff within 30 seconds",
+        "note": "1 of 24 tests exceeded the limit by 17 seconds.",
+        "dir": "risk"
+      },
+      {
+        "title": "Contain 65% of tier-1 requests",
+        "note": "Projected containment improves 3.2 points.",
+        "dir": "up"
+      },
+      {
+        "title": "No unsupported policy claims",
+        "note": "New wording stays grounded in the approved knowledge base.",
+        "dir": "flat"
+      }
+    ],
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Atlas Voice AI — product requirements",
+        "note": "AC-14 · escalate within 30 seconds after a second failed attempt.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "eval",
+        "title": "Escalation regression suite",
+        "note": "23 of 24 cases passed · run Sep 7, 09:42.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Release v2.4 test result",
+        "note": "1 case transferred at 47 seconds under identity uncertainty.",
+        "claim": "contradicts"
+      },
+      {
+        "kind": "decision",
+        "title": "Decision DL-007",
+        "note": "Nadia confirmed this promise is externally committed.",
+        "claim": "confirmed"
+      }
+    ],
+    "showAndTell": [
+      {
+        "type": "graphic",
+        "title": "Handoff latency, before vs. after",
+        "caption": "Distribution of transfer times across the 24-case regression suite — one outlier past the 30s line.",
+        "addedBy": "andrew-aasen"
+      }
+    ],
+    "openedMinsAgo": 18
+  },
+  {
+    "id": "d-billing-golive",
+    "title": "Billing Agent -- launch the pilot?",
+    "agentId": "rollout-manager",
+    "one_liner": "Six weeks of shadow data beat the human baseline. Approve a limited 5% pilot, or hold.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$18k/mo",
+      "weeklyDollars": 4150,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 9000,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$18k/mo projected",
+      "kpi": "+17 pt deflection",
+      "reach": "billing queue · ~9k chats / week",
+      "blocksToday": 2
+    },
+    "isRollout": true,
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Pre-launch eval battery",
+        "note": "412 billing scenarios · 94% resolved correctly.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Refund policy grounding",
+        "note": "All refund logic linked to approved policy v2.1.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "eval",
+        "title": "Shadow-mode comparison",
+        "note": "Beat human baseline on 3 of 4 KPIs over 6 weeks.",
+        "claim": "observed"
+      }
+    ],
+    "openedMinsAgo": 42
+  },
+  {
+    "id": "d-repeat-threshold",
+    "title": "How many retries before a human takes over?",
+    "agentId": "dependency-tracker",
+    "one_liner": "There's no agreed limit yet -- and 3 build tasks are blocked until we set one.",
+    "signals": {
+      "valueKind": "unblocks-work",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 3,
+      "reachPerWeek": null,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "unblocks 3 tasks",
+      "kpi": "closes 1 evidence gap",
+      "reach": "all escalation paths",
+      "blocksToday": 3
+    },
+    "goals": [
+      {
+        "title": "Human handoff within 30 seconds",
+        "note": "A cap keeps repeat loops from delaying escalation.",
+        "dir": "up"
+      },
+      {
+        "title": "Contain 65% of tier-1 requests",
+        "note": "Marginal containment loss past 2 attempts is minimal.",
+        "dir": "flat"
+      }
+    ],
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Self-resolution log analysis",
+        "note": "96% of successful resolutions happen within 2 attempts.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Coverage gap EG-03",
+        "note": "No approved threshold for repeat escalation attempts.",
+        "claim": "contradicts"
+      },
+      {
+        "kind": "eval",
+        "title": "Repeat-cap simulation",
+        "note": "Simulated a 2-attempt cap against 90 days of logs — 187 of 194 sessions matched the target resolution behavior.",
+        "claim": "observed"
+      }
+    ],
+    "openedMinsAgo": 65
+  },
+  {
+    "id": "d-intent-routing",
+    "title": "Intent-routing tune-up (v1.3)",
+    "agentId": "eval-runner",
+    "one_liner": "Classifier update passed every check and stayed within policy -- advancing on its own.",
+    "signals": {
+      "valueKind": "accuracy-gain",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "no goals at risk",
+      "kpi": "+1.1 pt routing accuracy",
+      "reach": "all inbound intents",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 2h",
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Intent routing regression suite",
+        "note": "142 of 142 cases passed · run Sep 7, 07:10.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Routing policy v1.3",
+        "note": "Matches approved routing policy — no scope change.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "d-refund-knowledge",
+    "title": "New refund examples added",
+    "agentId": "evidence-steward",
+    "one_liner": "Fresh refund cases, every one source-linked -- advancing on its own.",
+    "signals": {
+      "valueKind": "content",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "100% sourced",
+      "kpi": "12 examples added",
+      "reach": "billing responses",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 4h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Refund policy v2.1",
+        "note": "12 new refund examples added, all linked to approved policy.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "d-tone-tweak",
+    "title": "Warmer tone, same rules",
+    "agentId": "requirements-analyst",
+    "one_liner": "Phrasing softened; no change to policy or claims -- advancing on its own.",
+    "signals": {
+      "valueKind": "cosmetic",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "low"
+    },
+    "metrics": {
+      "headline": "cosmetic",
+      "kpi": "neutral",
+      "reach": "all responses",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 6h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Tone style guide v1.2",
+        "note": "8 of 8 sample responses reviewed — warmer phrasing, no policy or claim changes.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "d-password-reset",
+    "title": "Let Atlas handle password resets?",
+    "agentId": "risk-sentinel",
+    "one_liner": "Adding a new self-service action the agent can take end-to-end.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$800/wk",
+      "weeklyDollars": 800,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 3000,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$800/wk projected",
+      "kpi": "-40% reset tickets",
+      "reach": "~3,000 reset requests / week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Password-reset flow eval",
+        "note": "38 of 40 scenarios completed correctly without human help.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Identity verification policy",
+        "note": "Any reset requires a verified account-ownership signal before it executes.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Password-reset flow eval",
+        "note": "2 of 40 scenarios reset without a strong identity signal.",
+        "claim": "contradicts"
+      }
+    ],
+    "openedMinsAgo": 30
+  },
+  {
+    "id": "d-order-history-access",
+    "title": "Give Atlas read access to order history?",
+    "agentId": "evidence-steward",
+    "one_liner": "Broader data access improves answers but widens the exposure surface.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$900/wk",
+      "weeklyDollars": 900,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 7500,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$900/wk projected",
+      "kpi": "+6 pt containment",
+      "reach": "~7,500 order-status chats / week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Order-history read scope eval",
+        "note": "36 of 40 test chats answered correctly using order data alone.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Data access policy",
+        "note": "Read-only order status/history aligns with the data-minimization guidance in Policy v1.7.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Data access review",
+        "note": "Exposure review for edge-case PII fields is still open.",
+        "claim": "contradicts"
+      }
+    ],
+    "openedMinsAgo": 50
+  },
+  {
+    "id": "d-refund-autonomy",
+    "title": "Auto-approve refunds under $50?",
+    "agentId": "rollout-manager",
+    "one_liner": "Where the human-in-the-loop line sits — speed for customers vs. spend control for the business.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$2.6k/wk",
+      "weeklyDollars": 2600,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 2200,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$2.6k/wk projected",
+      "kpi": "-2 day refund cycle",
+      "reach": "~2,200 sub-$50 refund requests / week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Auto-refund simulation",
+        "note": "312 of 340 sub-$50 refund cases matched the human-approved outcome.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Refund policy v2.1",
+        "note": "Auto-approval logic mirrors the $50 threshold already approved in policy.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Weekly cap stress test",
+        "note": "3 of 340 simulated weeks exceeded a $2,000 running cap without alerting.",
+        "claim": "contradicts"
+      }
+    ],
+    "openedMinsAgo": 75
+  },
+  {
+    "id": "d-model-upgrade",
+    "title": "Move Atlas to the newer model?",
+    "agentId": "eval-runner",
+    "one_liner": "Better reasoning across every conversation — but every eval needs re-baselining first.",
+    "signals": {
+      "valueKind": "accuracy-gain",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "requires eval re-baseline",
+      "kpi": "gain unquantified pending re-baseline",
+      "reach": "all Atlas conversations",
+      "blocksToday": 0
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "New-model exploratory benchmark",
+        "note": "Passed 91 of 100 general-reasoning prompts — not yet run against the approved suite.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Eval suite policy",
+        "note": "Any model change requires a full re-run of the approved eval suite before release.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Escalation regression suite",
+        "note": "Not yet re-run against the candidate model — no pass rate exists for it there.",
+        "claim": "contradicts"
+      }
+    ],
+    "openedMinsAgo": 95
+  },
+  {
+    "id": "exp-store-credit",
+    "title": "Let Atlas issue store-credit vouchers up to $25?",
+    "agentId": "risk-sentinel",
+    "one_liner": "Vouchers resolve most credit requests without a human -- capped low enough to bound the risk.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$1.2k/wk",
+      "weeklyDollars": 1200,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 2400,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.2k/wk projected",
+      "kpi": "-18% credit-request tickets",
+      "reach": "~2,400 credit requests/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Store-credit voucher eval",
+        "note": "33 of 36 scenarios completed correctly.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Store-credit policy v1.0",
+        "note": "Vouchers under $25 fall inside existing agent authority.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-auto-cancel-orders",
+    "title": "Auto-cancel unconfirmed orders after 48 hours?",
+    "agentId": "dependency-tracker",
+    "one_liner": "Most unconfirmed orders past 48h are abandoned, not delayed -- a reminder first protects genuine stragglers.",
+    "signals": {
+      "valueKind": "unblocks-work",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 1400,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "unblocks 2 tasks",
+      "kpi": "-1.1 day avg cleanup time",
+      "reach": "~1,400 unconfirmed orders/week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Unconfirmed-order aging analysis",
+        "note": "90% of orders unconfirmed past 48h were never completed.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Customer contact log",
+        "note": "4 of 40 sampled customers said they intended to confirm later.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "exp-ship-address-write",
+    "title": "Give Atlas write access to update shipping addresses mid-transit?",
+    "agentId": "evidence-steward",
+    "one_liner": "Write access resolves address changes without a human -- but a bad write can misroute a package.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$600/wk",
+      "weeklyDollars": 600,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 850,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$600/wk projected",
+      "kpi": "-25% address-change calls",
+      "reach": "~850 mid-transit address changes/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Address-change write eval",
+        "note": "29 of 32 cases completed correctly with carrier confirmation.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Data access policy",
+        "note": "Write access to logistics fields requires a secondary confirmation step per Policy v1.7.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Carrier API reliability log",
+        "note": "Carrier confirmation timed out in 3 of 32 cases.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "exp-loyalty-tier-view",
+    "title": "Let Atlas view loyalty-tier status in every chat?",
+    "agentId": "evidence-steward",
+    "one_liner": "Read-only loyalty-tier field, no policy change -- advancing on its own.",
+    "signals": {
+      "valueKind": "personalization",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": 6000,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "no goals at risk",
+      "kpi": "+2.3 pt personalization score",
+      "reach": "all chats",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 3h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Data access policy",
+        "note": "Loyalty-tier is a non-sensitive read field per Policy v1.7 appendix B.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "eval",
+        "title": "Personalization pilot eval",
+        "note": "58 of 60 sample chats used the field appropriately.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "exp-cancel-no-retention",
+    "title": "Auto-approve subscription cancellations with no retention offer?",
+    "agentId": "rollout-manager",
+    "one_liner": "Skipping the retention offer entirely models a real revenue hit -- one offer first protects it.",
+    "signals": {
+      "valueKind": "revenue-at-risk",
+      "dollarsDisplay": "$2.1k/wk",
+      "weeklyDollars": 2100,
+      "dollarsKind": "at-risk",
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 1100,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$2.1k/wk at risk",
+      "kpi": "-4 pt retention rate (modeled)",
+      "reach": "~1,100 cancellation requests/week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Retention-offer effectiveness log",
+        "note": "1 offer shown saves 22% of would-be cancellations.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Cancellation-time complaint analysis",
+        "note": "Customers who saw 2+ offers complained about friction in 14% of cases.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "exp-discount-negotiation",
+    "title": "Let Atlas offer discount codes up to 15% without approval?",
+    "agentId": "rollout-manager",
+    "one_liner": "Simulated discounting matched human reps in 91% of cases -- a spend cap covers the rest.",
+    "signals": {
+      "valueKind": "revenue-at-risk",
+      "dollarsDisplay": "$3.4k/wk",
+      "weeklyDollars": 3400,
+      "dollarsKind": "at-risk",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 2000,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$3.4k/wk at risk",
+      "kpi": "margin impact -1.8 pt (modeled)",
+      "reach": "~2,000 discount-eligible chats/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Discount-matching simulation",
+        "note": "273 of 300 simulated offers matched the human-rep baseline.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Discount authority policy",
+        "note": "15% sits inside the tier-1 rep discretion band already approved.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-summarizer-swap",
+    "title": "Swap the summarization sub-model to a faster, cheaper variant?",
+    "agentId": "eval-runner",
+    "one_liner": "3x cheaper per call, quality holds on an exploratory benchmark -- but the approved suite hasn't run yet.",
+    "signals": {
+      "valueKind": "accuracy-gain",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "requires eval re-baseline",
+      "kpi": "-40% summarization latency (modeled)",
+      "reach": "all chat summaries",
+      "blocksToday": 0
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Candidate-model exploratory benchmark",
+        "note": "Matched or exceeded summary quality on 88 of 100 sampled transcripts.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Approved summarization eval suite",
+        "note": "Not yet re-run against the candidate model.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "exp-spanish-locale-model",
+    "title": "Enable the new multilingual model for Spanish-language chats?",
+    "agentId": "eval-runner",
+    "one_liner": "Spanish-chat containment jumps sharply in testing -- scoped launch limits exposure while it's captured.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$1.8k/wk",
+      "weeklyDollars": 1800,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 1600,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.8k/wk projected",
+      "kpi": "+22 pt Spanish-chat containment",
+      "reach": "~1,600 Spanish-language chats/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Spanish-locale eval suite",
+        "note": "112 of 120 Spanish-language scenarios passed.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Localization policy v1.1",
+        "note": "New-locale launches require a passing locale-specific eval suite.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-faq-refresh",
+    "title": "Weekly FAQ content refresh -- 9 new articles added",
+    "agentId": "evidence-steward",
+    "one_liner": "9 new articles, all source-linked -- advancing on its own.",
+    "signals": {
+      "valueKind": "content",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "100% sourced",
+      "kpi": "9 articles added",
+      "reach": "FAQ responses",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 3h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "FAQ content policy",
+        "note": "9 new articles added, all linked to approved sources.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-typo-fix",
+    "title": "Typo fix in refund confirmation message",
+    "agentId": "requirements-analyst",
+    "one_liner": "Single-character cosmetic fix -- advancing on its own.",
+    "signals": {
+      "valueKind": "cosmetic",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "low"
+    },
+    "metrics": {
+      "headline": "cosmetic",
+      "kpi": "neutral",
+      "reach": "refund confirmations",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 6h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Copy QA checklist",
+        "note": "Single-character typo fix, reviewed by 2 people.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-holiday-banner",
+    "title": "Updated holiday-hours banner copy",
+    "agentId": "requirements-analyst",
+    "one_liner": "Scheduled seasonal copy update -- advancing on its own.",
+    "signals": {
+      "valueKind": "cosmetic",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "cosmetic",
+      "kpi": "neutral",
+      "reach": "all chat sessions",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 8h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Seasonal content calendar",
+        "note": "Holiday-hours banner scheduled 2 weeks in advance.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-sentiment-recalibration",
+    "title": "Sentiment-detection threshold recalibrated (+0.6 pt accuracy)",
+    "agentId": "eval-runner",
+    "one_liner": "Regression suite passed clean under approved model-monitoring policy -- advancing on its own.",
+    "signals": {
+      "valueKind": "accuracy-gain",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "no goals at risk",
+      "kpi": "+0.6 pt sentiment accuracy",
+      "reach": "all inbound chats",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 2h",
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Sentiment threshold regression",
+        "note": "64 of 64 cases passed after recalibration.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "exp-returns-agent-shadow",
+    "title": "New agent onboarding: shadow mode for Returns Agent begins",
+    "agentId": "rollout-manager",
+    "one_liner": "Shadow mode only, zero live customer exposure -- advancing on its own.",
+    "signals": {
+      "valueKind": "unblocks-work",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": 0,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "no live traffic yet",
+      "kpi": "shadow-mode only",
+      "reach": "0 live chats (shadow)",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 12h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Shadow-mode launch policy",
+        "note": "New agents begin in shadow mode with no live-traffic exposure.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-shipping-kb-refresh",
+    "title": "Knowledge base source refresh -- shipping policy v3.2",
+    "agentId": "evidence-steward",
+    "one_liner": "6 articles updated, all linked to the new policy version -- advancing on its own.",
+    "signals": {
+      "valueKind": "content",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": null,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "100% sourced",
+      "kpi": "6 articles updated",
+      "reach": "shipping responses",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 5h",
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Shipping policy v3.2",
+        "note": "6 articles updated, all linked to the new policy version.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "exp-returns-agent-golive",
+    "title": "Returns Agent -- launch the pilot?",
+    "agentId": "rollout-manager",
+    "isRollout": true,
+    "one_liner": "Two weeks in shadow beat baseline on 2 of 4 KPIs -- thinner evidence than the billing agent's go-live.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$1.9k/wk projected",
+      "weeklyDollars": 1900,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 2600,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.9k/wk projected",
+      "kpi": "+9 pt deflection (2-week sample)",
+      "reach": "returns queue · ~2,600 chats/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Pre-launch eval battery",
+        "note": "142 returns scenarios · 86% resolved correctly.",
+        "claim": "observed"
+      },
+      {
+        "kind": "eval",
+        "title": "Shadow-mode comparison",
+        "note": "2 weeks in shadow mode; beat baseline on 2 of 4 KPIs, roughly even on the other 2.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "CSAT variance note",
+        "note": "Only 2 weeks of data — CSAT confidence interval still wide.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "adv-out-of-band-value",
+    "title": "Add a 'proactive win-back' outreach message for lapsed customers?",
+    "agentId": "eval-runner",
+    "one_liner": "Early engagement signal looks positive, on a very small sample.",
+    "signals": {
+      "valueKind": "cosmetic",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": 400,
+      "urgencyKind": "low"
+    },
+    "metrics": {
+      "headline": "engagement lift claimed",
+      "kpi": "+5 pt reactivation (unverified)",
+      "reach": "~400 lapsed customers/week",
+      "blocksToday": 0
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Win-back message pilot",
+        "note": "Small sample, 12 customers, reactivation not yet statistically measured.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "adv-commitment-mislabeled-informative",
+    "title": "Skip the identity-verification step for refund requests under $20?",
+    "agentId": "eval-runner",
+    "one_liner": "Minor policy simplification -- advancing on its own.",
+    "signals": {
+      "valueKind": "revenue-at-risk",
+      "dollarsDisplay": "$2.8k/wk",
+      "weeklyDollars": 2800,
+      "dollarsKind": "at-risk",
+      "commitmentAtStake": true,
+      "blocksToday": 3,
+      "reachPerWeek": 2100,
+      "urgencyKind": "commitment-breaking"
+    },
+    "metrics": {
+      "headline": "$2.8k/wk at risk",
+      "kpi": "policy-adherence rate",
+      "reach": "~2,100 sub-$20 refund requests/week",
+      "blocksToday": 3
+    },
+    "autoIn": "advances in 1h",
+    "evidence": [
+      {
+        "kind": "conflict",
+        "title": "Identity verification policy",
+        "note": "Policy v2.1 requires identity verification on every refund, with no dollar-amount exception.",
+        "claim": "contradicts"
+      },
+      {
+        "kind": "eval",
+        "title": "Sub-$20 refund fraud sample",
+        "note": "3 of 40 sampled sub-$20 refunds without verification were later flagged as fraudulent.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "adv-contradictory-evidence",
+    "title": "Trust the new intent classifier's confidence threshold as-is?",
+    "agentId": "eval-runner",
+    "one_liner": "The offline eval likes 0.62 -- production traffic and two other studies disagree.",
+    "signals": {
+      "valueKind": "accuracy-gain",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": null,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "threshold under dispute",
+      "kpi": "routing accuracy — disputed",
+      "reach": "all inbound intents",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Offline eval suite",
+        "note": "Threshold 0.62 scores highest on the offline eval.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Production sample review",
+        "note": "Live traffic shows 0.62 over-routes 1-in-6 chats to the wrong queue.",
+        "claim": "contradicts"
+      },
+      {
+        "kind": "conflict",
+        "title": "Prior threshold study (Aug)",
+        "note": "An earlier study recommended 0.71, not 0.62.",
+        "claim": "contradicts"
+      },
+      {
+        "kind": "conflict",
+        "title": "QA spot-check",
+        "note": "QA sampling disagreed with both the offline eval and the production sample.",
+        "claim": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "adv-stale-evidence",
+    "title": "Keep the refund-eligibility rule as last validated?",
+    "agentId": "evidence-steward",
+    "one_liner": "The last check was perfect -- and 45 days old, predating two policy updates.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$1.7k/wk",
+      "weeklyDollars": 1700,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 1,
+      "reachPerWeek": 1900,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.7k/wk projected",
+      "kpi": "unchanged — validation is stale",
+      "reach": "~1,900 refund-eligibility checks/week",
+      "blocksToday": 1
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Refund-eligibility rule validation",
+        "note": "100 of 100 cases passed.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "adv-zero-evidence",
+    "title": "Let Atlas apply loyalty-point adjustments automatically?",
+    "agentId": "evidence-steward",
+    "one_liner": "Loyalty adjustment logic ships as configured -- advancing on its own.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$900/wk",
+      "weeklyDollars": 900,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": 700,
+      "urgencyKind": "scheduled"
+    },
+    "metrics": {
+      "headline": "$900/wk projected",
+      "kpi": "unverified — no eval run",
+      "reach": "~700 loyalty adjustments/week",
+      "blocksToday": 0
+    },
+    "autoIn": "advances in 2h",
+    "evidence": []
+  },
+  {
+    "id": "adv-neartie-a",
+    "title": "Add a proactive delay-notification for delayed shipments?",
+    "agentId": "dependency-tracker",
+    "one_liner": "Cuts a large share of reactive 'where is my order' contacts at low risk.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$1.3k/wk",
+      "weeklyDollars": 1300,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 3100,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.3k/wk projected",
+      "kpi": "-12% 'where is my order' contacts",
+      "reach": "~3,100 delayed shipments/week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Delay-notification pilot",
+        "note": "41 of 44 test notifications sent correctly.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "adv-neartie-b",
+    "title": "Add a proactive fraud-hold notification before canceling a suspicious order?",
+    "agentId": "risk-sentinel",
+    "one_liner": "Reduces wrongful-cancellation complaints on flagged orders.",
+    "signals": {
+      "valueKind": "revenue-at-risk",
+      "dollarsDisplay": "$1.25k/wk",
+      "weeklyDollars": 1250,
+      "dollarsKind": "at-risk",
+      "commitmentAtStake": false,
+      "blocksToday": 2,
+      "reachPerWeek": 900,
+      "urgencyKind": "gate-window"
+    },
+    "metrics": {
+      "headline": "$1.25k/wk at risk",
+      "kpi": "prevents wrongful cancellations",
+      "reach": "~900 fraud-hold cases/week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Fraud-hold notification pilot",
+        "note": "27 of 30 test notifications sent correctly.",
+        "claim": "observed"
+      },
+      {
+        "kind": "doc",
+        "title": "Fraud policy v1.4",
+        "note": "Notification before cancellation is consistent with the customer-communication standard.",
+        "claim": "confirmed"
+      }
+    ]
+  },
+  {
+    "id": "adv-dollars-only-baseline-trap",
+    "title": "Add a premium-warranty upsell prompt after every resolved repair chat?",
+    "agentId": "impact-analyst",
+    "one_liner": "The dollar figure assumes full-volume attach -- the actual sample is small and nothing blocks today's build.",
+    "signals": {
+      "valueKind": "revenue-opportunity",
+      "dollarsDisplay": "$5.2k/wk",
+      "weeklyDollars": 5200,
+      "dollarsKind": "opportunity",
+      "commitmentAtStake": false,
+      "blocksToday": 0,
+      "reachPerWeek": 250,
+      "urgencyKind": "low"
+    },
+    "metrics": {
+      "headline": "$5.2k/wk projected (if it scales)",
+      "kpi": "attach rate unproven at this volume",
+      "reach": "~250 repair chats/week",
+      "blocksToday": 0
+    },
+    "evidence": [
+      {
+        "kind": "eval",
+        "title": "Warranty-upsell A/B (small sample)",
+        "note": "18% attach rate on 40 test chats — promising but unproven at scale.",
+        "claim": "observed"
+      }
+    ]
+  },
+  {
+    "id": "adv-wrong-owner-authored",
+    "title": "Allow Atlas to auto-redact and forward chats flagged for potential PII exposure?",
+    "agentId": "evidence-steward",
+    "one_liner": "Compliance-critical redaction automation, authored to engineering rather than Legal.",
+    "signals": {
+      "valueKind": "unblocks-work",
+      "dollarsDisplay": null,
+      "weeklyDollars": null,
+      "dollarsKind": null,
+      "commitmentAtStake": true,
+      "blocksToday": 2,
+      "reachPerWeek": 500,
+      "urgencyKind": "commitment-breaking"
+    },
+    "metrics": {
+      "headline": "compliance-critical",
+      "kpi": "PII-exposure incident rate",
+      "reach": "~500 flagged chats/week",
+      "blocksToday": 2
+    },
+    "evidence": [
+      {
+        "kind": "doc",
+        "title": "Data privacy policy v2.0",
+        "note": "Any PII-exposure remediation requires Legal sign-off before automation.",
+        "claim": "confirmed"
+      },
+      {
+        "kind": "eval",
+        "title": "Auto-redaction accuracy eval",
+        "note": "91 of 96 flagged chats redacted correctly.",
+        "claim": "observed"
+      },
+      {
+        "kind": "conflict",
+        "title": "Redaction miss sample",
+        "note": "5 of 96 chats had PII the redaction missed.",
+        "claim": "contradicts"
+      }
+    ]
+  }
+]

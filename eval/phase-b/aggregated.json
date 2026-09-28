@@ -1,0 +1,1543 @@
+{
+  "panel": {
+    "fleissKappaEscalation": 0.9340164570718832,
+    "meanPairwisePersonaSpearman": 0.8354774637127578,
+    "byId": {
+      "d-escalation": {
+        "medianRank": 3,
+        "ranks": [
+          4,
+          3,
+          2,
+          3,
+          8
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (CX/support operations owner)",
+          "the accountable delivery exec, given the externally committed 30-second handoff SLA",
+          "the accountable delivery exec (holds the externally committed 30-second handoff promise)",
+          "the accountable delivery exec who owns the 30-second handoff commitment",
+          "the accountable delivery exec who owns the externally-committed 30-second handoff SLA"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 79.6
+      },
+      "d-billing-golive": {
+        "medianRank": 11,
+        "ranks": [
+          2,
+          13,
+          5,
+          14,
+          11
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec, with revenue-operations sign-off",
+          "the accountable delivery exec, with finance/risk sign-off given real refund dollars",
+          "the accountable delivery exec / rollout owner for the billing agent",
+          "the accountable delivery exec (rollout owner for the Billing Agent launch)",
+          "the accountable delivery exec sponsoring the Billing Agent rollout"
+        ],
+        "majorityReadiness": "go",
+        "meanConfidence": 69.2
+      },
+      "d-repeat-threshold": {
+        "medianRank": 11,
+        "ranks": [
+          20,
+          11,
+          4,
+          17,
+          7
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "engineering lead (escalation policy owner)",
+          "engineering lead who owns the escalation-flow policy",
+          "engineering lead who owns the escalation/handoff policy",
+          "the product owner for escalation/handoff policy",
+          "engineering lead owning escalation/retry policy implementation"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69
+      },
+      "d-intent-routing": {
+        "medianRank": 27,
+        "ranks": [
+          26,
+          30,
+          25,
+          27,
+          29
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "engineering lead (routing/eval owner)",
+          "engineering lead for the intent-routing system",
+          "engineering lead for intent routing",
+          "engineering lead for intent-routing/eval",
+          "engineering lead owning intent-routing / the eval-runner suite"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 86.4
+      },
+      "d-refund-knowledge": {
+        "medianRank": 28,
+        "ranks": [
+          29,
+          28,
+          28,
+          29,
+          28
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/knowledge owner for billing",
+          "the knowledge-base/content owner for refund policy",
+          "knowledge-base/content owner",
+          "the knowledge-base/content owner for billing",
+          "knowledge-base owner (evidence steward) for refund content"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 88.6
+      },
+      "d-tone-tweak": {
+        "medianRank": 31,
+        "ranks": [
+          32,
+          31,
+          31,
+          25,
+          32
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/copy owner",
+          "the content/copy owner",
+          "content/QA owner",
+          "the product owner for conversational tone/style guide",
+          "conversation-design/content owner"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 88.4
+      },
+      "d-password-reset": {
+        "medianRank": 5,
+        "ranks": [
+          16,
+          5,
+          12,
+          4,
+          5
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec, with the security/identity owner",
+          "engineering lead for identity verification, with the security/compliance owner",
+          "security/identity-risk lead",
+          "engineering lead for identity/auth, with security sign-off",
+          "engineering/security lead owning identity-verification controls"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 72
+      },
+      "d-order-history-access": {
+        "medianRank": 12,
+        "ranks": [
+          15,
+          7,
+          13,
+          10,
+          12
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec, jointly with privacy/compliance",
+          "the data-privacy/compliance owner (data governance lead)",
+          "data-privacy/security lead (owns the open PII exposure review)",
+          "the data-privacy/compliance owner (pending PII exposure review)",
+          "data-privacy/security engineering lead (data-governance owner)"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69.6
+      },
+      "d-refund-autonomy": {
+        "medianRank": 8,
+        "ranks": [
+          7,
+          9,
+          8,
+          18,
+          4
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (billing/finance policy owner)",
+          "the finance/risk owner for refund spend controls",
+          "finance/spend-control owner working with the accountable delivery exec",
+          "finance/ops lead for refund policy, with the accountable delivery exec",
+          "engineering lead owning monitoring/alerting for the refund auto-approval flow, with finance policy sign-off"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 71
+      },
+      "d-model-upgrade": {
+        "medianRank": 21,
+        "ranks": [
+          22,
+          14,
+          21,
+          21,
+          14
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "engineering lead (model/eval owner)",
+          "the eval/quality lead who owns the model-change gate",
+          "engineering/eval lead",
+          "engineering lead / eval owner responsible for the approved eval suite",
+          "engineering lead / eval-runner owner responsible for the approved eval suite"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 67
+      },
+      "exp-store-credit": {
+        "medianRank": 19,
+        "ranks": [
+          12,
+          19,
+          15,
+          19,
+          22
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for billing/credit authority",
+          "the product owner for billing/credit policy",
+          "the accountable delivery exec (already within the approved authority band)",
+          "the product owner for billing/store-credit authority",
+          "product owner for self-service credit policy, with engineering as implementer"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69
+      },
+      "exp-auto-cancel-orders": {
+        "medianRank": 15,
+        "ranks": [
+          19,
+          15,
+          7,
+          11,
+          19
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for order-management operations",
+          "the product owner for order-fulfillment policy",
+          "operations lead for order management",
+          "the product owner for order-management / customer-ops lead",
+          "product/ops owner for order-lifecycle policy"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 67.6
+      },
+      "exp-ship-address-write": {
+        "medianRank": 9,
+        "ranks": [
+          17,
+          4,
+          20,
+          9,
+          9
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for logistics/fulfillment",
+          "engineering lead for logistics/carrier integration, with the data-access policy owner",
+          "logistics engineering lead (carrier-integration owner)",
+          "engineering lead for logistics integration, with customer-ops sign-off",
+          "engineering lead owning carrier-integration reliability and write-path safety"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69.2
+      },
+      "exp-loyalty-tier-view": {
+        "medianRank": 27,
+        "ranks": [
+          25,
+          23,
+          27,
+          28,
+          31
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the product owner for personalization features",
+          "the product owner for personalization/loyalty",
+          "product owner for personalization",
+          "product owner for personalization/loyalty",
+          "data-access policy owner (evidence steward)"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 86.2
+      },
+      "exp-cancel-no-retention": {
+        "medianRank": 12,
+        "ranks": [
+          6,
+          16,
+          10,
+          12,
+          16
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (subscription retention owner)",
+          "the product owner for subscription/retention",
+          "retention/growth policy owner",
+          "the product owner for subscription retention experience",
+          "product owner for subscription-retention policy"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 71
+      },
+      "exp-discount-negotiation": {
+        "medianRank": 18,
+        "ranks": [
+          5,
+          18,
+          16,
+          20,
+          20
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec / revenue-operations lead",
+          "the product owner for pricing/discount policy",
+          "the accountable delivery exec / discount-authority policy owner",
+          "the product owner for discount/pricing authority (finance-aligned)",
+          "sales/discount-policy owner, with engineering providing spend-cap guardrails"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69.8
+      },
+      "exp-summarizer-swap": {
+        "medianRank": 22,
+        "ranks": [
+          23,
+          20,
+          22,
+          22,
+          15
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "engineering lead (model/eval owner)",
+          "the eval/quality lead for the summarization pipeline",
+          "engineering/eval lead",
+          "engineering lead for the summarization model / eval owner",
+          "engineering lead / eval-runner owner for the approved summarization eval suite"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 68.2
+      },
+      "exp-spanish-locale-model": {
+        "medianRank": 14,
+        "ranks": [
+          9,
+          22,
+          14,
+          13,
+          21
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for localization",
+          "the product owner for localization",
+          "the accountable delivery exec / localization program owner",
+          "the product owner for localization / Spanish-market customer experience",
+          "localization/product owner, with engineering sign-off on the locale eval"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 74.2
+      },
+      "exp-faq-refresh": {
+        "medianRank": 29,
+        "ranks": [
+          30,
+          26,
+          29,
+          30,
+          26
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/knowledge owner for FAQ",
+          "the knowledge-base/content owner",
+          "knowledge-base/content owner",
+          "content/knowledge-base owner",
+          "knowledge-base owner (evidence steward) for FAQ content"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 89.6
+      },
+      "exp-typo-fix": {
+        "medianRank": 33,
+        "ranks": [
+          33,
+          33,
+          32,
+          33,
+          33
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/copy owner",
+          "the content/copy QA owner",
+          "content/QA owner",
+          "copy/QA owner",
+          "content/copy QA owner"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 93.2
+      },
+      "exp-holiday-banner": {
+        "medianRank": 34,
+        "ranks": [
+          34,
+          34,
+          33,
+          34,
+          34
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/copy owner",
+          "the content/copy owner",
+          "content/QA owner",
+          "content/marketing copy owner",
+          "seasonal-content owner"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 92.8
+      },
+      "exp-sentiment-recalibration": {
+        "medianRank": 27,
+        "ranks": [
+          27,
+          29,
+          26,
+          26,
+          30
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "engineering lead (model monitoring owner)",
+          "the eval/quality lead for model monitoring",
+          "engineering/eval lead",
+          "engineering/eval lead for sentiment detection",
+          "engineering lead / eval-runner owner for sentiment monitoring"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 87.2
+      },
+      "exp-returns-agent-shadow": {
+        "medianRank": 32,
+        "ranks": [
+          28,
+          32,
+          34,
+          32,
+          25
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the product owner for the Returns Agent rollout",
+          "the rollout owner for the Returns Agent",
+          "rollout manager / engineering lead",
+          "the rollout manager/product owner for the Returns Agent program",
+          "rollout-manager owning Returns Agent onboarding"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 87.6
+      },
+      "exp-shipping-kb-refresh": {
+        "medianRank": 30,
+        "ranks": [
+          31,
+          27,
+          30,
+          31,
+          27
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "informative",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the content/knowledge owner for shipping",
+          "the knowledge-base/content owner for shipping policy",
+          "knowledge-base/content owner",
+          "content/knowledge-base owner (shipping policy)",
+          "knowledge-base owner (evidence steward) for shipping content"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 90
+      },
+      "exp-returns-agent-golive": {
+        "medianRank": 10,
+        "ranks": [
+          8,
+          12,
+          17,
+          8,
+          10
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (rollout owner)",
+          "the accountable delivery exec (rollout owner), informed by CX/QA on the CSAT evidence gap",
+          "the accountable delivery exec / rollout owner for the returns agent",
+          "the accountable delivery exec for the Returns Agent launch",
+          "the accountable delivery exec sponsoring the Returns Agent rollout"
+        ],
+        "majorityReadiness": "hold",
+        "meanConfidence": 70.6
+      },
+      "adv-out-of-band-value": {
+        "medianRank": 24,
+        "ranks": [
+          24,
+          24,
+          24,
+          23,
+          24
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "decision",
+          "informative",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the product owner for retention/win-back marketing",
+          "the product owner for lifecycle/win-back marketing",
+          "product/growth owner for retention outreach",
+          "the product owner for customer win-back/lifecycle marketing",
+          "growth/marketing owner for lapsed-customer outreach"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 57
+      },
+      "adv-commitment-mislabeled-informative": {
+        "medianRank": 1,
+        "ranks": [
+          1,
+          1,
+          1,
+          1,
+          3
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (fraud/compliance risk owner)",
+          "legal/compliance, together with the fraud-risk owner, given the explicit policy conflict and fraud evidence",
+          "risk/compliance lead (fraud & identity-verification policy owner)",
+          "the accountable delivery exec, in consultation with fraud/risk compliance",
+          "the accountable delivery exec / risk-compliance owner for identity-verification policy exceptions -- this should not auto-advance as informative"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 87.6
+      },
+      "adv-contradictory-evidence": {
+        "medianRank": 10,
+        "ranks": [
+          21,
+          10,
+          18,
+          6,
+          6
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "engineering/ML lead for intent routing",
+          "the eval/quality lead who owns the intent-classifier threshold",
+          "engineering/eval lead for intent routing",
+          "the product owner for chat routing, with data-science/ML sign-off",
+          "engineering lead / eval-runner owner for intent-routing threshold calibration"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 74.4
+      },
+      "adv-stale-evidence": {
+        "medianRank": 10,
+        "ranks": [
+          10,
+          8,
+          19,
+          5,
+          13
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for refund policy",
+          "the evidence steward/knowledge owner accountable for refund-eligibility policy currency",
+          "evidence-steward / policy-compliance owner (needs revalidation against current policy)",
+          "the policy/evidence owner for refund-eligibility rules",
+          "QA/evidence-steward owner responsible for revalidation cadence against policy changes"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 75.2
+      },
+      "adv-zero-evidence": {
+        "medianRank": 6,
+        "ranks": [
+          3,
+          6,
+          6,
+          7,
+          1
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec, pending engineering-provided eval evidence",
+          "the finance/risk owner for loyalty-program spend, since no eval exists to hand this to engineering alone",
+          "engineering lead responsible for loyalty-point adjustment logic",
+          "the accountable delivery exec (should not be allowed to auto-advance with no evidence on file)",
+          "engineering lead / eval-runner owner -- must block the auto-advance and require an eval run before this financial automation ships"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 83.8
+      },
+      "adv-neartie-a": {
+        "medianRank": 16,
+        "ranks": [
+          14,
+          21,
+          9,
+          16,
+          18
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the product owner for logistics/shipping notifications",
+          "the product owner for shipping/logistics customer communications",
+          "operations lead for shipping/logistics communications",
+          "the product owner for shipping/logistics notifications",
+          "product/ops owner for shipping-notification policy, with engineering implementing"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 68.8
+      },
+      "adv-neartie-b": {
+        "medianRank": 15,
+        "ranks": [
+          13,
+          17,
+          11,
+          15,
+          17
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "the accountable delivery exec (fraud/risk owner)",
+          "the fraud/risk policy owner",
+          "risk/fraud lead",
+          "the product owner for fraud/risk notifications",
+          "risk-sentinel / fraud-policy owner, with engineering implementing the notification"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 69.8
+      },
+      "adv-dollars-only-baseline-trap": {
+        "medianRank": 23,
+        "ranks": [
+          18,
+          25,
+          23,
+          24,
+          23
+        ],
+        "majorityEscalation": "informative",
+        "escalations": [
+          "informative",
+          "decision",
+          "decision",
+          "informative",
+          "informative"
+        ],
+        "owners": [
+          "the product owner for the warranty/upsell program",
+          "the product owner for the post-repair warranty/upsell program",
+          "product owner for post-repair upsell / revenue",
+          "the product owner for the repair/warranty upsell program",
+          "product/growth owner for the warranty-upsell experiment"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 63.4
+      },
+      "adv-wrong-owner-authored": {
+        "medianRank": 2,
+        "ranks": [
+          11,
+          2,
+          3,
+          2,
+          2
+        ],
+        "majorityEscalation": "decision",
+        "escalations": [
+          "decision",
+          "decision",
+          "decision",
+          "decision",
+          "decision"
+        ],
+        "owners": [
+          "legal/compliance lead",
+          "legal/compliance — specifically Legal sign-off, not engineering as currently authored",
+          "Legal/Compliance (Data Privacy Policy v2.0 requires their sign-off, not engineering)",
+          "Legal/compliance (not engineering) -- per the data-privacy policy's required sign-off before automating PII redaction",
+          "Legal/Compliance -- Data Privacy Policy v2.0 requires Legal sign-off before this automation; it was mis-routed to engineering"
+        ],
+        "majorityReadiness": null,
+        "meanConfidence": 87.2
+      }
+    }
+  },
+  "judge": {
+    "interJudgeAgreement": 0.9294117647058824,
+    "dimMeans": {
+      "correctChoice": 4.3431372549019605,
+      "grounded": 4.049019607843139,
+      "actionable": 4.666666666666666,
+      "addressesRisk": 4.656862745098039,
+      "noHallucination": 3.9313725490196076
+    },
+    "overallJudgeMean": 4.329411764705883,
+    "hallucinationFlags": [
+      {
+        "id": "d-billing-golive",
+        "noHallucinationScores": [
+          1,
+          1,
+          1
+        ],
+        "rationales": [
+          "The evidence only says the agent beat baseline on '3 of 4 KPIs' with no names given, so the rationale's specific claims of 'deflection and handle time while holding CSAT' and 'guardrails and rollback triggers are in place' are invented details not present in any evidence item.",
+          "The rationale asserts 'guardrails and rollback triggers are in place' and attributes the win specifically to deflection/handle-time/CSAT, but none of that appears in the evidence, metrics, or signals (which only say '3 of 4 KPIs') or anywhere else in the object, so it's a fabricated specific.",
+          "The rationale invents that the agent beat baseline specifically on 'deflection and handle time' and states 'guardrails and rollback triggers are in place,' neither of which appears anywhere in the shown evidence or metrics (which only say '3 of 4 KPIs')."
+        ]
+      },
+      {
+        "id": "d-repeat-threshold",
+        "noHallucinationScores": [
+          1,
+          1,
+          1
+        ],
+        "rationales": [
+          "The 96% figure matches the self-resolution log exactly, but 'frustration signals rise' is a fabricated claim -- no evidence item mentions frustration data at all.",
+          "The 96% self-resolution figure is grounded in the eval evidence, but the claim that 'frustration signals rise' beyond two attempts has no supporting evidence item anywhere in the object, making it an invented specific.",
+          "The 96% and cap-simulation figures match the evidence, but the claim that 'frustration signals rise' beyond two attempts has no support in any evidence, signal, or goal shown."
+        ]
+      },
+      {
+        "id": "exp-cancel-no-retention",
+        "noHallucinationScores": [
+          2,
+          1,
+          1
+        ],
+        "rationales": [
+          "The 4-point modeled retention drop matches the kpi metric, but the qualifier 'against the last two quarters' is an invented baseline/timeframe that appears nowhere in the shown evidence or metrics.",
+          "The 4-point modeled drop matches the metrics field, but the rationale invents a supporting detail -- 'against the last two quarters' -- that appears nowhere in the evidence, signals, or metrics shown.",
+          "The 4-point modeled drop matches metrics, but 'against the last two quarters' is a specific comparison baseline that appears nowhere in the shown evidence, signals, or metrics."
+        ]
+      },
+      {
+        "id": "exp-summarizer-swap",
+        "noHallucinationScores": [
+          1,
+          2,
+          1
+        ],
+        "rationales": [
+          "The 88/100 quality-benchmark figure is accurate, but the '3x cheaper per call' claim is unsupported by the shown metrics, which report only a modeled -40% latency change and say nothing about cost.",
+          "The 88-of-100 quality figure and the re-baseline gate are grounded in the eval and conflict evidence, but the '3x cheaper per call' cost claim appears only in the one-liner summary, not in the evidence, metrics, or signals fields being scored.",
+          "The 88/100 benchmark figure is accurate, but '3x cheaper per call' has no support in the shown metrics, which cite only a modeled 40% latency reduction, not cost."
+        ]
+      },
+      {
+        "id": "exp-spanish-locale-model",
+        "noHallucinationScores": [
+          2,
+          1,
+          1
+        ],
+        "rationales": [
+          "The rationale claims the eval passed 'at a rate comparable to English' but no English benchmark appears anywhere in the evidence shown, so that comparison is invented.",
+          "The evidence shows only a 112/120 Spanish-suite pass rate and a satisfied policy gate, but the rationale's claim that the pass rate is 'comparable to English' has no English baseline anywhere in the shown evidence and is fabricated.",
+          "The rationale's claim that the Spanish eval 'passed at a rate comparable to English' is fabricated -- no English pass-rate data appears anywhere in the evidence or metrics shown."
+        ]
+      },
+      {
+        "id": "exp-returns-agent-golive",
+        "noHallucinationScores": [
+          2,
+          1,
+          2
+        ],
+        "rationales": [
+          "The rationale asserts 'no CSAT drop' and cites 'guardrails and rollback triggers' that appear nowhere in the evidence -- in fact the only CSAT-related item warns the confidence interval is still wide -- so both claims overstate or fabricate what the thin 2-week evidence shows.",
+          "The rationale asserts 'no CSAT drop' despite the shown conflict evidence stating the CSAT confidence interval is still wide after only two weeks, and invents unevidenced 'guardrails and rollback triggers' that appear nowhere in the evidence list.",
+          "The rationale's assertion of 'no CSAT drop' is not actually supported -- the only CSAT-related evidence is a conflict note saying the confidence interval is still too wide to be confident, making this an unsupported gloss rather than a hard numeric fabrication."
+        ]
+      },
+      {
+        "id": "adv-commitment-mislabeled-informative",
+        "noHallucinationScores": [
+          1,
+          2,
+          5
+        ],
+        "rationales": [
+          "Calling this a 'minor policy simplification' directly contradicts the evidence -- a confirmed policy with no dollar exception plus 3 of 40 sampled fraud hits -- and with commitmentAtStake true the blank rationale names none of it, so the framing is both ungrounded and fabricated.",
+          "commitmentAtStake is true and the evidence directly contradicts the change (policy requires verification on every refund with no exception, and 3 of 40 unverified sub-$20 refunds were later flagged fraudulent), yet the empty rationale never names this risk and the headline mislabels it a 'minor policy simplification.'",
+          "The rationale field is empty so no fabricated facts are present, but the headline's 'minor policy simplification' framing is unsupported by, and directly contradicted by, the policy-conflict and fraud-sample evidence shown."
+        ]
+      },
+      {
+        "id": "adv-stale-evidence",
+        "noHallucinationScores": [
+          2,
+          1,
+          1
+        ],
+        "rationales": [
+          "The rationale's specific '45 days old' and 'predating two policy updates' details appear only in the one_liner, not in the evidence/metrics/signals shown (which say only '100 of 100 passed' and 'validation is stale'), so those specifics aren't traceable to the evidence being judged.",
+          "The only sanctioned evidence item is '100 of 100 cases passed,' so the rationale's specific claims of '45 days old' and 'predating two policy updates' are fabricated relative to the shown evidence/signals/metrics, even though the general 're-validate' direction aligns with the metrics' own 'validation is stale' note.",
+          "The headline and rationale cite '45 days old' and 'predates two policy updates,' but those specifics appear only in the one-liner, not in the evidence array shown (which contains just a single 100/100 confirmed eval), so they are fabricated relative to the scoreable fields."
+        ]
+      },
+      {
+        "id": "adv-wrong-owner-authored",
+        "noHallucinationScores": [
+          3,
+          4,
+          1
+        ],
+        "rationales": [
+          "The confirmed policy evidence requires Legal sign-off before any PII-remediation automation and a conflict item shows 5 of 96 missed redactions, yet the rationale only cites an unevidenced 'backlog' benefit and never names the sign-off requirement despite commitmentAtStake being true.",
+          "commitmentAtStake is true and evidence confirms Legal sign-off is required before automation while a conflict item shows 5 of 96 flagged chats had missed PII, yet the rationale only cites backlog reduction and never names either the compliance gap or the miss-rate risk.",
+          "The rationale's claim of 'reduces manual review backlog' is invented since no evidence item mentions backlog, and it also omits the confirmed Legal-sign-off requirement and the 5-of-96 redaction misses that directly contradict approving this."
+        ]
+      }
+    ],
+    "byId": {
+      "d-escalation": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-billing-golive": {
+        "meanByDim": {
+          "correctChoice": 4.666666666666667,
+          "grounded": 2,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 1
+        },
+        "overallMean": 3.5333333333333337
+      },
+      "d-repeat-threshold": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 2.3333333333333335,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 1
+        },
+        "overallMean": 3.666666666666667
+      },
+      "d-intent-routing": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-refund-knowledge": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-tone-tweak": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-password-reset": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-order-history-access": {
+        "meanByDim": {
+          "correctChoice": 3.6666666666666665,
+          "grounded": 5,
+          "actionable": 4.666666666666667,
+          "addressesRisk": 2,
+          "noHallucination": 5
+        },
+        "overallMean": 4.066666666666666
+      },
+      "d-refund-autonomy": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "d-model-upgrade": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 4.666666666666667,
+          "noHallucination": 5
+        },
+        "overallMean": 4.933333333333334
+      },
+      "exp-store-credit": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-auto-cancel-orders": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-ship-address-write": {
+        "meanByDim": {
+          "correctChoice": 4.666666666666667,
+          "grounded": 5,
+          "actionable": 4.666666666666667,
+          "addressesRisk": 4.666666666666667,
+          "noHallucination": 5
+        },
+        "overallMean": 4.800000000000001
+      },
+      "exp-loyalty-tier-view": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-cancel-no-retention": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 2.6666666666666665,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 1.3333333333333333
+        },
+        "overallMean": 3.7999999999999994
+      },
+      "exp-discount-negotiation": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 4,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 3.3333333333333335
+        },
+        "overallMean": 4.466666666666667
+      },
+      "exp-summarizer-swap": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 2,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 1.3333333333333333
+        },
+        "overallMean": 3.6666666666666665
+      },
+      "exp-spanish-locale-model": {
+        "meanByDim": {
+          "correctChoice": 4,
+          "grounded": 2,
+          "actionable": 4.333333333333333,
+          "addressesRisk": 5,
+          "noHallucination": 1.3333333333333333
+        },
+        "overallMean": 3.333333333333333
+      },
+      "exp-faq-refresh": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-typo-fix": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-holiday-banner": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-sentiment-recalibration": {
+        "meanByDim": {
+          "correctChoice": 4.333333333333333,
+          "grounded": 4,
+          "actionable": 4.666666666666667,
+          "addressesRisk": 5,
+          "noHallucination": 3
+        },
+        "overallMean": 4.2
+      },
+      "exp-returns-agent-shadow": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-shipping-kb-refresh": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "exp-returns-agent-golive": {
+        "meanByDim": {
+          "correctChoice": 3,
+          "grounded": 2,
+          "actionable": 4.333333333333333,
+          "addressesRisk": 5,
+          "noHallucination": 1.6666666666666667
+        },
+        "overallMean": 3.1999999999999997
+      },
+      "adv-out-of-band-value": {
+        "meanByDim": {
+          "correctChoice": 2,
+          "grounded": 2.6666666666666665,
+          "actionable": 4,
+          "addressesRisk": 5,
+          "noHallucination": 4.333333333333333
+        },
+        "overallMean": 3.6
+      },
+      "adv-commitment-mislabeled-informative": {
+        "meanByDim": {
+          "correctChoice": 1,
+          "grounded": 3.6666666666666665,
+          "actionable": 2.6666666666666665,
+          "addressesRisk": 1,
+          "noHallucination": 2.6666666666666665
+        },
+        "overallMean": 2.1999999999999997
+      },
+      "adv-contradictory-evidence": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "adv-stale-evidence": {
+        "meanByDim": {
+          "correctChoice": 4.333333333333333,
+          "grounded": 1.6666666666666667,
+          "actionable": 4.333333333333333,
+          "addressesRisk": 5,
+          "noHallucination": 1.3333333333333333
+        },
+        "overallMean": 3.333333333333333
+      },
+      "adv-zero-evidence": {
+        "meanByDim": {
+          "correctChoice": 1,
+          "grounded": 3.6666666666666665,
+          "actionable": 2.3333333333333335,
+          "addressesRisk": 5,
+          "noHallucination": 4.333333333333333
+        },
+        "overallMean": 3.2666666666666666
+      },
+      "adv-neartie-a": {
+        "meanByDim": {
+          "correctChoice": 4.333333333333333,
+          "grounded": 3.3333333333333335,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 4.333333333333333
+        },
+        "overallMean": 4.3999999999999995
+      },
+      "adv-neartie-b": {
+        "meanByDim": {
+          "correctChoice": 4.666666666666667,
+          "grounded": 4.333333333333333,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 4.8
+      },
+      "adv-dollars-only-baseline-trap": {
+        "meanByDim": {
+          "correctChoice": 5,
+          "grounded": 5,
+          "actionable": 5,
+          "addressesRisk": 5,
+          "noHallucination": 5
+        },
+        "overallMean": 5
+      },
+      "adv-wrong-owner-authored": {
+        "meanByDim": {
+          "correctChoice": 1,
+          "grounded": 2.3333333333333335,
+          "actionable": 2.6666666666666665,
+          "addressesRisk": 1,
+          "noHallucination": 2.6666666666666665
+        },
+        "overallMean": 1.9333333333333331
+      }
+    }
+  },
+  "tier2Metrics": {
+    "impactRanking": {
+      "precisionAt1": 0,
+      "precisionAt3": 0.6666666666666666,
+      "spearman": 0.8022918258212376,
+      "ndcg": 0.971099075320907
+    },
+    "escalation": {
+      "precision": 0.9090909090909091,
+      "recall": 0.9090909090909091,
+      "f1": 0.9090909090909091,
+      "falseBlockRate": 0.16666666666666666,
+      "falseDelegateRate": 0.09090909090909091,
+      "catastrophicMissRate": 0.3333333333333333,
+      "commitmentScenarioCount": 3,
+      "catastrophicMissIds": [
+        "adv-commitment-mislabeled-informative"
+      ]
+    },
+    "raciRouting": {
+      "accountableOwnerAccuracy": 0.5,
+      "n": 32,
+      "disagreements": [
+        {
+          "id": "d-repeat-threshold",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "d-tone-tweak",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "d-password-reset",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "d-model-upgrade",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-auto-cancel-orders",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-ship-address-write",
+          "authoredOwner": "sam-tan",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-loyalty-tier-view",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-summarizer-swap",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "exp-typo-fix",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-holiday-banner",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "exp-returns-agent-shadow",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "maya-okonkwo",
+          "preAuthoredCorrectOwnerId": "andrew-aasen"
+        },
+        {
+          "id": "adv-commitment-mislabeled-informative",
+          "authoredOwner": "andrew-aasen",
+          "panelMajorityFamily": "maya-okonkwo",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-contradictory-evidence",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-stale-evidence",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "nadia-chen",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-neartie-a",
+          "authoredOwner": "maya-okonkwo",
+          "panelMajorityFamily": "sam-tan",
+          "preAuthoredCorrectOwnerId": "maya-okonkwo"
+        },
+        {
+          "id": "adv-wrong-owner-authored",
+          "authoredOwner": "sam-tan",
+          "panelMajorityFamily": "andrew-aasen",
+          "preAuthoredCorrectOwnerId": "legal"
+        }
+      ]
+    },
+    "calibration": {
+      "ece": 0.10490196078431363,
+      "brier": 0.055634640522875804
+    },
+    "recommendationQuality": {
+      "judgeMean": 4.329411764705883,
+      "dimMeans": {
+        "correctChoice": 4.3431372549019605,
+        "grounded": 4.049019607843139,
+        "actionable": 4.666666666666666,
+        "addressesRisk": 4.656862745098039,
+        "noHallucination": 3.9313725490196076
+      },
+      "interJudgeAgreement": 0.9294117647058824
+    },
+    "grounding": {
+      "citationCoverage": 0.8098039215686278,
+      "faithfulness": 0.7862745098039216
+    },
+    "rolloutReadiness": {
+      "goNoGoAgreement": 1,
+      "n": 2
+    }
+  }
+}

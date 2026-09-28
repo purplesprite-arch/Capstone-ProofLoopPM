@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProofLoop AI Eval Report</title>
+<style>
+:root{--navy:#172338;--muted:#3d4759;--line:#e3e7eb;--bg:#f5f6f7;--white:#fff;--blue:#315aef;--blue-soft:#edf1ff;--coral:#e66045;--coral-soft:#fff0eb;--mint:#24a981;--mint-soft:#e8f8f3;--amber:#c98812;--amber-soft:#fff6df;--shadow:0 10px 30px rgba(23,35,56,.08);--radius:14px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--navy);background:var(--bg);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+code,.formula,.prompt-block{font-family:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+h1,h2,h3,p,ul,ol{margin:0}
+.hero{background:linear-gradient(160deg,var(--navy),#223149);color:#fff;padding:40px 24px 32px}
+.hero-inner{max-width:980px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;opacity:.85;margin-bottom:14px}
+.brand-mark{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#6f8cff,#a2b3ff);color:#13203a;font-weight:800;font-size:11px}
+.hero h1{font-size:30px;letter-spacing:-.6px;margin-bottom:12px}
+.hero .lead{max-width:70ch;opacity:.88;font-size:15px}
+.hero-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18)}
+.meta-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.5px;opacity:.65;margin-bottom:3px}
+.meta-value{display:block;font-size:13px;font-weight:600}
+.draft-banner{max-width:980px;margin:20px auto 0;padding:14px 18px;background:var(--amber-soft);border:1px solid #f0d68a;border-radius:var(--radius);font-size:13.5px;color:#6b4c0a}
+.report-nav{max-width:980px;margin:18px auto 0;padding:10px 16px;background:#fff;border:1px solid var(--line);border-radius:999px;display:flex;gap:4px;flex-wrap:wrap;font-size:12px}
+.report-nav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px;font-weight:600}
+.report-nav a:hover{background:var(--blue-soft);color:var(--blue)}
+.section{max-width:980px;margin:34px auto;padding:0 16px}
+.section h2{font-size:21px;letter-spacing:-.4px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+.sub{font-size:14px;font-weight:800;margin:24px 0 10px;color:var(--navy)}
+.sub .note{font-weight:500;color:var(--muted);font-size:12px}
+p{margin-bottom:12px;max-width:82ch}
+.illustrative-note{font-size:12.5px;color:#6b4c0a;background:var(--amber-soft);padding:10px 12px;border-radius:10px;max-width:none}
+.badge{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.3px;padding:4px 8px;border-radius:6px;white-space:nowrap}
+.badge.draft{color:#6b4c0a;background:var(--amber-soft)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:8px}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.stat-card.illustrative{border-style:dashed}
+.stat-top{margin-bottom:8px}
+.stat-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.stat-value{font-size:15px;font-weight:800;margin-bottom:8px}
+.stat-target{font-size:11px;color:var(--muted);font-weight:600}
+.map-table,.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px;font-size:13px}
+.map-table th,.map-table td,.data-table th,.data-table td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.data-table th{background:#f8f9fa;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.data-table td.num{font-family:"DM Mono",ui-monospace,monospace;text-align:right}
+.data-table .tags .tag{display:inline-block;font-size:9.5px;background:#eef1f4;color:var(--muted);padding:2px 6px;border-radius:5px;margin:1px}
+.muted{color:var(--muted)}
+.metric-pill{display:inline-block;font-size:11.5px;background:#f0f2f5;padding:3px 8px;border-radius:6px;margin:2px 4px 2px 0}
+.cap-note{font-size:12px;color:var(--muted);max-width:32ch}
+.finding-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.finding-card summary{cursor:pointer;font-size:13.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.finding-card p{margin-top:10px;font-size:13px}
+details > summary{list-style:none}
+details > summary::-webkit-details-marker{display:none}
+.prose-list{padding-left:20px;margin-bottom:14px}
+.prose-list li{margin-bottom:9px;max-width:78ch}
+.formula,.prompt-block{background:var(--navy);color:#dce6ff;padding:14px 16px;border-radius:10px;font-size:12.5px;overflow-x:auto;white-space:pre-wrap}
+footer{text-align:center;padding:30px 16px 50px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand"><span class="brand-mark">PL</span><span>ProofLoop &middot; <strong>AI Eval Report</strong></span></div>
+    <h1>Does ProofLoop's judgment hold up?</h1>
+    <p class="lead">A single-run evaluation of the ProofLoop morning decision ritual: correctness of its
+    deterministic engines (Tier 1), quality of the AI-shaped judgments a production build would make
+    (Tier 2), and the concrete risks worth mitigating before this moves past a capstone demo (Tier 3).</p>
+    <div class="hero-meta">
+      <div><span class="meta-label">Report generated</span><span class="meta-value">2026-09-28</span></div>
+      <div><span class="meta-label">Scenario bank</span><span class="meta-value">34 scenarios &middot; 10 anchor / 15 expansion / 9 adversarial</span></div>
+      <div><span class="meta-label">Simulated "now"</span><span class="meta-value">2026-09-07T09:50:00</span></div>
+      <div><span class="meta-label">Ground truth</span><span class="meta-value">synthetic 5-persona panel + 3-run LLM judge (disclosed, see &sect;9 / Appendix)</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="draft-banner">
+  <strong>Every number below is computed, not illustrative.</strong> Tier 1 and the deterministic half
+  of Tier 3 come from a real run of <code>eval/run.js</code> against ProofLoop's actual
+  <code>prototype-2</code> engines. Tier 2 and the Tier 3 likelihood column come from a real run of
+  <code>eval/aggregate-panel.js</code> over a <strong>synthetic 5-persona delivery-lead panel</strong>
+  and a <strong>3-run LLM judge</strong> — a disclosed synthetic ground-truth proxy, not real delivery
+  leads. That disclosure doesn't expire: see Methodology (&sect;3), Limitations (&sect;8), and the
+  Human-Validation Protocol (&sect;9) for what it means and how it gets replaced with real experts.
+</div>
+<nav class="report-nav"><a href="#scorecard">Scorecard</a><a href="#methodology">Methodology</a><a href="#scenario-bank">Scenario bank</a><a href="#tier1">Tier 1 — Correctness</a><a href="#tier2">Tier 2 — AI quality</a><a href="#tier3">Tier 3 — Risk</a><a href="#limitations">Limitations</a><a href="#human-protocol">Human validation</a><a href="#appendix">Appendix</a></nav>
+
+<section id="scorecard" class="section">
+  <h2>Scorecard</h2>
+  <h3 class="sub">Computed today — real, from this run</h3>
+  <div class="card-grid">
+    
+    <div class="stat-card">
+      <div class="stat-top"><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></div>
+      <div class="stat-label">Impact Score &amp; confidence</div>
+      <div class="stat-value">10/10 anchors reproduce exactly</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></div>
+      <div class="stat-label">Bank sanity (34 scenarios)</div>
+      <div class="stat-value">34/34 finite &amp; in-range</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></div>
+      <div class="stat-label">Band containment sweep</div>
+      <div class="stat-value">2 out-of-band flag(s) found (both expected)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="badge" style="color:#be4a33;background:#fff0eb">FAIL</span></div>
+      <div class="stat-label">Integrity linter</div>
+      <div class="stat-value">7/11 findings confirmed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="badge" style="color:#be4a33;background:#fff0eb">FAIL</span></div>
+      <div class="stat-label">Tier 3 deterministic/adversarial</div>
+      <div class="stat-value">4/5 checks confirmed</div>
+    </div>
+  </div>
+  <h3 class="sub">AI-quality vs. PRD provisional targets <span class="note">(synthetic-panel/judge ground truth — see &sect;3)</span></h3>
+  <div class="card-grid">
+    
+    <div class="stat-card">
+      <div class="stat-label">Precision@1 (impact ranking)</div>
+      <div class="stat-value">0% <span class="stat-target">target 80%</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="2" height="10" rx="5" fill="#e66045"/>
+  <line x1="144.0" y1="-2" x2="144.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Escalation precision</div>
+      <div class="stat-value">91% <span class="stat-target">target 85%</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="163.63636363636363" height="10" rx="5" fill="#24a981"/>
+  <line x1="153.0" y1="-2" x2="153.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Confidence-calibration error (ECE)</div>
+      <div class="stat-value">10% <span class="stat-target">target 10%</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="62.94117647058818" height="10" rx="5" fill="#c98812"/>
+  <line x1="60.0" y1="-2" x2="60.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">RACI routing accuracy</div>
+      <div class="stat-value">50% <span class="stat-target">target 85%</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="90" height="10" rx="5" fill="#e66045"/>
+  <line x1="153.0" y1="-2" x2="153.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Recommendation quality (LLM-judge mean)</div>
+      <div class="stat-value">4.3/5 <span class="stat-target">target 4.0/5</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="155.85882352941178" height="10" rx="5" fill="#24a981"/>
+  <line x1="144.0" y1="-2" x2="144.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Catastrophic-miss rate</div>
+      <div class="stat-value">33% <span class="stat-target">target 2%</span></div>
+      <svg width="180" height="16" viewBox="0 0 180 16" class="scorebar" role="img" aria-label="value vs target">
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e3e7eb"/>
+  <rect x="0" y="0" width="180" height="10" rx="5" fill="#e66045"/>
+  <line x1="36.0" y1="-2" x2="36.0" y2="12" stroke="#172338" stroke-width="1.5"/>
+</svg>
+    </div>
+  </div>
+</section>
+
+<section id="methodology" class="section">
+  <h2>Methodology &amp; scope</h2>
+  <p>Most of what ProofLoop shows today is <strong>deterministic UI over authored data</strong>, not
+  live model output — and a credible eval has to say exactly where the line sits, or every metric
+  below is meaningless.</p>
+  <table class="map-table">
+    <thead><tr><th>Computed</th><th>Authored (not intelligence, today)</th></tr></thead>
+    <tbody><tr>
+      <td>Impact Score (weighted sum of 4 sub-scores) &middot; Confidence % (capped at 99) &middot;
+        sub-score band containment &middot; the Value-Model lever override</td>
+      <td>Impact sub-scores themselves &middot; the escalation gate (<code>type: "decision" |
+        "informative"</code> is a literal field) &middot; recommendations (static choice + reasoning
+        strings) &middot; RACI assignment</td>
+    </tr></tbody>
+  </table>
+  <p>So this eval tests two layers, plus a third: <strong>Tier 1</strong> — do the deterministic
+  engines, as they exist today, compute what they claim to compute, and where does the authored data
+  disagree with itself? <strong>Tier 2</strong> — how would the AI-shaped judgments a production
+  ProofLoop would need to make (ranking, escalation classification, routing, recommendation,
+  grounding) score against an independent reference? <strong>Tier 3</strong> — what concrete failure
+  modes should worry us, and which ones are already exploitable today?</p>
+  <p><strong>Ground truth.</strong> Tier 2 needs an independent reference that isn't the app grading
+  itself. This run uses a <strong>synthetic 5-persona delivery-lead panel</strong> (revenue-first,
+  risk-first, ops-first, customer-experience, engineering-delivery — see <code>eval/prompts/panel.md</code>,
+  full text in the Appendix) plus a <strong>3-run LLM-judge rubric</strong> for recommendation quality
+  (<code>eval/prompts/judge.md</code>). Both are disclosed as synthetic proxies, not real experts — see
+  Limitations (&sect;8) and the Human-Validation Protocol (&sect;9) for how this gets replaced with real
+  reviewers.</p>
+  <p><strong>Honest-arithmetic invariant.</strong> Every number in Tier 1 and the Tier 3-deterministic
+  section is produced by calling ProofLoop's own real, unmodified functions — loaded into Node via a
+  window-shim (<code>eval/engines.js</code>) that requires <code>prototype-2/data.js</code> then
+  <code>prototype-2/render.js</code> exactly as the browser does — never a parallel reimplementation of
+  its scoring logic. The one exception is <em>orchestration</em>, not scoring: the out-of-band-value
+  finding (&sect;5) mirrors 8 lines of <code>app.js</code>'s <code>applyModeledValue</code> selection
+  logic, which itself calls only <code>PLRender</code>'s own exported functions — no formula is
+  reimplemented anywhere in this eval.</p>
+</section>
+
+<section id="scenario-bank" class="section">
+  <h2>Scenario bank</h2>
+  <p>34 scenarios: the 10 real seed decisions (anchor — a regression
+  baseline, never transcribed, always read live from <code>PL.decisions</code>) plus 15
+  expansion scenarios spanning the four Agentforce decision classes, plus 9
+  purpose-built adversarial cases (each targets one specific mechanism — see Tier 3).</p>
+  <details open>
+  <summary>Full scenario bank (34 rows)</summary>
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>Source</th><th>Title</th><th>Type</th><th>Score</th><th>Conf.</th><th>Owner</th><th>Tags</th></tr></thead>
+    <tbody><tr>
+        <td><code>d-billing-golive</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Billing Agent -- launch the pilot?</td>
+        <td>decision</td>
+        <td class="num">76</td>
+        <td class="num">98</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">rollout</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-escalation</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Friendlier escalation replies (v2.4)</td>
+        <td>decision</td>
+        <td class="num">85</td>
+        <td class="num">91</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">commitment</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-intent-routing</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Intent-routing tune-up (v1.3)</td>
+        <td>informative</td>
+        <td class="num">44</td>
+        <td class="num">99</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>d-model-upgrade</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Move Atlas to the newer model?</td>
+        <td>decision</td>
+        <td class="num">41</td>
+        <td class="num">76</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-order-history-access</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Give Atlas read access to order history?</td>
+        <td>decision</td>
+        <td class="num">53</td>
+        <td class="num">87</td>
+        <td>sam-tan</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">raci-mismatch</span> <span class="tag">data-access</span></td>
+      </tr><tr>
+        <td><code>d-password-reset</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Let Atlas handle password resets?</td>
+        <td>decision</td>
+        <td class="num">51</td>
+        <td class="num">88</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-refund-autonomy</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Auto-approve refunds under $50?</td>
+        <td>decision</td>
+        <td class="num">62</td>
+        <td class="num">87</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-refund-knowledge</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>New refund examples added</td>
+        <td>informative</td>
+        <td class="num">37</td>
+        <td class="num">99</td>
+        <td>nadia-chen</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>d-repeat-threshold</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>How many retries before a human takes over?</td>
+        <td>decision</td>
+        <td class="num">62</td>
+        <td class="num">74</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>d-tone-tweak</code></td>
+        <td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td>
+        <td>Warmer tone, same rules</td>
+        <td>informative</td>
+        <td class="num">30</td>
+        <td class="num">96</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">anchor</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-auto-cancel-orders</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Auto-cancel unconfirmed orders after 48 hours?</td>
+        <td>decision</td>
+        <td class="num">50</td>
+        <td class="num">82</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">action-scope</span> <span class="tag">clean</span> <span class="tag">decision</span></td>
+      </tr><tr>
+        <td><code>exp-cancel-no-retention</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Auto-approve subscription cancellations with no retention offer?</td>
+        <td>decision</td>
+        <td class="num">60</td>
+        <td class="num">79</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">autonomy-boundary</span> <span class="tag">decision</span> <span class="tag">revise-case</span></td>
+      </tr><tr>
+        <td><code>exp-discount-negotiation</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Let Atlas offer discount codes up to 15% without approval?</td>
+        <td>decision</td>
+        <td class="num">56</td>
+        <td class="num">97</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">autonomy-boundary</span> <span class="tag">decision</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>exp-faq-refresh</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Weekly FAQ content refresh -- 9 new articles added</td>
+        <td>informative</td>
+        <td class="num">27</td>
+        <td class="num">99</td>
+        <td>nadia-chen</td>
+        <td class="tags"><span class="tag">content</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-holiday-banner</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Updated holiday-hours banner copy</td>
+        <td>informative</td>
+        <td class="num">23</td>
+        <td class="num">99</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">content</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-loyalty-tier-view</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Let Atlas view loyalty-tier status in every chat?</td>
+        <td>informative</td>
+        <td class="num">39</td>
+        <td class="num">99</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">data-access</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-returns-agent-golive</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Returns Agent -- launch the pilot?</td>
+        <td>decision</td>
+        <td class="num">52</td>
+        <td class="num">79</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">rollout</span> <span class="tag">readiness-disagreement</span> <span class="tag">recommendation-overconfidence</span></td>
+      </tr><tr>
+        <td><code>exp-returns-agent-shadow</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>New agent onboarding: shadow mode for Returns Agent begins</td>
+        <td>informative</td>
+        <td class="num">26</td>
+        <td class="num">65</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">rollout</span> <span class="tag">clean</span> <span class="tag">informative</span> <span class="tag">zero-eval-guard</span></td>
+      </tr><tr>
+        <td><code>exp-sentiment-recalibration</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Sentiment-detection threshold recalibrated (+0.6 pt accuracy)</td>
+        <td>informative</td>
+        <td class="num">37</td>
+        <td class="num">99</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">model-version</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-ship-address-write</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Give Atlas write access to update shipping addresses mid-transit?</td>
+        <td>decision</td>
+        <td class="num">44</td>
+        <td class="num">87</td>
+        <td>sam-tan</td>
+        <td class="tags"><span class="tag">data-access</span> <span class="tag">decision</span> <span class="tag">raci-nuance</span></td>
+      </tr><tr>
+        <td><code>exp-shipping-kb-refresh</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Knowledge base source refresh -- shipping policy v3.2</td>
+        <td>informative</td>
+        <td class="num">26</td>
+        <td class="num">99</td>
+        <td>nadia-chen</td>
+        <td class="tags"><span class="tag">content</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>exp-spanish-locale-model</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Enable the new multilingual model for Spanish-language chats?</td>
+        <td>decision</td>
+        <td class="num">52</td>
+        <td class="num">98</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">model-version</span> <span class="tag">decision</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>exp-store-credit</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Let Atlas issue store-credit vouchers up to $25?</td>
+        <td>decision</td>
+        <td class="num">47</td>
+        <td class="num">97</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">action-scope</span> <span class="tag">clean</span> <span class="tag">decision</span></td>
+      </tr><tr>
+        <td><code>exp-summarizer-swap</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Swap the summarization sub-model to a faster, cheaper variant?</td>
+        <td>decision</td>
+        <td class="num">37</td>
+        <td class="num">66</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">model-version</span> <span class="tag">decision</span> <span class="tag">clean</span></td>
+      </tr><tr>
+        <td><code>exp-typo-fix</code></td>
+        <td><span class="badge" style="color:#24a981;background:#e8f8f3">expansion</span></td>
+        <td>Typo fix in refund confirmation message</td>
+        <td>informative</td>
+        <td class="num">20</td>
+        <td class="num">99</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">content</span> <span class="tag">clean</span> <span class="tag">informative</span></td>
+      </tr><tr>
+        <td><code>adv-commitment-mislabeled-informative</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Skip the identity-verification step for refund requests under $20?</td>
+        <td>informative</td>
+        <td class="num">77</td>
+        <td class="num">83</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">commitment-mislabeled</span> <span class="tag">catastrophic-miss</span> <span class="tag">guardrail</span></td>
+      </tr><tr>
+        <td><code>adv-contradictory-evidence</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Trust the new intent classifier&#39;s confidence threshold as-is?</td>
+        <td>decision</td>
+        <td class="num">47</td>
+        <td class="num">72</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">contradictory-evidence</span> <span class="tag">confidence-calibration</span></td>
+      </tr><tr>
+        <td><code>adv-dollars-only-baseline-trap</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Add a premium-warranty upsell prompt after every resolved repair chat?</td>
+        <td>decision</td>
+        <td class="num">41</td>
+        <td class="num">71</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">dollars-only-baseline</span> <span class="tag">ranking-validity</span></td>
+      </tr><tr>
+        <td><code>adv-neartie-a</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Add a proactive delay-notification for delayed shipments?</td>
+        <td>decision</td>
+        <td class="num">59</td>
+        <td class="num">98</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">near-tie</span> <span class="tag">ranking-stress</span></td>
+      </tr><tr>
+        <td><code>adv-neartie-b</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Add a proactive fraud-hold notification before canceling a suspicious order?</td>
+        <td>decision</td>
+        <td class="num">54</td>
+        <td class="num">97</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">near-tie</span> <span class="tag">ranking-stress</span> <span class="tag">qualitative-override</span></td>
+      </tr><tr>
+        <td><code>adv-out-of-band-value</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Add a &#39;proactive win-back&#39; outreach message for lapsed customers?</td>
+        <td>decision</td>
+        <td class="num">48</td>
+        <td class="num">91</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">out-of-band-value</span> <span class="tag">integrity</span></td>
+      </tr><tr>
+        <td><code>adv-stale-evidence</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Keep the refund-eligibility rule as last validated?</td>
+        <td>decision</td>
+        <td class="num">52</td>
+        <td class="num">90</td>
+        <td>maya-okonkwo</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">stale-evidence</span> <span class="tag">confidence-calibration</span></td>
+      </tr><tr>
+        <td><code>adv-wrong-owner-authored</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Allow Atlas to auto-redact and forward chats flagged for potential PII exposure?</td>
+        <td>decision</td>
+        <td class="num">71</td>
+        <td class="num">88</td>
+        <td>sam-tan</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">wrong-owner</span> <span class="tag">raci-routing</span> <span class="tag">compliance</span></td>
+      </tr><tr>
+        <td><code>adv-zero-evidence</code></td>
+        <td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td>
+        <td>Let Atlas apply loyalty-point adjustments automatically?</td>
+        <td>informative</td>
+        <td class="num">35</td>
+        <td class="num">15</td>
+        <td>andrew-aasen</td>
+        <td class="tags"><span class="tag">adversarial</span> <span class="tag">zero-evidence</span> <span class="tag">grounding</span> <span class="tag">guard-test</span></td>
+      </tr></tbody>
+  </table>
+  </details>
+</section>
+
+<section id="tier1" class="section">
+  <h2>Tier 1 — Correctness &amp; integrity</h2>
+  <p>Fully computed, this run. Every row below is a real call into <code>PLRender</code>, not a
+  transcription.</p>
+
+  <h3 class="sub">Impact Score &amp; Confidence — anchored regression table</h3>
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>Title</th><th>Exp. score</th><th>Actual</th><th></th><th>Exp. conf.</th><th>Actual</th><th></th></tr></thead>
+    <tbody><tr>
+    <td><code>d-escalation</code></td><td>Friendlier escalation replies (v2.4)</td>
+    <td class="num">85</td><td class="num">85</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">91</td><td class="num">91</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-billing-golive</code></td><td>Billing Agent -- launch the pilot?</td>
+    <td class="num">76</td><td class="num">76</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">98</td><td class="num">98</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-repeat-threshold</code></td><td>How many retries before a human takes over?</td>
+    <td class="num">62</td><td class="num">62</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">74</td><td class="num">74</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-intent-routing</code></td><td>Intent-routing tune-up (v1.3)</td>
+    <td class="num">44</td><td class="num">44</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">99</td><td class="num">99</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-refund-knowledge</code></td><td>New refund examples added</td>
+    <td class="num">37</td><td class="num">37</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">99</td><td class="num">99</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-tone-tweak</code></td><td>Warmer tone, same rules</td>
+    <td class="num">30</td><td class="num">30</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">96</td><td class="num">96</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-password-reset</code></td><td>Let Atlas handle password resets?</td>
+    <td class="num">51</td><td class="num">51</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">88</td><td class="num">88</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-order-history-access</code></td><td>Give Atlas read access to order history?</td>
+    <td class="num">53</td><td class="num">53</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">87</td><td class="num">87</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-refund-autonomy</code></td><td>Auto-approve refunds under $50?</td>
+    <td class="num">62</td><td class="num">62</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">87</td><td class="num">87</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr><tr>
+    <td><code>d-model-upgrade</code></td><td>Move Atlas to the newer model?</td>
+    <td class="num">41</td><td class="num">41</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+    <td class="num">76</td><td class="num">76</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">PASS</span></td>
+  </tr></tbody>
+  </table>
+
+  <h3 class="sub">Sub-score band containment sweep (all 34 scenarios)</h3>
+  <p>Calls the real <code>breakdown(d)</code> and parses its own HTML for the
+  "sits outside its signal band" marker — never a reimplementation of the private band functions.</p>
+  <table class="data-table">
+    <thead><tr><th>ID</th><th>Source</th><th>Out-of-band factor(s)</th></tr></thead>
+    <tbody><tr>
+    <td><code>d-repeat-threshold</code></td><td><span class="badge" style="color:#315aef;background:#edf1ff">anchor</span></td><td>value</td>
+  </tr><tr>
+    <td><code>adv-out-of-band-value</code></td><td><span class="badge" style="color:#e66045;background:#fff0eb">adversarial</span></td><td>value</td>
+  </tr></tbody>
+  </table>
+
+  <h3 class="sub">Integrity linter — 7 of 11 findings confirmed</h3>
+  
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#e66045;background:#fff0eb">CRITICAL</span> <span class="badge" style="color:#be4a33;background:#fff0eb">NOT CONFIRMED</span> <strong>Rollout showcase confidence disagrees with the decision&#39;s own computed confidence</strong></summary>
+    <p><strong>Mechanism:</strong> PL.rollout.confidence used to be a hardcoded literal; render.js&#39;s showcase() now calls confidenceScore(d-billing-golive) directly, so the showcase and the decision can never disagree.</p>
+    <p><strong>Detail:</strong> Fixed: PL.rollout.confidence literal removed from data.js; showcase() now renders confidenceScore(d-billing-golive) = 98 directly, matching the decision&#39;s own displayed confidence everywhere else in the app.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#c98812;background:#fff6df">MEDIUM</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Confidence weights are provisional/unvalidated, presented as a calibrated percentage</strong></summary>
+    <p><strong>Mechanism:</strong> PL.confidenceWeights (data.js) sets the four weights confidenceScore() uses; no held-out expert-labeled set exists yet to fit them against.</p>
+    <p><strong>Detail:</strong> Self-disclosed in-code (data.js, above confidenceWeights): flagged PROVISIONAL/UNVALIDATED, pending a held-out expert-confidence set that doesn&#39;t exist in this capstone.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span> <span class="badge" style="color:#be4a33;background:#fff0eb">NOT CONFIRMED</span> <strong>&quot;Needs a human&quot; is an authored field, not an AI judgment</strong></summary>
+    <p><strong>Mechanism:</strong> Checked for render.js&#39;s classifyEscalation(d) (derives type from signals.commitmentAtStake, isRollout, gate, severity) and confirmed app.js&#39;s decisionFor()/all() read its output (esc.type) instead of the seed&#39;s `type` literal directly.</p>
+    <p><strong>Detail:</strong> Fixed: classifyEscalation(d) now derives &quot;needs a human&quot; from signals for every decision; app.js routes decisionFor()/all() through it. Its verdict matches all 10 seed decisions&#39; authored type (0 disagreements), and it&#39;s what closes the missing-commitment-guardrail gap for adv-commitment-mislabeled-informative-shaped cases.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Most blocking decisions have no escalated-status agent watching them</strong></summary>
+    <p><strong>Mechanism:</strong> Compared every type:&quot;decision&quot; id in PL.decisions against every agents[].escalatedTo id.</p>
+    <p><strong>Detail:</strong> 4 of 7 blocking decisions have no agent in &quot;escalated&quot; status pointing to them: d-password-reset, d-order-history-access, d-refund-autonomy, d-model-upgrade.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#c98812;background:#fff6df">MEDIUM</span> <span class="badge" style="color:#be4a33;background:#fff0eb">NOT CONFIRMED</span> <strong>Chief of Staff&#39;s briefing summary doesn&#39;t match the real decision/informative split</strong></summary>
+    <p><strong>Mechanism:</strong> The finding string used to be a hardcoded literal in data.js; render.js&#39;s agents() now computes it live from state.blocking()/informative(), so it can never drift from the real split.</p>
+    <p><strong>Detail:</strong> Fixed: rendered briefing claims &quot;routed 7 to you, 3 advancing&quot; — matches real data (7 type:&quot;decision&quot; + 3 type:&quot;informative&quot; = 10 total) because it&#39;s computed from the same state, not authored separately.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Seed data disagrees with its own mapped Value-Model lever — the live app silently resolves this in the lever&#39;s favor and never discloses it</strong></summary>
+    <p><strong>Mechanism:</strong> d-repeat-threshold inherits the &quot;cut-cost-to-serve&quot; Value Model lever via valueFocusTagMap (rung 3), which prices out to a &quot;critical&quot; band (80–100) — overriding the plain-signal band its own authored signals (valueKind:&quot;unblocks-work&quot;, no dollars) would otherwise imply. app.js&#39;s applyModeledValue() then substitutes that band&#39;s own midpoint for the decision&#39;s displayed value before any render happens, upstream of breakdown()/openBreakdown.</p>
+    <p><strong>Detail:</strong> Authored seed impact.value = 58 → breakdown() on the raw seed flags it as out-of-band (outside [80, 100]): true. Live-app-effective value after applyModeledValue&#39;s override = 90 (the band&#39;s own midpoint) → in-band, flag suppressed: true. The two subsystems (hand-authored signals-driven bands vs. the Value Model lever overlay) disagree about this decision&#39;s value score, and the app resolves that disagreement by always trusting the lever — silently, with no UI trace that an override happened at all.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#315aef;background:#edf1ff">LOW</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Perfect-input decisions display 99% confidence, never 100%</strong></summary>
+    <p><strong>Mechanism:</strong> confidenceScore() computes raw = round(weighted sum of the 4 factors), then returns Math.min(99, raw) — a deliberate cap (PRD §7) so absolute certainty is never displayed.</p>
+    <p><strong>Detail:</strong> 7 scenario(s) in the bank have all-perfect confidence inputs (100% eval pass, 100% coverage, zero contradicting evidence, ≤7 days old): d-intent-routing, d-refund-knowledge, exp-faq-refresh, exp-typo-fix, exp-holiday-banner, exp-sentiment-recalibration, exp-shipping-kb-refresh. All 7 of them display exactly 99%, confirming the cap — not a coincidence of the formula landing on 99 naturally.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#315aef;background:#edf1ff">LOW</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>app.js wires a [data-score] click handler that can never fire</strong></summary>
+    <p><strong>Mechanism:</strong> Searched render.js for any element emitting a data-score attribute (excluding the unrelated data-cockpit-score, which never contains the substring &quot;data-score=&quot;).</p>
+    <p><strong>Detail:</strong> app.js defines the [data-score] handler, but no template in render.js ever emits that attribute — only data-cockpit-score (wired to the presenter cockpit&#39;s openCockpitScoreModal) and data-why (wired to openBreakdown) actually fire. Dead code, not a functional defect: the equivalent &quot;see the math&quot; flow is still reachable via data-why.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#e66045;background:#fff0eb">CRITICAL</span> <span class="badge" style="color:#be4a33;background:#fff0eb">NOT CONFIRMED</span> <strong>The Decision&lt;-&gt;Informative toggle has no guardrail against demoting a commitment-breaking change</strong></summary>
+    <p><strong>Mechanism:</strong> Searched app.js&#39;s toggle handler (the [data-set] click delegate) for any reference to commitmentAtStake or an agent-identity check before accepting the type flip.</p>
+    <p><strong>Detail:</strong> Expected pattern not found — re-check app.js for structural changes.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#315aef;background:#edf1ff">LOW</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>A code comment claims 3 decisions &#39;don&#39;t exist yet&#39; — they do</strong></summary>
+    <p><strong>Mechanism:</strong> Checked PL.decisions for the 3 ids the features[] comment (data.js) describes as reserved/not-yet-existing.</p>
+    <p><strong>Detail:</strong> d-order-history-access, d-refund-autonomy, and d-password-reset are all full decision objects in PL.decisions today — the comment describing them as reserved placeholders is stale documentation, not a functional defect.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#3d4759;background:#eef1f4">INFORMATIONAL</span> <span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Recent-decisions log titles don&#39;t literally match PL.decisions titles</strong></summary>
+    <p><strong>Mechanism:</strong> Compared each PL.decisionLog[].decisionTitle against PL.decisions[].title.</p>
+    <p><strong>Detail:</strong> Self-documented in-code (data.js, above decisionLog): this worktree branched before an unmerged &#39;decisions-copy-revamp&#39; branch landed on main, so decisionLog carries the post-revamp wording while PL.decisions above still carries pre-revamp wording for the same 4 ids. Not a hidden defect — listed here for the report&#39;s completeness, not as something to fix.</p>
+  </details>
+</section>
+
+<section id="tier2" class="section">
+  <h2>Tier 2 — AI-capability quality</h2>
+  <p class="illustrative-note">Ground truth = a synthetic 5-persona delivery-lead panel (revenue-first, risk-first, ops-first, customer-experience, engineering-delivery) each independently ranking and labeling the blinded 34-scenario bank, plus 3 independent LLM-judge runs scoring every authored recommendation on a 5-dimension rubric. This is a disclosed synthetic proxy, not real delivery leads — see Methodology and the Human-Validation Protocol for how it gets replaced with real expert labels. Every number below is a real computation over that panel/judge data (eval/aggregate-panel.js), not a placeholder.</p>
+  <table class="data-table">
+    <thead><tr><th>Capability</th><th>Metrics</th><th>PRD target</th><th>Method note</th></tr></thead>
+    <tbody><tr>
+    <td>Impact ranking</td>
+    <td><span class="metric-pill">Precision@1: <strong>0%</strong></span> <span class="metric-pill">Precision@3: <strong>67%</strong></span> <span class="metric-pill">Spearman ρ: <strong>80%</strong></span> <span class="metric-pill">NDCG: <strong>97%</strong></span></td>
+    <td>Precision@1 ≥ 80%</td>
+    <td class="cap-note">Precision@1 is a single binary hit/miss over one 34-item ranking (this run&#39;s system #1 was not the panel&#39;s median-rank #1) — a coarse, high-variance signal at n=1; Precision@3, Spearman ρ, and NDCG are the more stable reads here and all show strong agreement with the panel&#39;s ranking.</td>
+  </tr><tr>
+    <td>Escalation classification (needs-a-human)</td>
+    <td><span class="metric-pill">precision: <strong>91%</strong></span> <span class="metric-pill">recall: <strong>91%</strong></span> <span class="metric-pill">F1: <strong>—</strong></span> <span class="metric-pill">false-block rate: <strong>—</strong></span> <span class="metric-pill">false-delegate rate: <strong>—</strong></span> <span class="metric-pill">catastrophic-miss rate: <strong>—</strong></span></td>
+    <td>escalation precision ≥ 85%, catastrophic-miss rate ≈ 0</td>
+    <td class="cap-note">Ground truth = panel-majority escalation label (Fleiss&#39; κ = 0.93 across the 5 personas — near-perfect agreement). Of 3 commitment-at-stake scenarios in the bank, 1 is a deliberately-constructed miss (adv-commitment-mislabeled-informative) — this is the adversarial guardrail-gap case, not a surprise regression.</td>
+  </tr><tr>
+    <td>RACI routing</td>
+    <td><span class="metric-pill">accountable-owner accuracy: <strong>—</strong></span></td>
+    <td>(routing accuracy, no numeric PRD target set)</td>
+    <td class="cap-note">Compares ProofLoop&#39;s authored accountableOwner against the panel-majority owner, mapped via a keyword role-family heuristic (accountable-delivery-exec / engineering / content-knowledge / data-security / legal) since the panel was never shown ProofLoop&#39;s named-owner roster and answered in free-text role terms. This makes it the noisiest metric in this report — treat 50% as a directional signal, not a precise rate; see Limitations. 16 of 32 scored scenarios disagreed, including the 3 deliberately-constructed RACI-mismatch cases already confirmed deterministically in Tier 3.</td>
+  </tr><tr>
+    <td>Confidence calibration</td>
+    <td><span class="metric-pill">ECE: <strong>—</strong></span> <span class="metric-pill">Brier score: <strong>—</strong></span> <span class="metric-pill">over/under-confidence: <strong>—</strong></span></td>
+    <td>calibration error ≤ 10 pts</td>
+    <td class="cap-note">Accuracy proxy = mean LLM-judge correctChoice score (rescaled 0-1) per scenario, binned against displayed confidence in 10 deciles for ECE.</td>
+  </tr><tr>
+    <td>Recommendation quality</td>
+    <td><span class="metric-pill">LLM-judge rubric (1-5): <strong>—</strong></span> <span class="metric-pill">inter-judge agreement: <strong>—</strong></span></td>
+    <td>(business usefulness, no numeric PRD target set)</td>
+    <td class="cap-note">Mean across all 5 rubric dimensions, 3 independent judge runs, 34 scenarios. Per-dimension means: correctChoice 4.34, grounded 4.05, actionable 4.67, addressesRisk 4.66, noHallucination 3.93. Inter-judge agreement = fraction of (scenario × dimension) scores within 1 point across the 3 runs.</td>
+  </tr><tr>
+    <td>Grounding / traceability</td>
+    <td><span class="metric-pill">citation coverage: <strong>—</strong></span> <span class="metric-pill">faithfulness: <strong>79%</strong></span> <span class="metric-pill">contradiction handling: <strong>—</strong></span></td>
+    <td>100% traceability (Agentic RAID)</td>
+    <td class="cap-note">faithfulness = mean noHallucination score (rescaled 0-1); citationCoverage = mean grounded score (rescaled 0-1). 9 of 34 scenarios drew a noHallucination=1 flag from at least one judge run — see the appendix for the full list and rationale; several recur across all 3 runs, indicating reproducible grounding gaps in ProofLoop&#39;s authored recommendation text, not judge noise.</td>
+  </tr><tr>
+    <td>Rollout readiness</td>
+    <td><span class="metric-pill">go/no-go agreement vs. expert verdict: <strong>—</strong></span></td>
+    <td>(agreement rate, no numeric PRD target set)</td>
+    <td class="cap-note">Only 2 rollout-class scenarios exist in this bank (d-billing-golive, exp-returns-agent-golive) — full agreement at n=2 is not a statistically meaningful rate; more rollout-shaped scenarios are needed before this metric is trustworthy. See Limitations.</td>
+  </tr></tbody>
+  </table>
+  <h3 class="sub">Panel &amp; judge agreement (validity signal, not a product metric)</h3>
+  <div class="card-grid">
+    <div class="stat-card">
+      <div class="stat-label">Fleiss' κ — escalation label (5 personas)</div>
+      <div class="stat-value">0.934</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mean pairwise persona Spearman ρ (ranking)</div>
+      <div class="stat-value">0.835</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Inter-judge agreement (3 runs, within 1pt)</div>
+      <div class="stat-value">93%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Hallucination flags (≥1 of 3 judge runs)</div>
+      <div class="stat-value">9 of 34</div>
+    </div>
+  </div>
+  <p class="muted" style="font-size:12.5px">High panel/judge agreement is a validity signal for the ground
+  truth itself (the panel/judge were consistent with each other) — it is not evidence that the panel is
+  right, since all 5 personas and all 3 judge runs are the same underlying model. See Limitations.</p>
+</section>
+
+<section id="tier3" class="section">
+  <h2>Tier 3 — Risk / red-team</h2>
+  <h3 class="sub">Failure-mode matrix <span class="note">(likelihood computed from the Phase B panel/judge run; severity is a fixed editorial judgment, not panel-scored; detection &amp; status are real)</span></h3>
+  <table class="data-table">
+    <thead><tr><th>Failure mode</th><th>Likelihood</th><th>Severity</th><th>Detection</th><th>Status</th></tr></thead>
+    <tbody><tr>
+    <td>Under-escalation of a commitment-breaking change</td>
+    <td>medium — 1 of 3 commitment-at-stake scenarios in this bank missed (catastrophic-miss rate 33%)</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">CRITICAL</span></td>
+    <td>adv-commitment-mislabeled-informative + missing-commitment-guardrail finding</td>
+    <td>confirmed gap — no guardrail exists; panel-confirmed catastrophic miss on adv-commitment-mislabeled-informative</td>
+  </tr><tr>
+    <td>Over-escalation (erodes trust in the ritual)</td>
+    <td>low-medium — false-block rate 17% vs. panel</td>
+    <td><span class="badge" style="color:#3d4759;background:#eef1f4">MODERATE</span></td>
+    <td>false-delegate rate (Tier 2, Phase B)</td>
+    <td>measured: false-block rate 17%, false-delegate rate 9% (escalation F1 91%)</td>
+  </tr><tr>
+    <td>Hallucinated/ungrounded number (honest-arithmetic violation)</td>
+    <td>medium — 9 of 34 authored recommendations flagged by at least one judge run</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span></td>
+    <td>band-containment sweep (Tier 1b) + grounding/traceability metric (Tier 2)</td>
+    <td>9 scenarios flagged noHallucination=1 by ≥1 of 3 judge runs (faithfulness 79%); the displayed Impact/Confidence numbers themselves remain 0 ungrounded (Tier 1) — this failure mode lives in authored recommendation prose, not the computed scores</td>
+  </tr><tr>
+    <td>Mis-routing to the wrong accountable owner</td>
+    <td>medium-high — panel disagreed with the authored owner on 16 of 32 scenarios (noisy heuristic, see Tier 2 RACI note)</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span></td>
+    <td>RACI routing mismatch checks (Tier 3)</td>
+    <td>3 confirmed deterministically in this run&#39;s bank (Tier 3); panel-based Tier 2 signal is directional only given free-text role-matching noise</td>
+  </tr><tr>
+    <td>Calibration failure (real-looking wrong confidence)</td>
+    <td>medium — ECE 10.5 pts vs. ≤10pt target</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span></td>
+    <td>confidence-conflict finding + ECE (Tier 2, Phase B)</td>
+    <td>0 live conflicts — the 87-vs-98 rollout/decision mismatch found in this run is fixed (showcase() now derives confidence live); ECE 10.5 pts, Brier 0.056 against judge-derived accuracy proxy</td>
+  </tr><tr>
+    <td>Delegation-becomes-abdication (compliance item demoted to informative)</td>
+    <td>medium — same construction as the catastrophic-miss case above</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">CRITICAL</span></td>
+    <td>adv-commitment-mislabeled-informative + adv-zero-evidence</td>
+    <td>confirmed gap — no guardrail exists</td>
+  </tr><tr>
+    <td>Stale-data decision</td>
+    <td>low-medium — recency banding behaves correctly; judge still flagged 1 stale-evidence recommendation as under-grounded</td>
+    <td><span class="badge" style="color:#3d4759;background:#eef1f4">MODERATE</span></td>
+    <td>adv-stale-evidence + recency banding</td>
+    <td>recency correctly drags confidence down (Tier 3); adv-stale-evidence also drew a noHallucination=1 flag from the judge for citing specifics not present in the shown evidence</td>
+  </tr><tr>
+    <td>Prompt injection via build-change text (LLM-backed future state)</td>
+    <td>not applicable today — no LLM in ProofLoop&#39;s current build loop</td>
+    <td><span class="badge" style="color:#e66045;background:#fff0eb">HIGH</span></td>
+    <td>not yet applicable — current build has no LLM in the loop</td>
+    <td>out of scope for this run; re-test once an LLM is in the authoring/recommendation path</td>
+  </tr></tbody>
+  </table>
+  <p class="illustrative-note">Likelihood is now derived from the real Phase B panel/judge run (rates above); severity remains a fixed editorial judgment per failure mode (catastrophic/high/moderate), not something the panel scored directly. Detection and status are real for every row except prompt injection, which stays out of scope (no LLM in ProofLoop&#39;s current build loop).</p>
+  <h3 class="sub">Deterministic &amp; adversarial checks — real, computed this run</h3>
+  
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Catastrophic-miss construction</strong></summary>
+    <p>Scenario is type:&quot;informative&quot; (auto-advances) with signals.commitmentAtStake:true (breaks a confirmed policy commitment) and a fraud signal in its evidence. Combined with finding missing-commitment-guardrail (#9), this exact combination has nothing in app.js to stop it from silently auto-advancing today.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Zero-evidence / zero-eval division guard</strong></summary>
+    <p>Both scenarios have eval:{0,0} and/or empty evidence — this exercises pct()&#39;s division-by-zero guard (total ? round(n/total*100) : 0). Neither throws nor produces NaN; confidenceScore() correctly returns a low-but-defined number (grounding absence reads as low confidence, not a crash and not a misleadingly high default).</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Near-tie ranking pair</strong></summary>
+    <p>adv-neartie-a scores 59, adv-neartie-b scores 54 (Δ5) — a genuine near-tie by composite score. Whether the independent panel ranks them in the SAME order as the composite is a Phase B question (needs the synthetic panel); this scenario pair is confirmed to exercise that question rather than being a wide, uninteresting gap.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#24a981;background:#e8f8f3">CONFIRMED</span> <strong>Dollars-only baseline trap</strong></summary>
+    <p>Ranked 17 dollar-bearing scenarios two ways. adv-dollars-only-baseline-trap has the largest weekly-dollar figure in the bank ($5.2k/wk) and ranks #1 on a naive dollars-only baseline, but only #16 on the real composite score() — demoted because reach is narrow, nothing blocks today&#39;s build, and there&#39;s no urgency. This demonstrates the composite adds value over a dollars-first ranking on a case computed today, without needing the synthetic panel.</p>
+  </details>
+  <details class="finding-card">
+    <summary><span class="badge" style="color:#be4a33;background:#fff0eb">NOT CONFIRMED</span> <strong>RACI routing mismatches</strong></summary>
+    <p>3 scenario(s) carry an independently-reasoned RACI routing disagreement: d-order-history-access (authored sam-tan, ground truth says maya-okonkwo); exp-ship-address-write (authored sam-tan, ground truth says maya-okonkwo); adv-wrong-owner-authored (authored sam-tan, ground truth says legal).</p>
+  </details>
+</section>
+
+<section id="limitations" class="section">
+  <h2>Limitations &amp; validity threats</h2>
+  <ul class="prose-list">
+    <li><strong>Synthetic panel, not real experts.</strong> The 5 delivery-lead personas (&sect;3) ran
+      for real and every Tier 2 number above is a real computation over their actual output — but the
+      panel itself is an LLM-simulated proxy, not real delivery leads. All 5 personas share one
+      underlying model, so their high agreement (Fleiss' κ, &sect;6) shows internal consistency, not
+      correctness against real-world judgment.</li>
+    <li><strong>Synthetic judge, not real reviewers.</strong> The recommendation-quality rubric
+      (<code>eval/prompts/judge.md</code>) is itself an LLM call, run 3 times. Its scores are a real,
+      scalable proxy — not ground truth from real reviewers.</li>
+    <li><strong>RACI-routing accuracy is the noisiest Tier 2 number.</strong> The panel was never shown
+      ProofLoop's named-owner roster, so it answered in free-text role terms that a keyword heuristic
+      maps onto ProofLoop's 5 owner ids (&sect;6 note) — read that one metric as directional, not
+      precise.</li>
+    <li><strong>Rollout-readiness agreement is n=2.</strong> Only 2 scenarios in the bank are
+      rollout-class; 100% agreement at that n is not a statistically meaningful rate.</li>
+    <li><strong>Provisional, unvalidated weights.</strong> <code>PL.confidenceWeights</code> is
+      explicitly disclosed in-code as provisional/unvalidated (no held-out expert-labeled set exists
+      yet to fit it against). <code>PL.weights</code> (the Impact Score weights) carries no such
+      in-code disclosure, but is equally unvalidated against real outcomes and should be treated with
+      the same caution.</li>
+    <li><strong>Small n.</strong> 34 scenarios is enough to exercise every mechanism at least once, not
+      enough for tight confidence intervals on Tier 2 metrics. Precision@1/κ/ECE numbers from a bank
+      this size should be read as directional, not statistically precise.</li>
+    <li><strong>Single run.</strong> This report reflects one execution. No variance across repeated
+      runs or repeated panel/judge samples has been characterized yet.</li>
+    <li><strong>No LLM in ProofLoop's current build.</strong> Escalation classification, recommendation
+      generation, and RACI routing are all authored fields today (&sect;3). Tier 2 evaluates the
+      capability a production build would need, using the current authored values as the "model
+      output" under test — it is not yet evaluating a live model.</li>
+  </ul>
+</section>
+
+<section id="human-protocol" class="section">
+  <h2>Human-validation protocol</h2>
+  <p>How the synthetic panel and judge get replaced with real validation, once this direction is
+  signed off:</p>
+  <ol class="prose-list">
+    <li><strong>Recruit 3-5 real delivery/engineering leads</strong> spanning the same priors the
+      synthetic panel simulates (revenue, risk, ops, CX, engineering-delivery) — ideally people who
+      would actually receive a ProofLoop-style briefing in their real job.</li>
+    <li><strong>Run <code>eval/prompts/panel.md</code>'s task on real humans</strong>, blind to
+      ProofLoop's own computed scores, against the same scenario bank — identical inputs, so results
+      are directly comparable to the synthetic panel's.</li>
+    <li><strong>Compute real inter-rater agreement</strong> (Fleiss' κ for escalation labels, Spearman
+      ρ for rankings) among the real panel, and between the real panel and the synthetic one — this
+      tells us how good a proxy the synthetic panel actually was.</li>
+    <li><strong>Refit the provisional weights</strong> (<code>PL.confidenceWeights</code>, and
+      candidate weights for <code>PL.weights</code>) against the real panel's labels, replacing the
+      "provisional/unvalidated" disclosure with a real fit and its own reported error.</li>
+    <li><strong>Spot-check the LLM judge</strong> — have the real panel independently score a sample of
+      recommendations on the same 5-dimension rubric (<code>eval/prompts/judge.md</code>), and report
+      agreement between the real scores and the LLM judge's scores as the judge's own validity signal.</li>
+    <li><strong>Promote PRD targets from provisional to validated</strong> once the above lands — e.g.
+      "Precision@1 ≥ 80%" becomes a target grounded in what real leads actually agreed on, not an
+      assumption.</li>
+  </ol>
+</section>
+
+<section id="appendix" class="section">
+  <h2>Appendix</h2>
+
+  <h3 class="sub">Formulas</h3>
+  <pre class="formula">Impact Score  = round(0.35·value + 0.30·unblock + 0.20·reach + 0.15·urgency)
+
+Confidence %  = min(99, round(0.35·evalPassRate + 0.30·sourceAgreement
+                              + 0.20·coverage + 0.15·recency))
+                — the min(99, …) cap is deliberate: no decision may ever display
+                  absolute (100%) certainty. See Tier 1, "confidence-hard-cap-99".</pre>
+
+  <h3 class="sub">Weights (as currently shipped in <code>prototype-2/data.js</code>)</h3>
+  <table class="data-table">
+    <thead><tr><th>Weight set</th><th>Fields</th><th>Provisional?</th></tr></thead>
+    <tbody>
+      <tr><td><code>PL.weights</code> (Impact Score)</td><td>value .35 &middot; unblock .30 &middot; reach .20 &middot; urgency .15</td><td>Not disclosed in-code, but unvalidated against real outcomes</td></tr>
+      <tr><td><code>PL.confidenceWeights</code></td><td>evalPassRate .35 &middot; sourceAgreement .30 &middot; coverage .20 &middot; recency .15</td><td><span class="badge" style="color:#24a981;background:#e8f8f3">Disclosed provisional/unvalidated</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Reproducibility</h3>
+  <ul class="prose-list">
+    <li><code>node eval/run.js</code> regenerates <code>eval/results.json</code> deterministically
+      from <code>prototype-2/</code>'s current source plus <code>eval/scenarios.js</code> — no network
+      access, no randomness.</li>
+    <li><code>node eval/render-report.js</code> regenerates this HTML from
+      <code>eval/results.json</code>.</li>
+    <li><code>eval/engines.js</code> loads the real <code>prototype-2/data.js</code> and
+      <code>prototype-2/render.js</code> into Node via a minimal <code>window</code> shim — the exact
+      same scoring functions the browser runs, never a parallel reimplementation.</li>
+  </ul>
+
+  <h3 class="sub">Prompts used (full text)</h3>
+  <details><summary><code>eval/prompts/panel.md</code> — synthetic delivery-lead panel</summary>
+    <pre class="prompt-block"># ProofLoop Eval — Synthetic Delivery-Lead Panel Prompt
+
+## Purpose
+
+Generates the eval&#39;s ground-truth labels for the full scenario bank (`eval/scenarios.js` anchors +
+new scenarios) via simulated independent &quot;delivery-lead&quot; personas, standing in for real human experts
+until the Human-Validation Protocol (report §9) replaces them.
+
+**Disclosure:** this panel is a synthetic proxy, not real delivery leads. It exists to dry-run the
+eval&#39;s methodology and produce illustrative-but-defensible numbers ahead of running this against real
+experts. Treat every number this panel produces as provisional.
+
+## Panel composition
+
+Run this prompt independently for each of the 5 personas below. Each run is a SEPARATE model call,
+blind to the other personas&#39; outputs and blind to ProofLoop&#39;s own computed score/confidence/RACI for
+every decision — show each persona the decision&#39;s `title`, description/framing, `evidence[]`, and
+`metrics` only, exactly as a real delivery lead reviewing the underlying facts would see them, never
+the app&#39;s own conclusions about those facts (strip `impact`, any displayed confidence %, and `raci`
+before showing a decision to a persona).
+
+1. **Revenue-first lead** — prioritizes decisions that protect or grow revenue-bearing flows; anchors
+   readiness verdicts on business-metric evidence (conversion, AOV, churn) over process cleanliness.
+2. **Risk-first lead** — prioritizes compliance, legal exposure, and irreversible/hard-to-unwind
+   changes; defaults to &quot;escalate&quot; and &quot;hold&quot; when evidence is ambiguous.
+3. **Ops-first lead** — prioritizes what unblocks today&#39;s operational load (queue depth, agent
+   coverage, on-call burden); comfortable approving lower-evidence items if they relieve a live
+   bottleneck.
+4. **Customer-experience lead** — prioritizes what customers actually feel (tone, latency, correctness
+   of what they&#39;re told); weighs qualitative evidence (verbatims, sentiment) more heavily than the
+   other personas.
+5. **Engineering-delivery lead** — prioritizes technical readiness and rollback safety; most skeptical
+   of thin evidence bases (shadow-mode duration, sample size) regardless of business upside.
+
+## Task, per persona, per decision in the scenario bank
+
+Given ONLY: `title`, description/framing text, `evidence[]` (claim + source + snippet), and `metrics`
+(if present) —
+
+1. **Rank** — after seeing the FULL set of decisions/scenarios in one pass, produce a total order
+   (most to least deserving of a delivery lead&#39;s attention today).
+2. **Escalation label** — for each: does this need a human decision today, or can it advance
+   informationally? (`decision` | `informative`)
+3. **Accountable owner** — who should hold the &quot;A&quot; in RACI for this decision? Answer with a role
+   (e.g. &quot;the accountable exec&quot;, &quot;engineering lead&quot;, &quot;legal/compliance&quot;), not a name.
+4. **Readiness verdict** (rollout-shaped decisions only) — `go` | `hold` | `no-go`, plus a one-line
+   reason grounded in the evidence shown.
+5. **Confidence** — 0-100, this persona&#39;s own subjective confidence in their verdict, given the
+   evidence they were shown (not ProofLoop&#39;s computed %).
+
+## Output format
+
+Return strict JSON: `{ persona: string, rankings: [{id, rank}], labels: [{id, escalation, owner,
+readinessVerdict, confidence}] }`.
+
+## Aggregation (done after all 5 personas run)
+
+- **Rank** — median rank per decision across personas.
+- **Escalation / owner / readiness** — majority vote; ties broken by the risk-first persona (this
+  eval&#39;s tie-break favors caution, matching ProofLoop&#39;s own stated design principle of routing
+  ambiguous cases to a human).
+- **Inter-rater agreement** — Fleiss&#39; κ across the 5 personas&#39; escalation labels; Spearman ρ between
+  each pair of personas&#39; rankings, averaged.
+- **Report honestly** — low agreement on a given decision is itself a finding (it means the &quot;correct&quot;
+  answer is genuinely contested, not that the panel is broken). Surface it; don&#39;t average it away.
+</pre>
+  </details>
+  <details><summary><code>eval/prompts/judge.md</code> — LLM-as-judge recommendation-quality rubric</summary>
+    <pre class="prompt-block"># ProofLoop Eval — LLM-as-Judge Recommendation-Quality Rubric
+
+## Purpose
+
+Scores the QUALITY of each decision&#39;s authored `recommendation` (the &quot;choice&quot; + supporting reasoning
+ProofLoop surfaces to Maya) against the underlying evidence — independent of whether the Impact Score
+ranked it correctly. This is a judgment call about business usefulness, not a re-check of arithmetic.
+
+**Disclosure:** the &quot;judge&quot; is itself an LLM call, not a real delivery lead — it is a scalable proxy
+for the recommendation-quality dimension of human review, cross-checked against the synthetic panel&#39;s
+own `recommendationGold` field (see `eval/prompts/panel.md`) and, eventually, real reviewer spot-checks
+(Human-Validation Protocol, report §9).
+
+## Inputs shown to the judge, per decision
+
+- The decision&#39;s `title`, description, `evidence[]`, `metrics`, and its authored `recommendation`
+  (choice + reasoning) — exactly what a real reviewer would see.
+- NOT shown: ProofLoop&#39;s own Impact Score, confidence %, or the ground-truth panel&#39;s own verdict — the
+  judge scores the recommendation on its own merits against the evidence, not against another model&#39;s
+  or panel&#39;s conclusion (that comparison happens afterward, as a separate metric).
+
+## Rubric — score each dimension 1-5, independently
+
+1. **Correct choice** — given the evidence shown, is the recommended action (`approve` / `revise` /
+   `hold` / a specific threshold, etc.) the one a competent delivery lead would actually make?
+2. **Grounded** — does every factual claim in the recommendation&#39;s reasoning trace to a specific
+   evidence item shown, with no invented specifics?
+3. **Actionable** — could Maya act on this recommendation in under 30 seconds, with no follow-up
+   question needed to know what &quot;approve&quot; or &quot;hold&quot; actually commits her to?
+4. **Addresses risk** — if the decision carries a `commitmentAtStake`, compliance, or irreversibility
+   signal, does the recommendation explicitly name that risk rather than silently ignoring it?
+5. **No hallucination** — zero fabricated numbers, sources, or claims not present in the evidence
+   shown (score 1 if any single fabrication is found, regardless of the other four dimensions).
+
+## Procedure
+
+- Run the rubric with **3 independent judge calls per decision** (same prompt, temperature &gt; 0), not
+  one — report the mean per dimension and the inter-judge agreement (e.g. the fraction of
+  dimension-scores within 1 point of each other across the 3 runs) as a validity signal on the judge
+  itself.
+- A decision&#39;s overall recommendation-quality score is the mean of the 5 dimensions, itself averaged
+  across the 3 judge runs.
+- Any run that scores dimension 5 (&quot;no hallucination&quot;) at 1 is flagged for manual review regardless of
+  the aggregate — a single hallucination is a correctness incident, not something an average should
+  smooth over.
+
+## Output format
+
+Return strict JSON per judge run: `{ decisionId, scores: {correctChoice, grounded, actionable,
+addressesRisk, noHallucination}, rationale: string }`.
+</pre>
+  </details>
+</section>
+<footer>ProofLoop AI Eval Report &middot; generated by <code>eval/render-report.js</code> from <code>eval/results.json</code> &middot; single capstone run</footer>
+</body>
+</html>

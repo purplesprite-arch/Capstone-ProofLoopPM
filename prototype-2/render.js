@@ -10,6 +10,13 @@
   const icon = (id, cls) => `<svg class="icon${cls ? " " + cls : ""}" aria-hidden="true"><use href="#${id}" /></svg>`;
   const ava = (id, extra) => `<span class="ava${extra ? " " + extra : ""}">${P[id] ? P[id].initials : "?"}</span>`;
   const agentOf = (id) => PL.agents.find((a) => a.id === id);
+  // Shared $/wk-or-k formatter — used by the value-model provenance line and the cockpit panel.
+  function fmtDollars(n) {
+    if (n == null || isNaN(n)) return "$0";
+    const sign = n < 0 ? "-" : "";
+    const abs = Math.abs(n);
+    return abs >= 1000 ? sign + "$" + (Math.round(abs / 100) / 10).toString().replace(/\.0$/, "") + "k" : sign + "$" + Math.round(abs);
+  }
 
   function score(impact) {
     const w = PL.weights;
@@ -30,7 +37,20 @@
      observable signals. We do NOT recompute the sub-score — we expose the
      facts that justify its band. The band is the grounded claim; the exact
      point within it stays an estimate. */
-  function valueBand(s) {
+  function valueBand(s, lever) {
+    // When this decision inherits a grounded lever (rung >= 2), the band comes from the
+    // MODELED value, not the hand-authored signals below — those signals remain the
+    // fallback for decisions with no mapped lever, or one still at "Strategic Model."
+    if (lever) {
+      const range = leverValueRange(lever);
+      if (!range.qualitative && !range.metricOnly) {
+        const weeks = (lever.period && lever.period.weeks) || 13;
+        const weekly = range.mid / weeks;
+        if (weekly >= 4000) return { name: "critical", lo: 80, hi: 100 };
+        if (weekly >= 1500) return { name: "high", lo: 60, hi: 79 };
+        if (weekly > 0) return { name: "moderate", lo: 40, hi: 59 };
+      }
+    }
     if (s.commitmentAtStake) return { name: "critical", lo: 80, hi: 100 };
     if (s.weeklyDollars != null && s.weeklyDollars >= 4000) return { name: "critical", lo: 80, hi: 100 };
     if (s.weeklyDollars != null && s.weeklyDollars >= 1500) return { name: "high", lo: 60, hi: 79 };
@@ -60,11 +80,372 @@
   }
   const BAND_FN = { value: valueBand, unblock: unblockBand, reach: reachBand, urgency: urgencyBand };
 
+  /* ---------- Value Model (progressive value capture) ----------
+     Pure functions over PL.valueModelState (falling back to PL.valueModelSeed) —
+     app.js owns loading/persisting/mutating that model; nothing here writes to it.
+     A lever climbs a 5-rung DATA-GROUNDING ladder as fields are supplied: naming a
+     goal, attaching a benchmark, entering the customer's own baseline, committing to
+     a target, and finally wiring live actuals + attribution. The composite is never
+     recomputed to look more certain than its inputs — at rung <=1 there is no number
+     at all, and the range only narrows as real data lands. */
+  const RUNG_META = [
+    { n: 0, label: "No goal yet" },
+    { n: 1, label: "Strategic Model" },
+    { n: 2, label: "Benchmarked" },
+    { n: 3, label: "Baselined" },
+    { n: 4, label: "Target-Committed" },
+    { n: 5, label: "Operationally Airtight" }
+  ];
+  const RANGE_HALFWIDTH = [null, 0.60, 0.45, 0.30, 0.18, 0.07]; // indexed by rung; narrower as grounding deepens
+
+  function rungLabel(n) { return (RUNG_META[n] || RUNG_META[0]).label; }
+  // Levers carry only kind/period/model — domain, direction ("revenue"|"cost"), and label
+  // live on the matching valueFocusTaxonomy entry (same key), so the taxonomy is the one
+  // place that metadata is authored.
+  function taxonomyFor(key) {
+    return PL.valueFocusTaxonomy.find((v) => v.key === key) || null;
+  }
+  function taxonomyLabel(key) {
+    const t = taxonomyFor(key);
+    return t ? t.label : key;
+  }
+  // Shared 5-pip rung ladder markup — used by the engagement-grade badge (profile seam +
+  // Value Model header) and by each lever's own small ladder.
+  function rungPips(rung, cls) {
+    return [1, 2, 3, 4, 5].map((n) => `<i class="rung-step${cls ? " " + cls : ""}${n <= rung ? " is-on" : ""}"></i>`).join("");
+  }
+  // The live, persisted model (app.js publishes overrides here) — falls back to the seed
+  // so every function below works identically before any input has been entered.
+  function liveModel() { return PL.valueModelState || PL.valueModelSeed || []; }
+  function leverByKey(key) { return liveModel().find((l) => l.key === key); }
+  // A decision may map to several taxonomy keys (valueFocusTagMap); it inherits value
+  // from whichever mapped lever is MOST grounded, not just the first tag — an ungrounded
+  // tag listed first shouldn't hide a better-grounded one listed second.
+  function leverForDecision(d) {
+    const tags = (PL.valueFocusTagMap && PL.valueFocusTagMap[d.id]) || [];
+    let best = null, bestRung = -1;
+    tags.forEach((k) => {
+      const lever = leverByKey(k);
+      if (!lever) return;
+      const r = leverRung(lever);
+      if (r > bestRung) { bestRung = r; best = lever; }
+    });
+    return best;
+  }
+
+  function leverRung(lever) {
+    if (!lever || lever.kind !== "value") return 0;
+    const m = lever.model || {};
+    if (!m.goal) return 0;
+    if (!m.benchmark) return 1;
+    if (!m.baseline || m.baseline.value == null) return 2;
+    if (!m.target || m.target.value == null || !m.target.timeframe) return 3;
+    if (!m.actuals || m.actuals.value == null || m.actuals.attributionPct == null) return 4;
+    return 5;
+  }
+
+  // Bottom-up: (improved metric - baseline) x volume x unit economics x the realization
+  // window. Prefers live actuals over a committed target once actuals exist.
+  function bottomUpValue(lever) {
+    const m = (lever && lever.model) || {};
+    if (!m.baseline || m.baseline.value == null) return null;
+    const endpoint = m.actuals && m.actuals.value != null ? m.actuals.value : (m.target && m.target.value != null ? m.target.value : null);
+    if (endpoint == null || !m.bottomUp || m.bottomUp.volumePerWeek == null || m.bottomUp.unitEconomics == null) return null;
+    const unit = m.baseline.unit || "";
+    const delta = unit.indexOf("%") !== -1 ? (endpoint - m.baseline.value) / 100 : endpoint - m.baseline.value;
+    const weeks = (lever.period && lever.period.weeks) || 13;
+    return delta * m.bottomUp.volumePerWeek * m.bottomUp.unitEconomics * weeks;
+  }
+
+  // Top-down: the customer's own stated target-gap x a plausible attribution share to
+  // this lever/agent. Independent of bottom-up on purpose — see valueCrossCheck().
+  function topDownValue(lever) {
+    const m = (lever && lever.model) || {};
+    if (!m.topDown || m.topDown.customerTargetGap == null || m.topDown.attributionShare == null) return null;
+    return m.topDown.customerTargetGap * m.topDown.attributionShare;
+  }
+
+  // Both methods, side by side — divergence is a SIGNAL the model needs more data, never
+  // silently averaged away.
+  function valueCrossCheck(lever) {
+    const bu = bottomUpValue(lever);
+    const td = topDownValue(lever);
+    if (bu == null || td == null) return { bu, td, divergencePct: null, diverges: false };
+    const denom = Math.max(Math.abs(bu), Math.abs(td)) || 1;
+    const divergencePct = Math.abs(bu - td) / denom;
+    return { bu, td, divergencePct, diverges: divergencePct > 0.4 };
+  }
+
+  // The tightening value range. <=1: qualitative, no number. Otherwise a $ range once
+  // bottom-up/top-down are computable; if only a benchmark exists (no volume/economics
+  // yet), the range is the benchmarked KPI range itself, not a fabricated dollar figure.
+  function leverValueRange(lever) {
+    const rung = leverRung(lever);
+    if (rung <= 1) return { qualitative: true, rung };
+    const m = lever.model || {};
+    const cross = valueCrossCheck(lever);
+    const hw = RANGE_HALFWIDTH[rung] || 0.5;
+    if (cross.bu != null || cross.td != null) {
+      const mid = cross.bu != null && cross.td != null ? (cross.bu + cross.td) / 2 : cross.bu != null ? cross.bu : cross.td;
+      return { qualitative: false, metricOnly: false, rung, mid, lo: mid * (1 - hw), hi: mid * (1 + hw), unit: "$", cross };
+    }
+    if (m.benchmark) return { qualitative: false, metricOnly: true, rung, lo: m.benchmark.lo, hi: m.benchmark.hi, unit: m.benchmark.unit };
+    return { qualitative: true, rung };
+  }
+
+  // How many days a delivery lever's slip defers the START of this lever's value —
+  // the ONLY place delivery time touches money: it shrinks the realization window,
+  // it never invents its own dollar figure.
+  function deliveryForLever(key) {
+    return liveModel()
+      .filter((l) => l.kind === "delivery" && l.model && (l.model.defers || []).indexOf(key) !== -1)
+      .reduce((sum, l) => sum + (l.model.slipDays || 0), 0);
+  }
+  function deliveryAdjustedRange(lever) {
+    const range = leverValueRange(lever);
+    const slipDays = deliveryForLever(lever.key);
+    if (range.qualitative || range.metricOnly || !slipDays) return Object.assign({}, range, { slipDays: slipDays || 0 });
+    const weeks = (lever.period && lever.period.weeks) || 13;
+    const fraction = Math.max(0, (weeks - slipDays / 7) / weeks);
+    return Object.assign({}, range, { mid: range.mid * fraction, lo: range.lo * fraction, hi: range.hi * fraction, slipDays });
+  }
+
+  // One engagement-level grade, WEAKEST-LINK WEIGHTED: the value-weighted average rung,
+  // capped at the rung of whichever single lever carries the most modeled value — you
+  // can't read as "Operationally Airtight" while your #1 value lever is still just named.
+  // A completely separate axis from confidenceScore() below; never merged with it.
+  function engagementGrade(model) {
+    const levers = (model || liveModel()).filter((l) => l.kind === "value");
+    const scored = levers.map((l) => ({ lever: l, rung: leverRung(l), range: leverValueRange(l) }));
+    const priced = scored.filter((x) => !x.range.qualitative && !x.range.metricOnly && x.range.mid > 0);
+    let weightedAvg, cap, capLever;
+    if (priced.length) {
+      const totalWeight = priced.reduce((s, x) => s + x.range.mid, 0);
+      weightedAvg = priced.reduce((s, x) => s + x.range.mid * x.rung, 0) / totalWeight;
+      const top = priced.reduce((best, x) => (!best || x.range.mid > best.range.mid ? x : best), null);
+      cap = top.rung;
+      capLever = top.lever;
+    } else {
+      // No lever has a modeled dollar yet — fall back to breadth across whatever has a goal,
+      // so the grade still moves as levers deepen even before any $ figure exists.
+      const named = scored.filter((x) => x.rung >= 1);
+      weightedAvg = named.length ? named.reduce((s, x) => s + x.rung, 0) / named.length : 0;
+      cap = named.length ? Math.min.apply(null, named.map((x) => x.rung)) : 0;
+      capLever = named.length ? named.reduce((low, x) => (x.rung < low.rung ? x : low), named[0]).lever : null;
+    }
+    const rung = Math.max(0, Math.min(Math.floor(Math.min(weightedAvg, cap)), 5));
+    const capBinds = cap < weightedAvg;
+    return { rung, label: rungLabel(rung), weightedAvg, cap, capLeverKey: capBinds && capLever ? capLever.key : null, capLeverLabel: capBinds && capLever ? taxonomyLabel(capLever.key) : null };
+  }
+
+  // Shared badge markup for engagementGrade() — used on the Profile seam (compact) and atop
+  // the Value Model screen (same markup, CSS just sizes it up via the .lg class).
+  function gradeBadgeHtml(grade, cls) {
+    const cap = grade.capLeverKey
+      ? `<p class="grade-cap">Held back by <b>${grade.capLeverLabel}</b> — still ${rungLabel(leverRung(leverByKey(grade.capLeverKey)))}.</p>`
+      : "";
+    return `<div class="grade-badge${cls ? " " + cls : ""}">
+        <div class="grade-top"><b>${grade.label}</b><span class="grade-sub">Engagement grade · L${grade.rung}</span></div>
+        <div class="rung-ladder">${rungPips(grade.rung)}</div>
+        ${cap}
+      </div>`;
+  }
+
+  /* ---------- Value Model screen (progressive lever inputs) ----------
+     One editable field per data-grounding rung. Inputs are wired by app.js's delegated
+     "change" listener via data-lever-field="leverKey|dot.path.into.model" — this file only
+     ever produces markup, never touches PL.valueModelState directly. */
+  function leverField(lever, path, value, label, opts) {
+    opts = opts || {};
+    const key = `${lever.key}|${path}`;
+    if (opts.textarea) {
+      const safe = value == null ? "" : String(value).replace(/</g, "&lt;");
+      return `<label class="lever-field wide"><span>${label}</span><textarea class="lever-input" data-lever-field="${key}" placeholder="${opts.placeholder || ""}">${safe}</textarea></label>`;
+    }
+    const safeAttr = (value == null ? "" : String(value)).replace(/"/g, "&quot;");
+    return `<label class="lever-field${opts.wide ? " wide" : ""}"><span>${label}</span><input class="lever-input" data-lever-field="${key}" type="${opts.type || "text"}" value="${safeAttr}" placeholder="${opts.placeholder || ""}" /></label>`;
+  }
+
+  // Rung-by-rung field groups, in the same order leverRung() checks them. Only the levers
+  // already satisfied PLUS the next one are returned — progressive disclosure, so a lever
+  // never shows an "actuals" field before it has even named a goal.
+  function leverSections(lever) {
+    const m = lever.model || {};
+    const r = leverRung(lever);
+    const all = [
+      { title: "Goal", body: leverField(lever, "goal", m.goal, "What are we trying to move?", { textarea: true, placeholder: "e.g. Lift cross-sell attach on inbound billing chats." }) },
+      { title: "Industry benchmark", body: [
+          leverField(lever, "benchmark.lo", m.benchmark && m.benchmark.lo, "Low", { type: "number" }),
+          leverField(lever, "benchmark.hi", m.benchmark && m.benchmark.hi, "High", { type: "number" }),
+          leverField(lever, "benchmark.unit", m.benchmark && m.benchmark.unit, "Unit", { placeholder: "% attach" }),
+          leverField(lever, "benchmark.source", m.benchmark && m.benchmark.source, "Source", { wide: true, placeholder: "e.g. SaaS benchmark, 2025" })
+        ].join("") },
+      { title: "Customer's own baseline", body: [
+          leverField(lever, "baseline.value", m.baseline && m.baseline.value, "Current value", { type: "number" }),
+          leverField(lever, "baseline.unit", m.baseline && m.baseline.unit, "Unit", { placeholder: "% attach" }),
+          leverField(lever, "baseline.asOf", m.baseline && m.baseline.asOf, "As of", { type: "date" })
+        ].join("") },
+      { title: "Committed target", body: [
+          leverField(lever, "target.value", m.target && m.target.value, "Target value", { type: "number" }),
+          leverField(lever, "target.timeframe", m.target && m.target.timeframe, "Timeframe", { placeholder: "by Q4" }),
+          leverField(lever, "target.committedBy", m.target && m.target.committedBy, "Committed by", { placeholder: "who signed off" })
+        ].join("") },
+      { title: "Live actuals", body: [
+          leverField(lever, "actuals.value", m.actuals && m.actuals.value, "Actual value", { type: "number" }),
+          leverField(lever, "actuals.unit", m.actuals && m.actuals.unit, "Unit", { placeholder: "% attach" }),
+          leverField(lever, "actuals.asOf", m.actuals && m.actuals.asOf, "As of", { type: "date" }),
+          leverField(lever, "actuals.attributionPct", m.actuals && m.actuals.attributionPct, "Attribution %", { type: "number" })
+        ].join("") }
+    ];
+    const visible = Math.min(all.length, r + 2); // everything satisfied, plus one to fill in next
+    return all.slice(0, visible).map((s, i) => Object.assign({}, s, { locked: i > r }));
+  }
+
+  // Optional, independent of the rung ladder: once a lever has a benchmark (rung >= 1), it
+  // can be converted into an actual range via EITHER path — this is where bottomUp/topDown
+  // get entered. Filling one is enough; filling both lets the cross-check run.
+  function leverEconomicsSection(lever) {
+    if (leverRung(lever) < 1) return "";
+    const m = lever.model || {};
+    const bu = m.bottomUp || {};
+    const td = m.topDown || {};
+    return `<div class="lever-section econ">
+        <p class="lever-section-title">Turn this into a range <span class="rung-next-tag">optional — either path works</span></p>
+        <div class="two-up">
+          <div class="lever-fields"><p class="econ-label">Bottom-up</p>
+            ${leverField(lever, "bottomUp.volumePerWeek", bu.volumePerWeek, "Volume / week", { type: "number" })}
+            ${leverField(lever, "bottomUp.unitEconomics", bu.unitEconomics, "$ per unit", { type: "number" })}
+          </div>
+          <div class="lever-fields"><p class="econ-label">Top-down</p>
+            ${leverField(lever, "topDown.customerTargetGap", td.customerTargetGap, "Customer's target gap ($)", { type: "number" })}
+            ${leverField(lever, "topDown.attributionShare", td.attributionShare, "Attribution share (0–1)", { type: "number" })}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function leverValueOutput(lever) {
+    const range = leverValueRange(lever);
+    if (range.qualitative) return `<p class="lever-value qualitative">Name a goal to begin — no number yet.</p>`;
+    if (range.metricOnly) {
+      return `<div class="lever-value">
+          <div class="range-bar"><i style="width:100%"></i></div>
+          <div class="range-nums"><b>${range.lo}–${range.hi}${range.unit}</b><span>benchmarked range — not yet priced (add volume/economics below)</span></div>
+        </div>`;
+    }
+    const adj = deliveryAdjustedRange(lever);
+    const weeks = (lever.period && lever.period.weeks) || 13;
+    const cross = range.cross || {};
+    const divergenceNote = cross.diverges
+      ? `<p class="bd-prov flag"><span class="flag-note">Bottom-up and top-down disagree by ${Math.round(cross.divergencePct * 100)}% — that's a signal to gather more data, not something to average away.</span></p>`
+      : "";
+    const slipNote = adj.slipDays
+      ? `<p class="delivery-chip slip">${icon("alert")}Value start deferred ~${adj.slipDays}d by a delivery lever</p>`
+      : "";
+    return `<div class="lever-value">
+        <div class="range-bar"><i style="width:100%"></i></div>
+        <div class="range-nums"><b>${fmtDollars(adj.lo)}–${fmtDollars(adj.hi)}</b><span>modeled over ${weeks} wks · ${fmtDollars(adj.mid)} mid</span></div>
+        <div class="two-up calc-cols">
+          <div class="calc-col"><small>Bottom-up</small><b>${cross.bu != null ? fmtDollars(cross.bu) : "—"}</b></div>
+          <div class="calc-col"><small>Top-down</small><b>${cross.td != null ? fmtDollars(cross.td) : "—"}</b></div>
+        </div>
+        ${divergenceNote}
+        ${slipNote}
+      </div>`;
+  }
+
+  function leverCard(lever) {
+    const r = leverRung(lever);
+    const sections = leverSections(lever);
+    const sectionHtml = sections
+      .map((s) => `<div class="lever-section${s.locked ? " is-next" : ""}">
+          <p class="lever-section-title">${s.title}${s.locked ? ' <span class="rung-next-tag">next</span>' : ""}</p>
+          <div class="lever-fields">${s.body}</div>
+        </div>`)
+      .join("");
+    return `<article class="lever-card" data-lever="${lever.key}">
+        <div class="lever-card-head">
+          <b>${taxonomyLabel(lever.key)}</b>
+          <div class="rung-ladder small">${rungPips(r)}<span class="rung-label">${rungLabel(r)}</span></div>
+        </div>
+        ${leverValueOutput(lever)}
+        <div class="lever-body">
+          ${sectionHtml}
+          ${leverEconomicsSection(lever)}
+        </div>
+      </article>`;
+  }
+
+  // "Value starts ~{date}" readout for a delivery lever — the only date-flavored output
+  // delivery ever produces; still no dollar figure anywhere in this function.
+  function deliveryStartReadout(lever) {
+    const m = lever.model || {};
+    const days = (m.valueStartOffsetWeeks || 0) * 7 + (m.slipDays || 0);
+    const base = new Date(PL.today.nowIso);
+    base.setDate(base.getDate() + Math.round(days));
+    return base.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  function deliveryLeverCard(lever) {
+    const m = lever.model || {};
+    const defers = (m.defers || []).map((k) => `<span class="pill">${taxonomyLabel(k)}</span>`).join(" ") || `<span class="muted">none linked</span>`;
+    return `<article class="lever-card delivery-card" data-lever="${lever.key}">
+        <div class="lever-card-head">
+          <b>${taxonomyLabel(lever.key)}</b>
+          <span class="delivery-chip slip">${icon("alert")}${m.slipDays || 0}d slip</span>
+        </div>
+        <p class="lever-goal">${m.goal || ""}</p>
+        <div class="lever-fields">${leverField(lever, "slipDays", m.slipDays, "Days slipped so far", { type: "number" })}</div>
+        <p class="defer-note">Defers value from: ${defers}</p>
+        <p class="defer-note">Value starts ~<b>${deliveryStartReadout(lever)}</b> at the current slip — never its own dollar figure.</p>
+      </article>`;
+  }
+
+  function valueModel(state) {
+    const model = state.valueModel || liveModel();
+    const grade = engagementGrade(model);
+    const valueLevers = model.filter((l) => l.kind === "value");
+    const deliveryLevers = model.filter((l) => l.kind === "delivery");
+    const domains = [];
+    valueLevers.forEach((l) => {
+      const domain = (taxonomyFor(l.key) || {}).domain || "Other";
+      let group = domains.find((g) => g.domain === domain);
+      if (!group) { group = { domain, levers: [] }; domains.push(group); }
+      group.levers.push(l);
+    });
+    const domainHtml = domains
+      .map((g) => `<section class="lever-domain-group"><h2>${g.domain}</h2><div class="lever-grid">${g.levers.map(leverCard).join("")}</div></section>`)
+      .join("");
+    const deliveryHtml = deliveryLevers.length
+      ? `<section class="lever-domain-group"><h2>Delivery — time as cost</h2><div class="lever-grid">${deliveryLevers.map(deliveryLeverCard).join("")}</div></section>`
+      : "";
+    return `
+      <button class="back" data-view="profile">${icon("arrow-left")}Back to profile</button>
+      <header class="page-head">
+        <h1>Value Model</h1>
+        <p>Name a goal, then deepen it — each lever climbs a data-grounding ladder from a strategic goal to live, attributed actuals. Delivery risk is modeled in days, never a fabricated dollar.</p>
+      </header>
+      ${gradeBadgeHtml(grade, "lg")}
+      ${domainHtml}
+      ${deliveryHtml}
+    `;
+  }
+
   // Plain-language basis for a factor's band, read straight from the signals.
   function provenance(key, d) {
     const s = d.signals || {};
     const m = d.metrics || {};
     if (key === "value") {
+      const lever = leverForDecision(d);
+      if (lever) {
+        const rung = leverRung(lever);
+        const range = leverValueRange(lever);
+        if (range.qualitative) return `goal named (${rungLabel(rung)}) — not yet enough data to model a number`;
+        const label = `${rungLabel(rung)} (L${rung}), narrowing as more data lands`;
+        if (range.metricOnly) return `${range.lo}–${range.hi}${range.unit} benchmarked · ${label}`;
+        const weeks = (lever.period && lever.period.weeks) || 13;
+        return `${fmtDollars(range.lo / weeks)}–${fmtDollars(range.hi / weeks)}/wk modeled · ${label}`;
+      }
       const money = s.dollarsDisplay
         ? s.dollarsDisplay + (s.dollarsKind === "at-risk" ? " at risk" : s.dollarsKind === "opportunity" ? " projected" : "")
         : "";
@@ -117,7 +498,7 @@
     const rows = contributions(d.impact)
       .map((c) => {
         const meta = PL.weightMeta[c.key];
-        const band = BAND_FN[c.key](sig);
+        const band = c.key === "value" ? valueBand(sig, leverForDecision(d)) : BAND_FN[c.key](sig);
         const inBand = c.sub >= band.lo && c.sub <= band.hi;
         const basis = provenance(c.key, d);
         return `<div class="bd-row">
@@ -131,7 +512,9 @@
     const segs = contributions(d.impact)
       .map((c) => `<i class="seg-${c.key}" style="width:${c.contrib}%" title="${PL.weightMeta[c.key].label}: ${c.contrib}"></i>`)
       .join("");
+    const esc = classifyEscalation(d);
     return `<div class="breakdown">
+        <p class="bd-escalation"><b>${esc.type === "decision" ? "Needs you" : "Advancing on its own"} because:</b> ${esc.reason}</p>
         <div class="bd-total"><span>Impact score</span><b>${s}<small>/100</small></b></div>
         <div class="bd-stack">${segs}</div>
         <div class="bd-rows">${rows}</div>
@@ -235,14 +618,55 @@
       </div>`;
   }
 
+  /* ---------- escalation classification (derived, not authored) ----------
+     Whether a decision needs a human is derived from the signals already on the object —
+     a confirmed external commitment, a rollout go/no-go, or a policy-consequence gate/severity
+     — instead of trusting the seed's own `type` literal. The four inputs below are exactly the
+     ones every seed decision actually carries; score()/confidenceScore() aren't used as gating
+     thresholds (there's no held-out calibrated set to fit a cutoff against — see
+     confidenceWeights' own PROVISIONAL note), but they're surfaced in the reason for context. */
+  function classifyEscalation(d) {
+    const sig = d.signals || {};
+    const context = ` (Impact ${score(d.impact)}${d.confidenceInputs ? `, confidence ${confidenceScore(d)}%` : ""}.)`;
+    if (sig.commitmentAtStake === true) {
+      return { type: "decision", reason: "Breaks a confirmed external commitment — that always needs a human, whatever the impact score reads." + context };
+    }
+    if (d.isRollout) {
+      return { type: "decision", reason: "A rollout go/no-go always needs an accountable owner." + context };
+    }
+    if (d.gate) {
+      return { type: "decision", reason: d.gate + context };
+    }
+    if (d.severity) {
+      return { type: "decision", reason: `Crosses a policy line (${d.severity.toLowerCase()}) — needs sign-off before it advances.` + context };
+    }
+    return { type: "informative", reason: "No confirmed commitment, rollout gate, or policy line at stake — safe to advance on its own." + context };
+  }
+
+  /* ---------- RACI routing (derived accountable owner) ----------
+     Every anchor decision the eval's independent panel confirmed shares one rule: whatever
+     classifyEscalation() flags as needing a human is accountable to the exec who owns the
+     outcome (PL.user), not whoever happens to be building it — that's exactly the fix for the
+     d-order-history-access mis-route (authored "sam-tan", an engineering lead) without editing
+     the seed data. Items that advance on their own keep whatever owner is already authored. */
+  function routeOwner(d) {
+    const esc = classifyEscalation(d);
+    if (esc.type === "decision") {
+      return { id: PL.user.id, reason: "Needs a human, so it's accountable to the exec who owns the outcome — not the team that built it." };
+    }
+    const a = (d.raci || {}).a;
+    return { id: a, reason: "Advancing on its own — ownership stays with whoever's already accountable for this lane." };
+  }
+
   /* ---------- RACI ---------- */
   function raci(d) {
     const r = d.raci || {};
+    const owner = routeOwner(d);
     const names = (arr) => (arr || []).map((id) => P[id] ? P[id].initials : id).join(" · ");
-    const isYou = r.a === PL.user.id;
-    const aName = isYou ? "You" : (P[r.a] ? P[r.a].short : r.a);
+    const isYou = owner.id === PL.user.id;
+    const aName = isYou ? "You" : (P[owner.id] ? P[owner.id].short : owner.id);
     const items = [];
-    items.push(`<span class="raci-item is-a" title="Accountable — the decider"><i>A</i><span>${aName}</span></span>`);
+    items.push(`<span class="raci-item is-a" title="Accountable — the decider. Routed here because: ${owner.reason}"><i>A</i><span>${aName}</span></span>`);
     if (r.r && r.r.length) items.push(`<span class="raci-item" title="Responsible — does the work"><i>R</i><span>${names(r.r)}</span></span>`);
     if (r.c && r.c.length) items.push(`<span class="raci-item" title="Consulted"><i>C</i><span>${names(r.c)}</span></span>`);
     if (r.i && r.i.length) items.push(`<span class="raci-item" title="Informed"><i>I</i><span>${names(r.i)}</span></span>`);
@@ -412,18 +836,26 @@
     `;
   }
 
-  function agents() {
+  function agents(state) {
     const status = { orchestrating: "Orchestrating", watching: "Watching", analyzing: "Analyzing", escalated: "Escalated" };
+    const blockingCount = state ? state.blocking().length : PL.decisions.filter((d) => d.type === "decision").length;
+    const informativeCount = state ? state.informative().length : PL.decisions.filter((d) => d.type === "informative").length;
     const cards = PL.agents
       .map((a) => {
         const esc = a.status === "escalated";
+        // The Chief of Staff's finding is the one card that reports live counts (everyone else
+        // reports a fixed observation) — computed here, not authored, so it can never drift
+        // from what the Decisions/Today views actually show.
+        const finding = a.id === "chief-of-staff"
+          ? `Assembled today's briefing — routed ${blockingCount} to you, ${informativeCount} advancing on their own.`
+          : a.finding;
         return `<article class="agent-card${esc ? " is-escalated" : ""}">
           <div class="agent-id">
             <span class="agent-ic">${icon(a.icon)}</span>
             <div><strong>${a.name}</strong><small>${a.monitors}</small></div>
             <span class="agent-status s-${a.status}">${status[a.status] || a.status}</span>
           </div>
-          <p class="agent-finding">${a.finding}</p>
+          <p class="agent-finding">${finding}</p>
           ${esc ? `<button class="link-btn" data-open="${a.escalatedTo}">Escalated a decision to you ${icon("arrow-right")}</button>` : `<span class="agent-clear">${icon("check")}No action needed</span>`}
         </article>`;
       })
@@ -651,9 +1083,18 @@
   }
 
   function profileValueFocusSeam(state) {
-    // VALUE_FOCUS_SEAM (A2) — stakeholder Value Focus taxonomy: pick 2-3 KPI-anchored
-    // focus areas, which persist to localStorage and re-rank the Decisions queue.
-    return valueFocusSection(state);
+    // VALUE_FOCUS_SEAM (A2) — superseded by the Value Model: the picker below is now the
+    // engagement-grade badge (data-grounding maturity across every lever) plus a link into
+    // the full Value Model screen. Queue re-ranking (feature #7) still works — it's now
+    // driven by activeFocusKeys() (app.js), the set of levers with a named goal, rather
+    // than a manual 2-3 pick list. valueFocusSection/valueFocusCard stay defined below,
+    // unused, in case a future taxonomy-only picker is wanted again.
+    const grade = engagementGrade(state.valueModel);
+    return `<section class="detail-block vf-section">
+        <div class="block-head"><h2>Value Model</h2><span class="muted">${grade.label}</span></div>
+        ${gradeBadgeHtml(grade)}
+        <button class="link-btn" data-view="valuemodel">${icon("trend-up")}Open the Value Model ${icon("arrow-right")}</button>
+      </section>`;
   }
   function profileRecentDecisionsSeam(state) {
     // RECENT_DECISIONS_SEAM (A3) — recent-decisions log: who decided, any
@@ -698,6 +1139,8 @@
   /* ---------- rollout: value showcase ---------- */
   function showcase() {
     const r = PL.rollout;
+    const billing = PL.decisions.find((d) => d.id === "d-billing-golive");
+    const confidence = confidenceScore(billing);
     const kpis = r.kpis
       .map(
         (k) => `<article class="kpi">
@@ -719,7 +1162,7 @@
           </div>
           <div class="value-banner">
             <div><small>Projected value</small><b>${r.dollarsSaved}</b><span>${r.dollarsNote}</span></div>
-            <div class="conf-side"><small>Evidence confidence</small><b>${r.confidence}%</b><i class="conf-bar"><em style="width:${r.confidence}%"></em></i></div>
+            <div class="conf-side"><small>Evidence confidence</small><b>${confidence}%</b><i class="conf-bar"><em style="width:${confidence}%"></em></i></div>
           </div>
           <div class="kpi-grid">${kpis}</div>
           ${showAndTell(r.showAndTell)}
@@ -830,23 +1273,43 @@
       </div>`;
   }
 
-  // Values are read off the SAME open/resolved decisions the dashboard above shows — nothing hardcoded.
+  // Fed entirely by the live Value Model, not by resolved decisions — a lever's modeled
+  // range counts here the moment it's grounded enough to price, whether or not any decision
+  // tied to it has been decided yet. direction ("cost" vs "revenue") comes from the matching
+  // valueFocusTaxonomy entry; delivery time-at-risk is the ONLY delivery number shown, in
+  // days — never converted to a dollar.
   function cockpitValuePanel(state) {
-    const decisions = state.all().filter((d) => d.type === "decision");
-    const decided = decisions.filter((d) => state.resolved[d.id]);
-    const byKind = (kind) => decided.filter((d) => d.signals && d.signals.dollarsKind === kind);
-    const sumWeekly = (items) => items.reduce((sum, d) => sum + (d.signals.weeklyDollars || 0), 0);
-    const fmt = (n) => (n >= 1000 ? "$" + (Math.round(n / 100) / 10).toString().replace(/\.0$/, "") + "k/wk" : "$" + n + "/wk");
-    const caption = (items, verb) =>
-      items.length ? `${items[0].title}${items.length > 1 ? ` + ${items.length - 1} more` : ""} — ${verb}.` : `No decisions resolved yet.`;
-    const risk = byKind("at-risk");
-    const opp = byKind("opportunity");
+    const model = state.valueModel || liveModel();
+    const grade = engagementGrade(model);
+    const valueLevers = model.filter((l) => l.kind === "value");
+    const byDirection = (dir) => valueLevers.filter((l) => (taxonomyFor(l.key) || {}).direction === dir);
+    const sumRange = (levers) => {
+      let lo = 0, hi = 0, any = false;
+      levers.forEach((l) => {
+        const r = deliveryAdjustedRange(l);
+        if (r.qualitative || r.metricOnly) return;
+        lo += r.lo; hi += r.hi; any = true;
+      });
+      return any ? { lo, hi } : null;
+    };
+    const caption = (levers, verb) => {
+      const named = levers.filter((l) => leverRung(l) >= 1);
+      if (!named.length) return "No levers named yet.";
+      const labels = named.slice(0, 2).map((l) => taxonomyLabel(l.key));
+      return `${labels.join(", ")}${named.length > 2 ? ` + ${named.length - 2} more` : ""} — ${verb}.`;
+    };
+    const fmtRange = (r) => (r ? `${fmtDollars(r.lo)}–${fmtDollars(r.hi)}` : "still qualitative");
+    const cost = byDirection("cost");
+    const revenue = byDirection("revenue");
+    const totalSlipDays = model.filter((l) => l.kind === "delivery").reduce((sum, l) => sum + ((l.model && l.model.slipDays) || 0), 0);
     return `<div class="vpanel">
-        <div class="vhead"><h3>Value from today's decisions</h3><span class="pill">${decided.length} of ${decisions.length} decided</span></div>
+        <div class="vhead"><h3>Value from the model</h3><span class="pill">${grade.label} · L${grade.rung}</span></div>
         <div class="vstats">
-          <div class="vstat risk"><div class="lbl">Risk mitigated</div><div class="num">${fmt(sumWeekly(risk))}</div><div class="cap">${caption(risk, "risk mitigated")}</div></div>
+          <div class="vstat risk"><div class="lbl">Cost saved / risk mitigated</div><div class="num">${fmtRange(sumRange(cost))}</div><div class="cap">${caption(cost, "cost/risk levers")}</div></div>
           <div class="vdivider"></div>
-          <div class="vstat opp"><div class="lbl">Value unlocked</div><div class="num">${fmt(sumWeekly(opp))}</div><div class="cap">${caption(opp, "value unlocked")}</div></div>
+          <div class="vstat opp"><div class="lbl">Value unlocked</div><div class="num">${fmtRange(sumRange(revenue))}</div><div class="cap">${caption(revenue, "revenue levers")}</div></div>
+          <div class="vdivider"></div>
+          <div class="vstat delivery"><div class="lbl">Delivery time at risk</div><div class="num">${totalSlipDays}d</div><div class="cap">${totalSlipDays ? "slip is deferring when value starts — not a dollar figure" : "nothing slipping right now"}</div></div>
         </div>
       </div>`;
   }
@@ -953,5 +1416,14 @@
     `;
   }
 
-  window.PLRender = { icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker, confidenceScore, confidenceBreakdown, presenter, profile, cockpitScoreModal, buildView };
+  window.PLRender = {
+    icon, score, today, decisions, agents, evidence, memory, brief, showcase, pilot, breakdown, whyLine, timePicker,
+    confidenceScore, confidenceBreakdown, presenter, profile, cockpitScoreModal, buildView,
+    // Value Model — leverRung/leverForDecision/leverValueRange/valueBand are called directly
+    // by app.js (activeFocusKeys, applyModeledValue); valueModel is the routed view.
+    leverRung, leverForDecision, leverValueRange, valueBand, valueModel,
+    // Derivation layer — classifyEscalation/routeOwner are called directly by app.js
+    // (decisionFor/all(), the commitment guardrail) as well as internally by raci()/breakdown().
+    classifyEscalation, routeOwner
+  };
 })();
